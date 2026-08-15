@@ -1,0 +1,2 @@
+DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname='supabase_realtime' AND schemaname='public' AND tablename='material_statuses') THEN EXECUTE 'ALTER PUBLICATION supabase_realtime ADD TABLE public.material_statuses'; END IF; END $$;
+ALTER TABLE public.material_statuses REPLICA IDENTITY FULL;

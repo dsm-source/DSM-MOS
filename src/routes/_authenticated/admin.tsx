@@ -1,0 +1,143 @@
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { notifyError } from "@/lib/error-message";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { listUsersWithRoles, assignRole, unassignRole } from "@/lib/admin-users.functions";
+import type { AppRole } from "@/lib/roles.functions";
+import { myRolesQueryOptions } from "@/hooks/use-my-roles";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const ALL_ROLES: AppRole[] = [
+  "admin",
+  "sales",
+  "engineering",
+  "material",
+  "production_planning",
+  "production",
+  "qc",
+  "delivery",
+  "viewer",
+];
+
+export const Route = createFileRoute("/_authenticated/admin")({
+  beforeLoad: async ({ context }) => {
+    const roles = await context.queryClient.ensureQueryData(myRolesQueryOptions);
+    if (!roles.includes("admin")) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
+  head: () => ({
+    meta: [
+      { title: "Kelola Peran User — DSM MOS" },
+      {
+        name: "description",
+        content: "Kelola peran user pada DSM Manufacturing Operating System.",
+      },
+    ],
+  }),
+  component: AdminPage,
+});
+
+function AdminPage() {
+  const qc = useQueryClient();
+  const listFn = useServerFn(listUsersWithRoles);
+  const assignFn = useServerFn(assignRole);
+  const unassignFn = useServerFn(unassignRole);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin", "users-with-roles"],
+    queryFn: () => listFn(),
+  });
+
+  const mutation = useMutation({
+    mutationFn: async (v: { userId: string; role: AppRole; assign: boolean }) => {
+      if (v.assign) return assignFn({ data: { userId: v.userId, role: v.role } });
+      return unassignFn({ data: { userId: v.userId, role: v.role } });
+    },
+    onSuccess: (_r, v) => {
+      toast.success(v.assign ? "Peran ditambahkan" : "Peran dicabut");
+      qc.invalidateQueries({ queryKey: ["admin", "users-with-roles"] });
+      qc.invalidateQueries({ queryKey: ["my-roles"] });
+    },
+    onError: (e: Error) => notifyError(e),
+  });
+
+  return (
+    <div className="p-6 space-y-4">
+      <div>
+        <h1 className="text-2xl font-semibold">Kelola Peran User</h1>
+        <p className="text-sm text-muted-foreground">
+          Centang untuk menugaskan peran. Hanya admin yang dapat mengubah.
+        </p>
+      </div>
+
+      <div className="rounded-xl border bg-card overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="min-w-[220px]">User</TableHead>
+              {ALL_ROLES.map((r) => (
+                <TableHead key={r} className="text-center text-xs">
+                  {r}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading &&
+              Array.from({ length: 3 }).map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell colSpan={ALL_ROLES.length + 1}>
+                    <Skeleton className="h-8 w-full" />
+                  </TableCell>
+                </TableRow>
+              ))}
+            {data?.map((u) => (
+              <TableRow key={u.id}>
+                <TableCell>
+                  <div className="text-sm font-medium">{u.email ?? "(no email)"}</div>
+                  <div className="text-xs text-muted-foreground font-mono">{u.id.slice(0, 8)}…</div>
+                </TableCell>
+                {ALL_ROLES.map((role) => {
+                  const has = u.roles.includes(role);
+                  return (
+                    <TableCell key={role} className="text-center">
+                      <Checkbox
+                        checked={has}
+                        disabled={mutation.isPending}
+                        onCheckedChange={(v) =>
+                          mutation.mutate({ userId: u.id, role, assign: v === true })
+                        }
+                        aria-label={`${role} untuk ${u.email ?? u.id}`}
+                      />
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
+            {data && data.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={ALL_ROLES.length + 1}
+                  className="text-center text-muted-foreground"
+                >
+                  Belum ada user.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}

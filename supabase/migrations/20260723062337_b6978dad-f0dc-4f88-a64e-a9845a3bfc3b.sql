@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.material_statuses_log_history() FROM PUBLIC, authenticated;
