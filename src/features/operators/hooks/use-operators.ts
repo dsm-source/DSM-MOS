@@ -4,12 +4,22 @@ import { mapPgError } from "@/lib/pg-error";
 import type { Database } from "@/integrations/supabase/types";
 
 export type OperatorRow = Database["public"]["Tables"]["operators"]["Row"];
-export type OperatorInsert =
-  Database["public"]["Tables"]["operators"]["Insert"];
 export type OperatorUpdate =
   Database["public"]["Tables"]["operators"]["Update"];
 
+export type OperatorFormInput = {
+  name: string;
+  employee_number?: string | null;
+};
+
 const LIST_KEY = ["operators"] as const;
+
+function normalizeOperatorInput(input: OperatorFormInput): OperatorFormInput {
+  return {
+    name: input.name.trim(),
+    employee_number: input.employee_number?.trim() || null,
+  };
+}
 
 export function useOperators() {
   return useQuery({
@@ -28,16 +38,10 @@ export function useOperators() {
 export function useCreateOperator() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: {
-      name: string;
-      employee_number?: string | null;
-    }) => {
+    mutationFn: async (input: OperatorFormInput) => {
       const { data, error } = await supabase
         .from("operators")
-        .insert({
-          name: input.name.trim(),
-          employee_number: input.employee_number?.trim() || null,
-        })
+        .insert(normalizeOperatorInput(input))
         .select("*")
         .single();
       if (error) throw new Error(mapPgError(error));
@@ -55,11 +59,14 @@ export function useUpdateOperator() {
       values,
     }: {
       id: string;
-      values: OperatorUpdate;
+      values: OperatorFormInput & Pick<OperatorUpdate, "is_active">;
     }) => {
       const { data, error } = await supabase
         .from("operators")
-        .update(values)
+        .update({
+          ...normalizeOperatorInput(values),
+          is_active: values.is_active,
+        })
         .eq("id", id)
         .select("*")
         .single();

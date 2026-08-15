@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { UserCog, Plus, Pencil, Power } from "lucide-react";
 import { toast } from "sonner";
-import { useMyRoles } from "@/hooks/use-my-roles";
+import { z } from "zod";
+import { myRolesQueryOptions, useMyRoles } from "@/hooks/use-my-roles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,10 +42,37 @@ import {
   useCreateOperator,
   useUpdateOperator,
   useToggleOperatorActive,
+  type OperatorFormInput,
   type OperatorRow,
 } from "@/features/operators/hooks/use-operators";
 
+const operatorSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Nama wajib diisi")
+    .max(120, "Nama maksimal 120 karakter"),
+  employee_number: z
+    .string()
+    .trim()
+    .max(40, "NPK maksimal 40 karakter")
+    .regex(
+      /^[A-Za-z0-9._-]*$/,
+      "NPK hanya boleh huruf, angka, titik, underscore, dan dash",
+    )
+    .transform((v) => v || null),
+});
+
+type OperatorFormErrors = Partial<Record<keyof OperatorFormInput, string>>;
+
 export const Route = createFileRoute("/_authenticated/operators")({
+  beforeLoad: async ({ context }) => {
+    const roles =
+      await context.queryClient.ensureQueryData(myRolesQueryOptions);
+    if (!roles.includes("admin") && !roles.includes("production_planning")) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
   head: () => ({
     meta: [
       { title: "Operators — DSM MOS" },
@@ -56,6 +84,18 @@ export const Route = createFileRoute("/_authenticated/operators")({
   }),
   component: OperatorsPage,
 });
+
+function validateOperatorForm(values: OperatorFormInput) {
+  const parsed = operatorSchema.safeParse(values);
+  if (parsed.success) return { values: parsed.data, errors: {} };
+
+  const errors: OperatorFormErrors = {};
+  for (const issue of parsed.error.issues) {
+    const key = issue.path[0] as keyof OperatorFormInput | undefined;
+    if (key) errors[key] = issue.message;
+  }
+  return { values: null, errors };
+}
 
 function OperatorsPage() {
   const { hasAnyRole } = useMyRoles();
@@ -80,7 +120,7 @@ function OperatorsPage() {
           <div>
             <h1 className="text-2xl font-semibold">Operators</h1>
             <p className="text-sm text-muted-foreground">
-              Master data operator produksi. Kelola nama & status aktif.
+              Master data operator produksi. Kelola nama, NPK, dan status aktif.
             </p>
           </div>
         </div>
@@ -154,33 +194,48 @@ function OperatorsPage() {
   );
 }
 
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+  return <p className="text-xs text-destructive">{message}</p>;
+}
+
 function CreateOperatorDialog() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [npk, setNpk] = useState("");
+  const [errors, setErrors] = useState<OperatorFormErrors>({});
   const create = useCreateOperator();
 
+  const reset = () => {
+    setName("");
+    setNpk("");
+    setErrors({});
+  };
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (create.isPending) return;
+    setOpen(nextOpen);
+    if (!nextOpen) reset();
+  };
+
   const submit = () => {
-    if (!name.trim()) {
-      toast.error("Nama wajib diisi.");
+    const parsed = validateOperatorForm({ name, employee_number: npk });
+    if (!parsed.values) {
+      setErrors(parsed.errors);
       return;
     }
-    create.mutate(
-      { name, employee_number: npk || null },
-      {
-        onSuccess: () => {
-          toast.success("Operator ditambahkan.");
-          setName("");
-          setNpk("");
-          setOpen(false);
-        },
-        onError: (e) => toast.error((e as Error).message),
+    create.mutate(parsed.values, {
+      onSuccess: () => {
+        toast.success("Operator ditambahkan.");
+        reset();
+        setOpen(false);
       },
-    );
+      onError: (e) => toast.error((e as Error).message),
+    });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm">
           <Plus className="h-4 w-4 mr-1" /> Tambah
@@ -190,7 +245,7 @@ function CreateOperatorDialog() {
         <DialogHeader>
           <DialogTitle>Tambah Operator</DialogTitle>
           <DialogDescription>
-            Isi nama operator dan nomor pegawai (NPK) opsional.
+            Isi nama operator dan NPK. NPK harus unik jika diisi.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
@@ -201,7 +256,9 @@ function CreateOperatorDialog() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Nama lengkap"
+              aria-invalid={Boolean(errors.name)}
             />
+            <FieldError message={errors.name} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="op-npk">NPK</Label>
@@ -209,8 +266,10 @@ function CreateOperatorDialog() {
               id="op-npk"
               value={npk}
               onChange={(e) => setNpk(e.target.value)}
-              placeholder="Nomor pegawai (opsional)"
+              placeholder="Nomor pegawai (unik jika diisi)"
+              aria-invalid={Boolean(errors.employee_number)}
             />
+            <FieldError message={errors.employee_number} />
           </div>
         </div>
         <DialogFooter>
@@ -227,17 +286,32 @@ function EditOperatorDialog({ operator }: { operator: OperatorRow }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(operator.name);
   const [npk, setNpk] = useState(operator.employee_number ?? "");
+  const [errors, setErrors] = useState<OperatorFormErrors>({});
   const update = useUpdateOperator();
 
+  useEffect(() => {
+    if (!open) {
+      setName(operator.name);
+      setNpk(operator.employee_number ?? "");
+      setErrors({});
+    }
+  }, [open, operator.employee_number, operator.name, operator.updated_at]);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (update.isPending) return;
+    setOpen(nextOpen);
+  };
+
   const submit = () => {
-    if (!name.trim()) {
-      toast.error("Nama wajib diisi.");
+    const parsed = validateOperatorForm({ name, employee_number: npk });
+    if (!parsed.values) {
+      setErrors(parsed.errors);
       return;
     }
     update.mutate(
       {
         id: operator.id,
-        values: { name: name.trim(), employee_number: npk.trim() || null },
+        values: { ...parsed.values, is_active: operator.is_active },
       },
       {
         onSuccess: () => {
@@ -250,7 +324,7 @@ function EditOperatorDialog({ operator }: { operator: OperatorRow }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon" title="Edit">
           <Pencil className="h-4 w-4" />
@@ -259,23 +333,30 @@ function EditOperatorDialog({ operator }: { operator: OperatorRow }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Operator</DialogTitle>
+          <DialogDescription>
+            Perbarui nama dan NPK operator. NPK harus unik jika diisi.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
           <div className="space-y-2">
-            <Label htmlFor="ed-name">Nama *</Label>
+            <Label htmlFor={`ed-name-${operator.id}`}>Nama *</Label>
             <Input
-              id="ed-name"
+              id={`ed-name-${operator.id}`}
               value={name}
               onChange={(e) => setName(e.target.value)}
+              aria-invalid={Boolean(errors.name)}
             />
+            <FieldError message={errors.name} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="ed-npk">NPK</Label>
+            <Label htmlFor={`ed-npk-${operator.id}`}>NPK</Label>
             <Input
-              id="ed-npk"
+              id={`ed-npk-${operator.id}`}
               value={npk}
               onChange={(e) => setNpk(e.target.value)}
+              aria-invalid={Boolean(errors.employee_number)}
             />
+            <FieldError message={errors.employee_number} />
           </div>
         </div>
         <DialogFooter>
@@ -292,21 +373,19 @@ function ToggleActiveButton({ operator }: { operator: OperatorRow }) {
   const toggle = useToggleOperatorActive();
   const [confirm, setConfirm] = useState(false);
 
-  const onToggle = () => {
-    toggle.mutate(
-      { id: operator.id, is_active: !operator.is_active },
-      {
-        onSuccess: () => {
-          toast.success(
-            operator.is_active
-              ? "Operator dinonaktifkan."
-              : "Operator diaktifkan.",
-          );
-          setConfirm(false);
-        },
-        onError: (e) => toast.error((e as Error).message),
-      },
-    );
+  const onToggle = async () => {
+    try {
+      await toggle.mutateAsync({
+        id: operator.id,
+        is_active: !operator.is_active,
+      });
+      toast.success(
+        operator.is_active ? "Operator dinonaktifkan." : "Operator diaktifkan.",
+      );
+      setConfirm(false);
+    } catch (e) {
+      toast.error((e as Error).message);
+    }
   };
 
   return (
@@ -315,9 +394,10 @@ function ToggleActiveButton({ operator }: { operator: OperatorRow }) {
         variant="ghost"
         size="icon"
         title={operator.is_active ? "Nonaktifkan" : "Aktifkan"}
+        disabled={toggle.isPending}
         onClick={() => {
           if (operator.is_active) setConfirm(true);
-          else onToggle();
+          else void onToggle();
         }}
       >
         <Power className="h-4 w-4" />
@@ -332,8 +412,16 @@ function ToggleActiveButton({ operator }: { operator: OperatorRow }) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={onToggle}>
+            <AlertDialogCancel disabled={toggle.isPending}>
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={toggle.isPending}
+              onClick={(event) => {
+                event.preventDefault();
+                void onToggle();
+              }}
+            >
               Nonaktifkan
             </AlertDialogAction>
           </AlertDialogFooter>
