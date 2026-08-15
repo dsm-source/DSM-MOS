@@ -1,1 +1,9 @@
 project_id = "uqsbdbchwvjzlftgepeg"
+
+[db]
+port = 5433
+
+[auth]
+# Akun hanya dibuat admin lewat halaman Kelola User (createUserManual, service-role).
+# Signup publik dimatikan supaya orang tak dikenal tidak bisa daftar sendiri.
+enable_signup = false
