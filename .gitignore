@@ -1,9 +1,18 @@
 node_modules
 dist
 dist-ssr
+.output
+.wrangler
 .env
 .env.local
 .DS_Store
 
 # Contains API keys (e.g. Context7) — do not commit
 .mcp.json
+
+# Claude Code personal tool permissions — local override, not shared config
+.claude/settings.local.json
+
+# Supabase CLI local runtime state (current branch pointer, version cache)
+supabase/.branches
+supabase/.temp
