@@ -9,7 +9,7 @@
 
 ## M0 — Foundation
 - [ ] M0.1 Deploy migration yang sudah benar
-- [ ] M0.2 Migration: tabel `operators` + RLS
+- [x] M0.2 Migration: tabel `operators` + RLS (local, belum deploy remote)
 - [x] M0.3 UI admin: buat user manual + assign role (terverifikasi di local Supabase stack)
 - [ ] M0.4 Verifikasi/bangun route guard per role
 - [ ] **Checkpoint M0**: admin buat user → user login → lihat menu sesuai role; `get_advisors` bersih
