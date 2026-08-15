@@ -36,20 +36,20 @@
 
 
 ## M3 — Material Status
-- [ ] M3.1 Verifikasi migration & RLS
-- [ ] M3.2 UI papan status Material
-- [ ] M3.3 Detail + tab riwayat
-- [ ] M3.4 pgTAP: 1:1 job, no duplikat, history tercatat
-- [ ] **Checkpoint M3**: full flow waiting→ready, riwayat tercatat; `get_advisors` bersih
+- [x] M3.1 Verifikasi migration & RLS
+- [x] M3.2 UI papan status Material
+- [x] M3.3 Detail + tab riwayat
+- [x] M3.4 pgTAP: 1:1 job, no duplikat, history tercatat
+- [x] **Checkpoint M3**: full flow waiting→ready, riwayat tercatat; pgTAP lulus (verifikasi local stack)
 
 ## M4 — Production Planning
 - [x] M4.1 Migration: tambah `production_batches.routing jsonb` (file: `20260816000006_production_routing_operator_fk.sql`)
 - [x] M4.2 Migration: `operator_id` FK → `operators`; revisi trigger steps ikuti routing (juga menghapus auto-set `operator_id := auth.uid()` di trigger validasi transisi, karena tidak valid lagi terhadap FK baru — operator kini harus dipilih eksplisit, sesuai M5.4)
-- [ ] M4.3 UI master data Operators CRUD
-- [ ] M4.4 UI form buat batch + routing checkbox
-- [ ] M4.5 Gantt Production (tombol, bukan drag)
-- [ ] M4.6 pgTAP: RLS insert batch/operators; routing→steps benar; Gantt isolated dari deliveries
-- [ ] **Checkpoint M4**: batch dengan routing custom → steps yang dibuat sesuai; `get_advisors` bersih
+- [x] M4.3 UI master data Operators CRUD
+- [x] M4.4 UI form buat batch + routing checkbox
+- [x] M4.5 Gantt Production (tombol, bukan drag)
+- [x] M4.6 pgTAP: RLS insert batch/operators; routing→steps benar; Gantt isolated dari deliveries
+- [x] **Checkpoint M4**: batch dengan routing custom → steps yang dibuat sesuai; pgTAP lulus (verifikasi local stack)
 
 ## M5 — Production Execution
 - [ ] M5.1 Migration: tambah `rework` ke `production_step_status`

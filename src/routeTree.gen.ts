@@ -16,6 +16,7 @@ import { Route as AuthenticatedSalesOrdersRouteImport } from './routes/_authenti
 import { Route as AuthenticatedQcRouteImport } from './routes/_authenticated/qc'
 import { Route as AuthenticatedProductionPlanningRouteImport } from './routes/_authenticated/production-planning'
 import { Route as AuthenticatedProductionRouteImport } from './routes/_authenticated/production'
+import { Route as AuthenticatedOperatorsRouteImport } from './routes/_authenticated/operators'
 import { Route as AuthenticatedMaterialRouteImport } from './routes/_authenticated/material'
 import { Route as AuthenticatedEngineeringRouteImport } from './routes/_authenticated/engineering'
 import { Route as AuthenticatedDeliveryRouteImport } from './routes/_authenticated/delivery'
@@ -64,6 +65,11 @@ const AuthenticatedProductionPlanningRoute =
 const AuthenticatedProductionRoute = AuthenticatedProductionRouteImport.update({
   id: '/production',
   path: '/production',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOperatorsRoute = AuthenticatedOperatorsRouteImport.update({
+  id: '/operators',
+  path: '/operators',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMaterialRoute = AuthenticatedMaterialRouteImport.update({
@@ -148,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/delivery': typeof AuthenticatedDeliveryRouteWithChildren
   '/engineering': typeof AuthenticatedEngineeringRouteWithChildren
   '/material': typeof AuthenticatedMaterialRoute
+  '/operators': typeof AuthenticatedOperatorsRoute
   '/production': typeof AuthenticatedProductionRoute
   '/production-planning': typeof AuthenticatedProductionPlanningRoute
   '/qc': typeof AuthenticatedQcRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/delivery': typeof AuthenticatedDeliveryRouteWithChildren
   '/engineering': typeof AuthenticatedEngineeringRouteWithChildren
   '/material': typeof AuthenticatedMaterialRoute
+  '/operators': typeof AuthenticatedOperatorsRoute
   '/production': typeof AuthenticatedProductionRoute
   '/production-planning': typeof AuthenticatedProductionPlanningRoute
   '/qc': typeof AuthenticatedQcRoute
@@ -192,6 +200,7 @@ export interface FileRoutesById {
   '/_authenticated/delivery': typeof AuthenticatedDeliveryRouteWithChildren
   '/_authenticated/engineering': typeof AuthenticatedEngineeringRouteWithChildren
   '/_authenticated/material': typeof AuthenticatedMaterialRoute
+  '/_authenticated/operators': typeof AuthenticatedOperatorsRoute
   '/_authenticated/production': typeof AuthenticatedProductionRoute
   '/_authenticated/production-planning': typeof AuthenticatedProductionPlanningRoute
   '/_authenticated/qc': typeof AuthenticatedQcRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/engineering'
     | '/material'
+    | '/operators'
     | '/production'
     | '/production-planning'
     | '/qc'
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/engineering'
     | '/material'
+    | '/operators'
     | '/production'
     | '/production-planning'
     | '/qc'
@@ -258,6 +269,7 @@ export interface FileRouteTypes {
     | '/_authenticated/delivery'
     | '/_authenticated/engineering'
     | '/_authenticated/material'
+    | '/_authenticated/operators'
     | '/_authenticated/production'
     | '/_authenticated/production-planning'
     | '/_authenticated/qc'
@@ -326,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/production'
       fullPath: '/production'
       preLoaderRoute: typeof AuthenticatedProductionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/operators': {
+      id: '/_authenticated/operators'
+      path: '/operators'
+      fullPath: '/operators'
+      preLoaderRoute: typeof AuthenticatedOperatorsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/material': {
@@ -492,6 +511,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDeliveryRoute: typeof AuthenticatedDeliveryRouteWithChildren
   AuthenticatedEngineeringRoute: typeof AuthenticatedEngineeringRouteWithChildren
   AuthenticatedMaterialRoute: typeof AuthenticatedMaterialRoute
+  AuthenticatedOperatorsRoute: typeof AuthenticatedOperatorsRoute
   AuthenticatedProductionRoute: typeof AuthenticatedProductionRoute
   AuthenticatedProductionPlanningRoute: typeof AuthenticatedProductionPlanningRoute
   AuthenticatedQcRoute: typeof AuthenticatedQcRoute
@@ -505,6 +525,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDeliveryRoute: AuthenticatedDeliveryRouteWithChildren,
   AuthenticatedEngineeringRoute: AuthenticatedEngineeringRouteWithChildren,
   AuthenticatedMaterialRoute: AuthenticatedMaterialRoute,
+  AuthenticatedOperatorsRoute: AuthenticatedOperatorsRoute,
   AuthenticatedProductionRoute: AuthenticatedProductionRoute,
   AuthenticatedProductionPlanningRoute: AuthenticatedProductionPlanningRoute,
   AuthenticatedQcRoute: AuthenticatedQcRoute,

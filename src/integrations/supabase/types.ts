@@ -412,6 +412,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      operators: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          employee_number: string | null;
+          id: string;
+          is_active: boolean;
+          name: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          employee_number?: string | null;
+          id?: string;
+          is_active?: boolean;
+          name: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          employee_number?: string | null;
+          id?: string;
+          is_active?: boolean;
+          name?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       production_batch_steps: {
         Row: {
           completed_at: string | null;
@@ -459,6 +489,13 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "production_batch_steps_operator_id_fkey";
+            columns: ["operator_id"];
+            isOneToOne: false;
+            referencedRelation: "operators";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "production_batch_steps_production_batch_id_fkey";
             columns: ["production_batch_id"];

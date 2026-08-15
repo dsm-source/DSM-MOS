@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   Users,
   Contact,
+  UserCog,
 } from "lucide-react";
 import {
   Sidebar,
@@ -103,6 +104,12 @@ const items: MenuItem[] = [
     title: "Production Planning",
     url: "/production-planning",
     icon: CalendarRange,
+    roles: ["admin", "production_planning"],
+  },
+  {
+    title: "Operators",
+    url: "/operators",
+    icon: UserCog,
     roles: ["admin", "production_planning"],
   },
   {
