@@ -19,14 +19,20 @@ export const DEFAULT_ERROR_ACTION = "Coba lagi";
 function extractDetail(err: unknown): string {
   if (!err) return "Penyebab tidak diketahui.";
   if (typeof err === "string") return err;
-  if (err instanceof Error || (typeof err === "object" && "message" in (err as object))) {
+  if (
+    err instanceof Error ||
+    (typeof err === "object" && "message" in (err as object))
+  ) {
     return mapPgError(err as Error);
   }
   return "Penyebab tidak diketahui.";
 }
 
 /** Ubah error apa pun menjadi struktur pesan yang konsisten untuk UI. */
-export function toUserError(err: unknown, opts?: { title?: string; action?: string }): UserError {
+export function toUserError(
+  err: unknown,
+  opts?: { title?: string; action?: string },
+): UserError {
   return {
     title: opts?.title ?? DEFAULT_ERROR_TITLE,
     detail: extractDetail(err),
@@ -45,7 +51,10 @@ export function announceError(e: UserError, extra?: string): string {
 }
 
 /** Toast error dengan format judul + detail yang seragam. */
-export function notifyError(err: unknown, opts?: { title?: string }): UserError {
+export function notifyError(
+  err: unknown,
+  opts?: { title?: string },
+): UserError {
   const e = toUserError(err, opts);
   toast.error(e.title, { description: e.detail });
   return e;

@@ -15,15 +15,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useMyRoles } from "@/hooks/use-my-roles";
-import { usePlannableJobs, type ApprovedJob } from "@/features/production/hooks/use-approved-jobs";
+import {
+  usePlannableJobs,
+  type ApprovedJob,
+} from "@/features/production/hooks/use-approved-jobs";
 import {
   useProductionBatches,
   type BatchWithContext,
 } from "@/features/production/hooks/use-batches";
 import { CreateBatchDialog } from "@/features/production/components/create-batch-dialog";
 import { EditBatchPlanDialog } from "@/features/production/components/edit-batch-plan-dialog";
-import { PlanningGantt, computeStatus } from "@/features/production/components/planning-gantt";
-import { PROCESS_LABEL, STEP_STATUS_LABEL } from "@/features/production/lib/process";
+import {
+  PlanningGantt,
+  computeStatus,
+} from "@/features/production/components/planning-gantt";
+import {
+  PROCESS_LABEL,
+  STEP_STATUS_LABEL,
+} from "@/features/production/lib/process";
 
 export const Route = createFileRoute("/_authenticated/production-planning")({
   beforeLoad: async () => {
@@ -68,7 +77,9 @@ function PlanningPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [search, setSearch] = useState("");
 
-  const [selectedBatch, setSelectedBatch] = useState<BatchWithContext | null>(null);
+  const [selectedBatch, setSelectedBatch] = useState<BatchWithContext | null>(
+    null,
+  );
   const [editOpen, setEditOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<ApprovedJob | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
@@ -114,12 +125,20 @@ function PlanningPage() {
   }, [batches, customerId, soId, statusFilter, search]);
 
   const scheduled = filtered.filter((b) => computeStatus(b) !== "unscheduled");
-  const unscheduled = filtered.filter((b) => computeStatus(b) === "unscheduled");
-  const overdueCount = filtered.filter((b) => computeStatus(b) === "overdue").length;
+  const unscheduled = filtered.filter(
+    (b) => computeStatus(b) === "unscheduled",
+  );
+  const overdueCount = filtered.filter(
+    (b) => computeStatus(b) === "overdue",
+  ).length;
 
   const plannableJobs = useMemo(
     () =>
-      jobs.filter((j) => j.status === "approved" && j.material_status?.status === "material_ready"),
+      jobs.filter(
+        (j) =>
+          j.status === "approved" &&
+          j.material_status?.status === "material_ready",
+      ),
     [jobs],
   );
 
@@ -131,8 +150,8 @@ function PlanningPage() {
           <div>
             <h1 className="text-2xl font-semibold">Production Planning</h1>
             <p className="text-sm text-muted-foreground">
-              Forward planning batch produksi. Bar = rencana mulai → selesai. Berlian ungu =
-              estimasi kirim.
+              Forward planning batch produksi. Bar = rencana mulai → selesai.
+              Berlian ungu = estimasi kirim.
             </p>
           </div>
         </div>
@@ -213,7 +232,10 @@ function PlanningPage() {
             ))}
           </SelectContent>
         </Select>
-        <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)}>
+        <Select
+          value={statusFilter}
+          onValueChange={(v) => setStatusFilter(v as StatusFilter)}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Status" />
           </SelectTrigger>
@@ -224,7 +246,10 @@ function PlanningPage() {
             <SelectItem value="overdue">Terlambat</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
+        <Select
+          value={viewMode}
+          onValueChange={(v) => setViewMode(v as ViewMode)}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Skala" />
           </SelectTrigger>
@@ -236,18 +261,28 @@ function PlanningPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2 text-xs">
-        <Badge variant="outline" className="border-blue-300 bg-blue-100 text-blue-800">
+        <Badge
+          variant="outline"
+          className="border-blue-300 bg-blue-100 text-blue-800"
+        >
           Bar biru = rencana on-track
         </Badge>
-        <Badge variant="outline" className="border-red-300 bg-red-100 text-red-800">
+        <Badge
+          variant="outline"
+          className="border-red-300 bg-red-100 text-red-800"
+        >
           Bar merah = terlambat dari rencana
         </Badge>
-        <Badge variant="outline" className="border-purple-300 bg-purple-100 text-purple-800">
+        <Badge
+          variant="outline"
+          className="border-purple-300 bg-purple-100 text-purple-800"
+        >
           ◆ Berlian ungu = estimasi kirim (bukan data Delivery)
         </Badge>
         {overdueCount > 0 && (
           <span className="inline-flex items-center gap-1 text-red-600">
-            <AlertTriangle className="h-3.5 w-3.5" /> {overdueCount} batch terlambat
+            <AlertTriangle className="h-3.5 w-3.5" /> {overdueCount} batch
+            terlambat
           </span>
         )}
       </div>
@@ -259,8 +294,8 @@ function PlanningPage() {
             <Badge variant="secondary">{unscheduled.length}</Badge>
           </div>
           <p className="text-xs text-muted-foreground">
-            Batch berikut belum punya <em>rencana mulai</em> atau <em>rencana selesai</em>. Klik
-            untuk mengisi jadwal.
+            Batch berikut belum punya <em>rencana mulai</em> atau{" "}
+            <em>rencana selesai</em>. Klik untuk mengisi jadwal.
           </p>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {unscheduled.map((b) => (
@@ -273,11 +308,15 @@ function PlanningPage() {
                 className="text-left rounded-lg border p-3 hover:bg-muted/50 transition"
               >
                 <div className="font-mono text-sm">{b.batch_number}</div>
-                <div className="text-sm">{b.engineering_job?.sales_order_item?.item_name}</div>
+                <div className="text-sm">
+                  {b.engineering_job?.sales_order_item?.item_name}
+                </div>
                 <div className="text-xs text-muted-foreground">
                   Qty {Number(b.quantity)} · SO{" "}
-                  {b.engineering_job?.sales_order_item?.sales_order?.so_number} ·{" "}
-                  {b.engineering_job?.sales_order_item?.sales_order?.customer?.name ?? "—"}
+                  {b.engineering_job?.sales_order_item?.sales_order?.so_number}{" "}
+                  ·{" "}
+                  {b.engineering_job?.sales_order_item?.sales_order?.customer
+                    ?.name ?? "—"}
                 </div>
               </button>
             ))}
@@ -300,7 +339,8 @@ function PlanningPage() {
 
       <p className="text-xs text-muted-foreground">
         Badge tahapan aktif di nama bar diambil dari step berstatus{" "}
-        <em>{STEP_STATUS_LABEL.running}</em> ({Object.values(PROCESS_LABEL).join(" / ")}).
+        <em>{STEP_STATUS_LABEL.running}</em> (
+        {Object.values(PROCESS_LABEL).join(" / ")}).
       </p>
 
       <CreateBatchDialog

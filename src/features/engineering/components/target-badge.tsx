@@ -37,7 +37,11 @@ export function TargetBadge({
       )}
       aria-label={isOverdue ? `Terlambat ${over} hari` : `Target ${target}`}
     >
-      {isOverdue ? <AlertTriangle className="h-3 w-3" /> : <Calendar className="h-3 w-3" />}
+      {isOverdue ? (
+        <AlertTriangle className="h-3 w-3" />
+      ) : (
+        <Calendar className="h-3 w-3" />
+      )}
       <span>{target}</span>
       {isOverdue && <span>· Terlambat {over} hari</span>}
     </span>

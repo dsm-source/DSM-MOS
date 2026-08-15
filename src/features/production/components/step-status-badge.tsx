@@ -1,5 +1,9 @@
 import { cn } from "@/lib/utils";
-import { STEP_STATUS_CLASS, STEP_STATUS_ICON, STEP_STATUS_LABEL } from "../lib/process";
+import {
+  STEP_STATUS_CLASS,
+  STEP_STATUS_ICON,
+  STEP_STATUS_LABEL,
+} from "../lib/process";
 import type { ProductionStepStatus } from "../types";
 
 export function StepStatusBadge({

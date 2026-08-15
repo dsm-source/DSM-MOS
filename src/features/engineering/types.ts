@@ -1,6 +1,7 @@
 import type { Database } from "@/integrations/supabase/types";
 
-export type EngineeringStatus = Database["public"]["Enums"]["engineering_status"];
+export type EngineeringStatus =
+  Database["public"]["Enums"]["engineering_status"];
 export const ENGINEERING_STATUSES: EngineeringStatus[] = [
   "draft",
   "in_progress",
@@ -8,4 +9,5 @@ export const ENGINEERING_STATUSES: EngineeringStatus[] = [
   "approved",
 ];
 
-export type EngineeringJobRow = Database["public"]["Tables"]["engineering_jobs"]["Row"];
+export type EngineeringJobRow =
+  Database["public"]["Tables"]["engineering_jobs"]["Row"];

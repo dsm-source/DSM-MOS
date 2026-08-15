@@ -7,9 +7,14 @@ export function useSoStatusCounts() {
   return useQuery({
     queryKey: ["dashboard", "so-status"],
     queryFn: async (): Promise<SoStatusRow[]> => {
-      const { data, error } = await supabase.from("v_dashboard_so_status").select("status, count");
+      const { data, error } = await supabase
+        .from("v_dashboard_so_status")
+        .select("status, count");
       if (error) throw error;
-      return (data ?? []).map((r) => ({ status: r.status as string, count: Number(r.count) }));
+      return (data ?? []).map((r) => ({
+        status: r.status as string,
+        count: Number(r.count),
+      }));
     },
   });
 }

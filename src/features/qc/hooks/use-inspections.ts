@@ -29,12 +29,16 @@ function normalize(row: unknown): QcInspectionWithContext {
       | (NonNullable<QcInspectionWithContext["production_batch"]> & {
           engineering_job:
             | (NonNullable<
-                NonNullable<QcInspectionWithContext["production_batch"]>["engineering_job"]
+                NonNullable<
+                  QcInspectionWithContext["production_batch"]
+                >["engineering_job"]
               > & {
                 sales_order_item:
                   | (NonNullable<
                       NonNullable<
-                        NonNullable<QcInspectionWithContext["production_batch"]>["engineering_job"]
+                        NonNullable<
+                          QcInspectionWithContext["production_batch"]
+                        >["engineering_job"]
                       >["sales_order_item"]
                     > & {
                       sales_order:
@@ -69,8 +73,10 @@ export function useQcInspections() {
   useEffect(() => {
     const channel = supabase
       .channel("qc-inspections-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "qc_inspections" }, () =>
-        qc.invalidateQueries({ queryKey: QC_KEY }),
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "qc_inspections" },
+        () => qc.invalidateQueries({ queryKey: QC_KEY }),
       )
       .subscribe();
     return () => {

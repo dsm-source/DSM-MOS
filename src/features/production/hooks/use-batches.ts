@@ -4,6 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { mapPgError } from "@/lib/pg-error";
 import type { ProductionBatchRow, ProductionBatchStepRow } from "../types";
 
+function toRouting(processes: string[]) {
+  return processes.map((process, i) => ({ process, sequence_order: i + 1 }));
+}
+
 export type BatchWithContext = ProductionBatchRow & {
   engineering_job: {
     id: string;
@@ -49,10 +53,14 @@ function normalize(row: unknown): BatchWithContext {
       | (BatchWithContext["engineering_job"] & {
           material_status: unknown;
           sales_order_item:
-            | (NonNullable<BatchWithContext["engineering_job"]>["sales_order_item"] & {
+            | (NonNullable<
+                BatchWithContext["engineering_job"]
+              >["sales_order_item"] & {
                 sales_order:
                   | (NonNullable<
-                      NonNullable<BatchWithContext["engineering_job"]>["sales_order_item"]
+                      NonNullable<
+                        BatchWithContext["engineering_job"]
+                      >["sales_order_item"]
                     >["sales_order"] & { customer: unknown })
                   | null;
               })
@@ -63,17 +71,21 @@ function normalize(row: unknown): BatchWithContext {
   if (r.engineering_job) {
     const ms = r.engineering_job.material_status as unknown;
     if (Array.isArray(ms)) {
-      r.engineering_job.material_status = (ms[0] as { status: string } | undefined) ?? null;
+      r.engineering_job.material_status =
+        (ms[0] as { status: string } | undefined) ?? null;
     }
     const so = r.engineering_job.sales_order_item?.sales_order;
     if (so) {
       const cu = so.customer as unknown;
       if (Array.isArray(cu)) {
-        so.customer = (cu[0] as { id: string; name: string } | undefined) ?? null;
+        so.customer =
+          (cu[0] as { id: string; name: string } | undefined) ?? null;
       }
     }
   }
-  r.steps = [...(r.steps ?? [])].sort((a, b) => a.sequence_order - b.sequence_order);
+  r.steps = [...(r.steps ?? [])].sort(
+    (a, b) => a.sequence_order - b.sequence_order,
+  );
   return r;
 }
 
@@ -84,19 +96,25 @@ export function useProductionBatches() {
   useEffect(() => {
     const channel = supabase
       .channel("production-batches-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "production_batches" }, () =>
-        qc.invalidateQueries({ queryKey: BATCHES_KEY }),
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "production_batches" },
+        () => qc.invalidateQueries({ queryKey: BATCHES_KEY }),
       )
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "production_batch_steps" },
         () => qc.invalidateQueries({ queryKey: BATCHES_KEY }),
       )
-      .on("postgres_changes", { event: "*", schema: "public", table: "material_statuses" }, () =>
-        qc.invalidateQueries({ queryKey: BATCHES_KEY }),
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "material_statuses" },
+        () => qc.invalidateQueries({ queryKey: BATCHES_KEY }),
       )
-      .on("postgres_changes", { event: "*", schema: "public", table: "engineering_jobs" }, () =>
-        qc.invalidateQueries({ queryKey: BATCHES_KEY }),
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "engineering_jobs" },
+        () => qc.invalidateQueries({ queryKey: BATCHES_KEY }),
       )
       .subscribe();
     return () => {
@@ -140,6 +158,7 @@ export type CreateBatchInput = {
   planned_completion_date: string | null;
   estimated_delivery_date: string | null;
   notes: string | null;
+  routing: string[];
 };
 
 export function useCreateBatch() {
@@ -155,6 +174,7 @@ export function useCreateBatch() {
           planned_completion_date: input.planned_completion_date,
           estimated_delivery_date: input.estimated_delivery_date,
           notes: input.notes,
+          routing: toRouting(input.routing),
           // batch_number diisi trigger database
         } as never)
         .select("*")
@@ -174,6 +194,7 @@ export type UpdateBatchPlanInput = {
   planned_completion_date: string | null;
   estimated_delivery_date: string | null;
   notes?: string | null;
+  routing?: string[];
 };
 
 export function useUpdateBatchPlan() {
@@ -186,6 +207,7 @@ export function useUpdateBatchPlan() {
         estimated_delivery_date: input.estimated_delivery_date,
       };
       if (input.notes !== undefined) patch.notes = input.notes;
+      if (input.routing !== undefined) patch.routing = toRouting(input.routing);
       const { data, error } = await supabase
         .from("production_batches")
         .update(patch as never)

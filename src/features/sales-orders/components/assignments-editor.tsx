@@ -78,13 +78,16 @@ function AssignmentRow({
   currentUserId: string | null;
   canWrite: boolean;
 }) {
-  const { data: users = [], isLoading } = useUsersByRole(canWrite ? role : null);
+  const { data: users = [], isLoading } = useUsersByRole(
+    canWrite ? role : null,
+  );
   const upsert = useUpsertAssignment();
   const del = useDeleteAssignment();
 
   const currentUser = users.find((u) => u.user_id === currentUserId);
   const displayEmail =
-    currentUser?.email ?? (currentUserId ? `(user ${currentUserId.slice(0, 8)}…)` : null);
+    currentUser?.email ??
+    (currentUserId ? `(user ${currentUserId.slice(0, 8)}…)` : null);
 
   return (
     <div className="flex items-center gap-2 border rounded-lg px-3 py-2">
@@ -92,7 +95,9 @@ function AssignmentRow({
         <div className="text-xs text-muted-foreground">{label}</div>
         {!canWrite && (
           <div className="text-sm font-medium truncate">
-            {displayEmail ?? <span className="text-muted-foreground">— belum di-assign</span>}
+            {displayEmail ?? (
+              <span className="text-muted-foreground">— belum di-assign</span>
+            )}
           </div>
         )}
       </div>

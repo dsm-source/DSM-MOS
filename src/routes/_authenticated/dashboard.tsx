@@ -6,7 +6,13 @@ import { FileText, Boxes, Factory } from "lucide-react";
 import { useMyRoles } from "@/hooks/use-my-roles";
 import { claimFirstAdmin, isRolesTableEmpty } from "@/lib/roles.functions";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
@@ -44,12 +50,18 @@ function StatCard({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          {title}
+        </CardTitle>
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-3xl font-semibold tracking-tight">{loading ? "…" : value}</div>
-        {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
+        <div className="text-3xl font-semibold tracking-tight">
+          {loading ? "…" : value}
+        </div>
+        {description && (
+          <p className="text-xs text-muted-foreground mt-1">{description}</p>
+        )}
       </CardContent>
     </Card>
   );
@@ -92,7 +104,9 @@ function DashboardPage() {
   for (const row of soStatus.data ?? []) soByStatus.set(row.status, row.count);
   const soTotal = (soStatus.data ?? []).reduce((sum, r) => sum + r.count, 0);
   const soActive =
-    soTotal - (soByStatus.get("completed") ?? 0) - (soByStatus.get("cancelled") ?? 0);
+    soTotal -
+    (soByStatus.get("completed") ?? 0) -
+    (soByStatus.get("cancelled") ?? 0);
 
   const orderedStatuses: SalesOrderStatus[] = [
     "draft",
@@ -109,7 +123,9 @@ function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">Ringkasan operasional lintas modul.</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Ringkasan operasional lintas modul.
+        </p>
       </div>
 
       {/* Peran & bootstrap admin */}
@@ -117,18 +133,21 @@ function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Peran Anda</CardTitle>
-            <CardDescription>Menentukan modul yang bisa Anda akses.</CardDescription>
+            <CardDescription>
+              Menentukan modul yang bisa Anda akses.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Belum ada peran yang ditugaskan ke akun Anda. Hubungi admin sistem.
+              Belum ada peran yang ditugaskan ke akun Anda. Hubungi admin
+              sistem.
             </p>
             {emptyQuery.data?.empty && (
               <div className="rounded-md border border-dashed p-4">
                 <p className="text-sm font-medium">Belum ada admin di sistem</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Karena tabel peran masih kosong, Anda dapat mengklaim posisi admin pertama. Aksi
-                  ini hanya bisa dilakukan sekali.
+                  Karena tabel peran masih kosong, Anda dapat mengklaim posisi
+                  admin pertama. Aksi ini hanya bisa dilakukan sekali.
                 </p>
                 <Button
                   className="mt-3"
@@ -136,7 +155,9 @@ function DashboardPage() {
                   onClick={() => claimMutation.mutate()}
                   disabled={claimMutation.isPending}
                 >
-                  {claimMutation.isPending ? "Memproses..." : "Klaim admin pertama"}
+                  {claimMutation.isPending
+                    ? "Memproses..."
+                    : "Klaim admin pertama"}
                 </Button>
               </div>
             )}
@@ -182,13 +203,17 @@ function DashboardPage() {
       <Card>
         <CardHeader>
           <CardTitle>Sales Order per Status</CardTitle>
-          <CardDescription>Distribusi seluruh SO berdasarkan status saat ini.</CardDescription>
+          <CardDescription>
+            Distribusi seluruh SO berdasarkan status saat ini.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {soStatus.isLoading ? (
             <p className="text-sm text-muted-foreground">Memuat…</p>
           ) : soTotal === 0 ? (
-            <p className="text-sm text-muted-foreground">Belum ada Sales Order.</p>
+            <p className="text-sm text-muted-foreground">
+              Belum ada Sales Order.
+            </p>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {orderedStatuses.map((status) => {
@@ -201,15 +226,20 @@ function DashboardPage() {
                       STATUS_CLASS[status],
                     )}
                   >
-                    <span className="text-sm font-medium">{STATUS_LABEL[status]}</span>
-                    <span className="text-xl font-semibold tabular-nums">{count}</span>
+                    <span className="text-sm font-medium">
+                      {STATUS_LABEL[status]}
+                    </span>
+                    <span className="text-xl font-semibold tabular-nums">
+                      {count}
+                    </span>
                   </div>
                 );
               })}
             </div>
           )}
           <p className="text-xs text-muted-foreground mt-4">
-            Kartu Antrian QC dan Siap Kirim akan muncul setelah modul QC & Delivery dibangun.
+            Kartu Antrian QC dan Siap Kirim akan muncul setelah modul QC &
+            Delivery dibangun.
           </p>
         </CardContent>
       </Card>

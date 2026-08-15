@@ -12,7 +12,10 @@ export const Route = createFileRoute("/")({
         content:
           "DSM MOS mengoordinasikan Sales Order, Engineering, Material, Production, QC, dan Delivery untuk pabrik sheet metal — satu sumber kebenaran, real-time.",
       },
-      { property: "og:title", content: "DSM MOS — Manufacturing Operating System" },
+      {
+        property: "og:title",
+        content: "DSM MOS — Manufacturing Operating System",
+      },
       {
         property: "og:description",
         content:
@@ -52,8 +55,9 @@ function LandingPage() {
           DSM MOS
         </h1>
         <p className="mt-4 text-base text-muted-foreground max-w-lg mx-auto">
-          Koordinasi Sales Order, Engineering, Material, Production, QC, dan Delivery untuk pabrik
-          sheet metal — satu sistem, real-time, aturan bisnis ditegakkan di database.
+          Koordinasi Sales Order, Engineering, Material, Production, QC, dan
+          Delivery untuk pabrik sheet metal — satu sistem, real-time, aturan
+          bisnis ditegakkan di database.
         </p>
         <div className="mt-8 flex items-center justify-center gap-3">
           <Button asChild size="lg">

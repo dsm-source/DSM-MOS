@@ -1,4 +1,9 @@
-import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
 import { Suspense, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,18 +50,29 @@ function AuthenticatedLayout() {
           <header className="h-12 flex items-center justify-between border-b bg-background px-2 gap-2">
             <div className="flex items-center gap-2">
               <SidebarTrigger />
-              <span className="text-sm text-muted-foreground truncate">{user.email}</span>
+              <span className="text-sm text-muted-foreground truncate">
+                {user.email}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <NotificationsBell />
-              <Button variant="ghost" size="sm" onClick={handleSignOut} disabled={signingOut}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSignOut}
+                disabled={signingOut}
+              >
                 <LogOut className="h-4 w-4 mr-2" />
                 Keluar
               </Button>
             </div>
           </header>
           <main className="flex-1 p-6">
-            <Suspense fallback={<div className="text-sm text-muted-foreground">Memuat...</div>}>
+            <Suspense
+              fallback={
+                <div className="text-sm text-muted-foreground">Memuat...</div>
+              }
+            >
               <Outlet />
             </Suspense>
           </main>

@@ -18,7 +18,10 @@ import { useDeliveries } from "@/features/delivery/hooks/use-deliveries";
 import { DeliveryStatusBadge } from "@/features/delivery/components/delivery-status-badge";
 import { CreateDeliveryDialog } from "@/features/delivery/components/create-delivery-dialog";
 import { isOverdue } from "@/features/delivery/components/delivery-gantt";
-import { DELIVERY_STATUS_LABEL, DELIVERY_STATUS_ORDER } from "@/features/delivery/lib/status";
+import {
+  DELIVERY_STATUS_LABEL,
+  DELIVERY_STATUS_ORDER,
+} from "@/features/delivery/lib/status";
 import type { DeliveryStatus } from "@/features/delivery/types";
 
 export const Route = createFileRoute("/_authenticated/delivery")({
@@ -27,7 +30,8 @@ export const Route = createFileRoute("/_authenticated/delivery")({
       { title: "Rencana Pengiriman — DSM MOS" },
       {
         name: "description",
-        content: "Daftar rencana pengiriman internal (bukan surat jalan resmi).",
+        content:
+          "Daftar rencana pengiriman internal (bukan surat jalan resmi).",
       },
     ],
   }),
@@ -91,7 +95,10 @@ function DeliveryPage() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <Select value={status} onValueChange={(v) => setStatus(v as DeliveryStatus | "all")}>
+        <Select
+          value={status}
+          onValueChange={(v) => setStatus(v as DeliveryStatus | "all")}
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue />
           </SelectTrigger>
@@ -111,7 +118,9 @@ function DeliveryPage() {
           <Loader2 className="h-5 w-5 mr-2 animate-spin" /> Memuat…
         </div>
       ) : filtered.length === 0 ? (
-        <Card className="p-8 text-center text-sm text-muted-foreground">Tidak ada data.</Card>
+        <Card className="p-8 text-center text-sm text-muted-foreground">
+          Tidak ada data.
+        </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
           {filtered.map((d) => {
@@ -132,14 +141,20 @@ function DeliveryPage() {
                   <div className="text-xs text-muted-foreground">
                     Kirim:{" "}
                     {d.planned_ship_date
-                      ? format(new Date(d.planned_ship_date), "d MMM yyyy", { locale: idLocale })
+                      ? format(new Date(d.planned_ship_date), "d MMM yyyy", {
+                          locale: idLocale,
+                        })
                       : "-"}
                     {" · "}
                     Sampai:{" "}
                     {d.planned_delivery_date
-                      ? format(new Date(d.planned_delivery_date), "d MMM yyyy", {
-                          locale: idLocale,
-                        })
+                      ? format(
+                          new Date(d.planned_delivery_date),
+                          "d MMM yyyy",
+                          {
+                            locale: idLocale,
+                          },
+                        )
                       : "-"}
                   </div>
                   <div className="text-xs">
@@ -148,7 +163,9 @@ function DeliveryPage() {
                         {d.driver_name ?? "-"} · {d.vehicle_number ?? "-"}
                       </>
                     ) : (
-                      <span className="text-muted-foreground">Driver/kendaraan belum diisi</span>
+                      <span className="text-muted-foreground">
+                        Driver/kendaraan belum diisi
+                      </span>
                     )}
                   </div>
                   <div className="text-xs text-muted-foreground">

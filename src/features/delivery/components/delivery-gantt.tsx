@@ -1,7 +1,11 @@
 import { useMemo } from "react";
 import { Gantt, Task, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
-import { DELIVERY_STATUS_COLOR, DELIVERY_STATUS_LABEL, OVERDUE_COLOR } from "../lib/status";
+import {
+  DELIVERY_STATUS_COLOR,
+  DELIVERY_STATUS_LABEL,
+  OVERDUE_COLOR,
+} from "../lib/status";
 import type { DeliveryWithContext } from "../types";
 
 function parseDate(d: string | null): Date | null {

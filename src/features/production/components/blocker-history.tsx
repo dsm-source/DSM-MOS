@@ -26,7 +26,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useBlockerHistory, type BlockerEvent } from "../hooks/use-blocker-history";
+import {
+  useBlockerHistory,
+  type BlockerEvent,
+} from "../hooks/use-blocker-history";
 import { resolveActorEmails } from "../hooks/use-actor-emails";
 
 type MilestoneFilter = "all" | "approved" | "material_ready" | "non_milestone";
@@ -45,9 +48,14 @@ const MAT_LABEL: Record<string, string> = {
   material_ready: "Material Ready",
 };
 
-function label(source: "engineering" | "material", status: string | null): string {
+function label(
+  source: "engineering" | "material",
+  status: string | null,
+): string {
   if (!status) return "—";
-  return (source === "engineering" ? ENG_LABEL[status] : MAT_LABEL[status]) ?? status;
+  return (
+    (source === "engineering" ? ENG_LABEL[status] : MAT_LABEL[status]) ?? status
+  );
 }
 
 function actorName(e: BlockerEvent): string {
@@ -74,7 +82,10 @@ function actorKeyOf(e: BlockerEvent): string {
 
 /** Format durasi antara dua ISO timestamps (menit/jam/hari). */
 function formatDurationBetween(fromIso: string, toIso: string): string {
-  const ms = Math.max(0, new Date(toIso).getTime() - new Date(fromIso).getTime());
+  const ms = Math.max(
+    0,
+    new Date(toIso).getTime() - new Date(fromIso).getTime(),
+  );
   let s = Math.floor(ms / 1000);
   const d = Math.floor(s / 86400);
   s -= d * 86400;
@@ -87,8 +98,12 @@ function formatDurationBetween(fromIso: string, toIso: string): string {
 }
 
 function WaitSummary({ events }: { events: BlockerEvent[] }) {
-  const engApproved = events.find((e) => e.source === "engineering" && e.to_status === "approved");
-  const matReady = events.find((e) => e.source === "material" && e.to_status === "material_ready");
+  const engApproved = events.find(
+    (e) => e.source === "engineering" && e.to_status === "approved",
+  );
+  const matReady = events.find(
+    (e) => e.source === "material" && e.to_status === "material_ready",
+  );
   const nowIso = new Date().toISOString();
 
   // Kedua milestone sudah tercapai → tampilkan gap antar milestone.
@@ -96,9 +111,14 @@ function WaitSummary({ events }: { events: BlockerEvent[] }) {
     const [firstMs, secondMs] = [engApproved, matReady].sort((a, b) =>
       a.changed_at.localeCompare(b.changed_at),
     );
-    const firstLabel = firstMs.source === "engineering" ? "Engineering approved" : "Material ready";
+    const firstLabel =
+      firstMs.source === "engineering"
+        ? "Engineering approved"
+        : "Material ready";
     const secondLabel =
-      secondMs.source === "engineering" ? "Engineering approved" : "Material ready";
+      secondMs.source === "engineering"
+        ? "Engineering approved"
+        : "Material ready";
     const gap = formatDurationBetween(firstMs.changed_at, secondMs.changed_at);
     return (
       <div className="rounded-md border border-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-800 p-2 mb-3 flex items-start gap-2">
@@ -106,9 +126,11 @@ function WaitSummary({ events }: { events: BlockerEvent[] }) {
         <div className="text-xs text-emerald-900 dark:text-emerald-100 space-y-0.5">
           <div className="font-medium">Total menunggu: {gap}</div>
           <div className="text-emerald-800/80 dark:text-emerald-200/80">
-            Dari <strong>{firstLabel}</strong> oleh <strong>{actorName(firstMs)}</strong> (
-            {new Date(firstMs.changed_at).toLocaleString()}) sampai <strong>{secondLabel}</strong>{" "}
-            oleh <strong>{actorName(secondMs)}</strong> (
+            Dari <strong>{firstLabel}</strong> oleh{" "}
+            <strong>{actorName(firstMs)}</strong> (
+            {new Date(firstMs.changed_at).toLocaleString()}) sampai{" "}
+            <strong>{secondLabel}</strong> oleh{" "}
+            <strong>{actorName(secondMs)}</strong> (
             {new Date(secondMs.changed_at).toLocaleString()}).
           </div>
         </div>
@@ -120,9 +142,13 @@ function WaitSummary({ events }: { events: BlockerEvent[] }) {
   if (engApproved || matReady) {
     const reached = (engApproved ?? matReady)!;
     const reachedLabel =
-      reached.source === "engineering" ? "Engineering approved" : "Material ready";
+      reached.source === "engineering"
+        ? "Engineering approved"
+        : "Material ready";
     const pendingLabel =
-      reached.source === "engineering" ? "Material ready" : "Engineering approved";
+      reached.source === "engineering"
+        ? "Material ready"
+        : "Engineering approved";
     const dur = formatDurationBetween(reached.changed_at, nowIso);
     return (
       <div className="rounded-md border border-amber-300 bg-amber-50 dark:bg-amber-900/30 dark:border-amber-800 p-2 mb-3 flex items-start gap-2">
@@ -148,10 +174,12 @@ function WaitSummary({ events }: { events: BlockerEvent[] }) {
     <div className="rounded-md border border-amber-300 bg-amber-50 dark:bg-amber-900/30 dark:border-amber-800 p-2 mb-3 flex items-start gap-2">
       <Hourglass className="h-3.5 w-3.5 mt-0.5 shrink-0 text-amber-700 dark:text-amber-300" />
       <div className="text-xs text-amber-900 dark:text-amber-100">
-        <div className="font-medium">Menunggu Engineering & Material: {dur}</div>
+        <div className="font-medium">
+          Menunggu Engineering & Material: {dur}
+        </div>
         <div className="text-amber-800/80 dark:text-amber-200/80">
-          Sejak perubahan pertama {new Date(first.changed_at).toLocaleString()} oleh{" "}
-          <strong>{actorName(first)}</strong>.
+          Sejak perubahan pertama {new Date(first.changed_at).toLocaleString()}{" "}
+          oleh <strong>{actorName(first)}</strong>.
         </div>
       </div>
     </div>
@@ -178,8 +206,10 @@ function ActorMilestoneStats({
   const stats = useMemo<ActorStat[]>(() => {
     const map = new Map<string, ActorStat>();
     for (const e of events) {
-      const isApproved = e.source === "engineering" && e.to_status === "approved";
-      const isMatReady = e.source === "material" && e.to_status === "material_ready";
+      const isApproved =
+        e.source === "engineering" && e.to_status === "approved";
+      const isMatReady =
+        e.source === "material" && e.to_status === "material_ready";
       if (!isApproved && !isMatReady) continue;
       const key = actorKeyOf(e);
       let row = map.get(key);
@@ -214,13 +244,13 @@ function ActorMilestoneStats({
         <div className="text-xs font-semibold">Milestone per aktor</div>
         <div className="text-[11px] text-muted-foreground flex items-center gap-2">
           <span className="inline-flex items-center gap-1">
-            <Wrench className="h-3 w-3 text-blue-600 dark:text-blue-400" /> Approved:{" "}
-            {totalApproved}
+            <Wrench className="h-3 w-3 text-blue-600 dark:text-blue-400" />{" "}
+            Approved: {totalApproved}
           </span>
           <span className="text-muted-foreground/60">•</span>
           <span className="inline-flex items-center gap-1">
-            <Package className="h-3 w-3 text-amber-600 dark:text-amber-400" /> Material ready:{" "}
-            {totalMatReady}
+            <Package className="h-3 w-3 text-amber-600 dark:text-amber-400" />{" "}
+            Material ready: {totalMatReady}
           </span>
         </div>
       </div>
@@ -247,8 +277,12 @@ function ActorMilestoneStats({
                 aria-pressed={isActive}
               >
                 <span className="truncate mr-2 text-left">
-                  <span className="font-medium text-foreground/90">{r.name}</span>
-                  {r.email && <span className="text-muted-foreground"> · {r.email}</span>}
+                  <span className="font-medium text-foreground/90">
+                    {r.name}
+                  </span>
+                  {r.email && (
+                    <span className="text-muted-foreground"> · {r.email}</span>
+                  )}
                 </span>
                 <span className="flex items-center gap-2 shrink-0">
                   <span
@@ -332,7 +366,12 @@ export function BlockerHistory({
   engineeringJobId: string | undefined;
   batchLabel?: string;
 }) {
-  const { data: events, isLoading, error, refetch } = useBlockerHistory(engineeringJobId);
+  const {
+    data: events,
+    isLoading,
+    error,
+    refetch,
+  } = useBlockerHistory(engineeringJobId);
   const queryClient = useQueryClient();
   const label_ = batchLabel ?? "batch";
 
@@ -413,7 +452,12 @@ export function BlockerHistory({
 
   // Kumpulkan user_id aktor pada baris terfilter agar bisa di-prefetch.
   const filteredActorIds = useMemo(
-    () => Array.from(new Set(filtered.map((e) => e.changed_by).filter((v): v is string => !!v))),
+    () =>
+      Array.from(
+        new Set(
+          filtered.map((e) => e.changed_by).filter((v): v is string => !!v),
+        ),
+      ),
     [filtered],
   );
 
@@ -464,7 +508,11 @@ export function BlockerHistory({
       if (!prev) {
         const active = document.activeElement as HTMLElement | null;
         focusBeforeErrorRef.current =
-          active && active !== document.body && panelRef.current?.contains(active) ? active : null;
+          active &&
+          active !== document.body &&
+          panelRef.current?.contains(active)
+            ? active
+            : null;
       }
       queueMicrotask(() => focusProgrammatically(retryBtnRef.current));
     } else if (emailsError && emailsError === prev) {
@@ -494,7 +542,11 @@ export function BlockerHistory({
     setEmailsPrefetching(true);
     resolveActorEmails(queryClient, filteredActorIds)
       .then(() => setEmailsError(null))
-      .catch((e) => setEmailsError(e instanceof Error ? e.message : "Gagal memuat nama aktor"))
+      .catch((e) =>
+        setEmailsError(
+          e instanceof Error ? e.message : "Gagal memuat nama aktor",
+        ),
+      )
       .finally(() => setEmailsPrefetching(false));
   };
 
@@ -516,7 +568,9 @@ export function BlockerHistory({
       const emailMap = await resolveActorEmails(queryClient, filteredActorIds);
       setEmailsError(null);
       const rows: BlockerEvent[] = filtered.map((e) =>
-        e.changed_by ? { ...e, actor_email: emailMap.get(e.changed_by) ?? e.actor_email } : e,
+        e.changed_by
+          ? { ...e, actor_email: emailMap.get(e.changed_by) ?? e.actor_email }
+          : e,
       );
       if (fmt === "csv") await exportCsv(rows, label_);
       else await exportPdf(rows, label_);
@@ -524,7 +578,9 @@ export function BlockerHistory({
         description: `${rows.length} baris riwayat blocker untuk ${label_} telah diunduh.`,
       });
     } catch (e) {
-      const { detail } = notifyError(e, { title: `Ekspor ${fmt.toUpperCase()} gagal` });
+      const { detail } = notifyError(e, {
+        title: `Ekspor ${fmt.toUpperCase()} gagal`,
+      });
       setEmailsError(detail);
     } finally {
       setExportingFmt(null);
@@ -583,7 +639,12 @@ export function BlockerHistory({
       {/* Live regions terpisah dan selalu ter-mount agar pembaca layar
           konsisten mengumumkan perubahan: 'polite' untuk loading, 'assertive'
           untuk error. aria-atomic supaya seluruh pesan dibacakan ulang. */}
-      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
         {emailsPrefetching && !emailsError
           ? "Menyiapkan nama aktor untuk pencarian dan ekspor."
           : ""}
@@ -602,12 +663,16 @@ export function BlockerHistory({
       )}
       {emailsPrefetching && !emailsError && (
         <div className="mb-2 flex items-center gap-2 rounded-md border border-muted bg-muted/40 px-2 py-1.5 text-xs text-muted-foreground">
-          <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
+          <Loader2
+            className="h-4 w-4 shrink-0 animate-spin"
+            aria-hidden="true"
+          />
           <span>Menyiapkan nama aktor untuk pencarian &amp; ekspor…</span>
         </div>
       )}
       <p className="text-xs text-muted-foreground mb-3">
-        Kronologi perubahan status Engineering & Material yang menentukan kapan batch boleh mulai.
+        Kronologi perubahan status Engineering & Material yang menentukan kapan
+        batch boleh mulai.
       </p>
 
       {hasEvents && (
@@ -622,7 +687,10 @@ export function BlockerHistory({
                 className="h-8 pl-7 text-xs"
               />
             </div>
-            <Select value={milestone} onValueChange={(v) => setMilestone(v as MilestoneFilter)}>
+            <Select
+              value={milestone}
+              onValueChange={(v) => setMilestone(v as MilestoneFilter)}
+            >
               <SelectTrigger className="h-8 w-[170px] text-xs">
                 <SelectValue placeholder="Milestone" />
               </SelectTrigger>
@@ -633,7 +701,10 @@ export function BlockerHistory({
                 <SelectItem value="non_milestone">Non-milestone</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={source} onValueChange={(v) => setSource(v as SourceFilter)}>
+            <Select
+              value={source}
+              onValueChange={(v) => setSource(v as SourceFilter)}
+            >
               <SelectTrigger className="h-8 w-[150px] text-xs">
                 <SelectValue placeholder="Aktor" />
               </SelectTrigger>
@@ -645,7 +716,10 @@ export function BlockerHistory({
             </Select>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <label htmlFor={dateFromId} className="text-xs text-muted-foreground">
+            <label
+              htmlFor={dateFromId}
+              className="text-xs text-muted-foreground"
+            >
               Dari
             </label>
             <Input
@@ -688,7 +762,9 @@ export function BlockerHistory({
         </div>
       )}
 
-      {isLoading && <div className="text-xs text-muted-foreground">Memuat…</div>}
+      {isLoading && (
+        <div className="text-xs text-muted-foreground">Memuat…</div>
+      )}
       {error && (
         <ErrorNotice
           compact
@@ -701,18 +777,25 @@ export function BlockerHistory({
         />
       )}
       {!isLoading && !error && !hasEvents && (
-        <div className="text-xs text-muted-foreground">Belum ada perubahan tercatat.</div>
+        <div className="text-xs text-muted-foreground">
+          Belum ada perubahan tercatat.
+        </div>
       )}
 
       {hasEvents && <WaitSummary events={events!} />}
       {hasEvents && (
-        <ActorMilestoneStats events={events!} activeKey={actorKey} onSelectActor={setActorKey} />
+        <ActorMilestoneStats
+          events={events!}
+          activeKey={actorKey}
+          onSelectActor={setActorKey}
+        />
       )}
 
       {actorKey && (
         <div className="mb-2 flex items-center justify-between rounded-md border border-primary/40 bg-primary/5 px-2 py-1 text-xs">
           <span>
-            Menampilkan aksi dari <strong>{activeActorLabel ?? "aktor terpilih"}</strong> pada batch
+            Menampilkan aksi dari{" "}
+            <strong>{activeActorLabel ?? "aktor terpilih"}</strong> pada batch
             ini.
           </span>
           <Button
@@ -738,7 +821,8 @@ export function BlockerHistory({
           {filtered.map((e) => {
             const isEng = e.source === "engineering";
             const isMilestone =
-              (isEng && e.to_status === "approved") || (!isEng && e.to_status === "material_ready");
+              (isEng && e.to_status === "approved") ||
+              (!isEng && e.to_status === "material_ready");
             const Icon = isMilestone ? CheckCircle2 : isEng ? Wrench : Package;
             return (
               <li key={e.id} className="flex items-start gap-2 text-xs">
@@ -754,8 +838,12 @@ export function BlockerHistory({
                 />
                 <div className="min-w-0 flex-1">
                   <div>
-                    <span className="font-medium">{isEng ? "Engineering" : "Material"}:</span>{" "}
-                    <span className="text-muted-foreground">{label(e.source, e.from_status)}</span>
+                    <span className="font-medium">
+                      {isEng ? "Engineering" : "Material"}:
+                    </span>{" "}
+                    <span className="text-muted-foreground">
+                      {label(e.source, e.from_status)}
+                    </span>
                     <span className="mx-1">→</span>
                     <span
                       className={
@@ -793,7 +881,9 @@ export function BlockerHistory({
                         }}
                         className={
                           "rounded-sm font-medium underline decoration-dotted underline-offset-2 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
-                          (isActorUnresolved(e) ? "text-muted-foreground italic" : "text-foreground/80")
+                          (isActorUnresolved(e)
+                            ? "text-muted-foreground italic"
+                            : "text-foreground/80")
                         }
                         aria-pressed={actorKey === actorKeyOf(e)}
                         title={`Tampilkan semua aksi ${actorName(e)} pada batch ini`}
@@ -803,7 +893,8 @@ export function BlockerHistory({
                       {isActorUnresolved(e) && (
                         <>
                           <span className="sr-only">
-                            Nama aktor gagal dimuat, menampilkan ID pengguna singkat.
+                            Nama aktor gagal dimuat, menampilkan ID pengguna
+                            singkat.
                           </span>
                           <Button
                             type="button"
@@ -815,9 +906,15 @@ export function BlockerHistory({
                             aria-label={`Coba lagi memuat nama aktor untuk pengguna ${shortActorId(e.changed_by!)}`}
                           >
                             {emailsPrefetching ? (
-                              <Loader2 className="h-3 w-3 mr-1 animate-spin" aria-hidden="true" />
+                              <Loader2
+                                className="h-3 w-3 mr-1 animate-spin"
+                                aria-hidden="true"
+                              />
                             ) : (
-                              <RefreshCw className="h-3 w-3 mr-1" aria-hidden="true" />
+                              <RefreshCw
+                                className="h-3 w-3 mr-1"
+                                aria-hidden="true"
+                              />
                             )}
                             Coba lagi
                           </Button>

@@ -10,10 +10,28 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useUpdateBatchPlan, type BatchWithContext } from "../hooks/use-batches";
+import {
+  useUpdateBatchPlan,
+  type BatchWithContext,
+} from "../hooks/use-batches";
+import { PRODUCTION_PROCESSES } from "../types";
+import { PROCESS_LABEL } from "../lib/process";
+
+function routingToProcesses(routing: unknown): string[] {
+  if (!Array.isArray(routing)) return [...PRODUCTION_PROCESSES];
+  const processes = routing
+    .map((item) =>
+      item && typeof item === "object"
+        ? (item as { process?: string }).process
+        : null,
+    )
+    .filter((p): p is string => !!p);
+  return processes.length > 0 ? processes : [...PRODUCTION_PROCESSES];
+}
 
 export function EditBatchPlanDialog({
   batch,
@@ -31,6 +49,9 @@ export function EditBatchPlanDialog({
   const [complete, setComplete] = useState("");
   const [delivery, setDelivery] = useState("");
   const [notes, setNotes] = useState("");
+  const [selectedProcesses, setSelectedProcesses] = useState<string[]>([
+    ...PRODUCTION_PROCESSES,
+  ]);
 
   useEffect(() => {
     if (!batch) return;
@@ -38,7 +59,14 @@ export function EditBatchPlanDialog({
     setComplete(batch.planned_completion_date ?? "");
     setDelivery(batch.estimated_delivery_date ?? "");
     setNotes(batch.notes ?? "");
+    setSelectedProcesses(routingToProcesses(batch.routing));
   }, [batch]);
+
+  const toggleProcess = (process: string, checked: boolean) => {
+    setSelectedProcesses((prev) =>
+      checked ? [...prev, process] : prev.filter((p) => p !== process),
+    );
+  };
 
   const submit = async () => {
     if (!batch) return;
@@ -54,6 +82,12 @@ export function EditBatchPlanDialog({
       });
       return;
     }
+    if (selectedProcesses.length === 0) {
+      toast.error("Data belum valid", {
+        description: "Pilih minimal 1 tahapan proses",
+      });
+      return;
+    }
     try {
       await update.mutateAsync({
         id: batch.id,
@@ -61,6 +95,9 @@ export function EditBatchPlanDialog({
         planned_completion_date: complete || null,
         estimated_delivery_date: delivery || null,
         notes: notes.trim() || null,
+        routing: PRODUCTION_PROCESSES.filter((p) =>
+          selectedProcesses.includes(p),
+        ),
       });
       toast.success("Rencana batch diperbarui");
       onOpenChange(false);
@@ -76,12 +113,15 @@ export function EditBatchPlanDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{canEdit ? "Ubah Rencana Batch" : "Detail Rencana Batch"}</DialogTitle>
+          <DialogTitle>
+            {canEdit ? "Ubah Rencana Batch" : "Detail Rencana Batch"}
+          </DialogTitle>
           <DialogDescription>
             {batch ? (
               <>
-                <span className="font-mono">{batch.batch_number}</span> · {item?.item_name} · Qty{" "}
-                {Number(batch.quantity)} {item?.unit ?? ""}
+                <span className="font-mono">{batch.batch_number}</span> ·{" "}
+                {item?.item_name} · Qty {Number(batch.quantity)}{" "}
+                {item?.unit ?? ""}
                 <br />
                 <span className="text-xs">
                   Job {job?.job_number} · SO {item?.sales_order?.so_number} ·{" "}
@@ -124,8 +164,31 @@ export function EditBatchPlanDialog({
               onChange={(e) => setDelivery(e.target.value)}
             />
             <p className="text-xs text-muted-foreground">
-              Milestone estimasi barang sampai ke customer. Bukan data dari modul Delivery.
+              Milestone estimasi barang sampai ke customer. Bukan data dari
+              modul Delivery.
             </p>
+          </div>
+          <div className="grid gap-1.5">
+            <Label>Tahapan Proses (Routing)</Label>
+            <div className="grid gap-2">
+              {PRODUCTION_PROCESSES.map((process) => (
+                <div key={process} className="flex items-center gap-2">
+                  <Checkbox
+                    id={`e-process-${process}`}
+                    checked={selectedProcesses.includes(process)}
+                    onCheckedChange={(checked) =>
+                      toggleProcess(process, checked === true)
+                    }
+                  />
+                  <Label
+                    htmlFor={`e-process-${process}`}
+                    className="font-normal"
+                  >
+                    {PROCESS_LABEL[process]}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="e-notes">Catatan</Label>

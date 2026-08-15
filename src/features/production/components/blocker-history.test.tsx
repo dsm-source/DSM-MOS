@@ -28,10 +28,15 @@ const sampleEvents: BlockerEvent[] = [
 ];
 
 vi.mock("../hooks/use-blocker-history", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../hooks/use-blocker-history")>();
+  const actual =
+    await importOriginal<typeof import("../hooks/use-blocker-history")>();
   return {
     ...actual,
-    useBlockerHistory: () => ({ data: sampleEvents, isLoading: false, error: null }),
+    useBlockerHistory: () => ({
+      data: sampleEvents,
+      isLoading: false,
+      error: null,
+    }),
   };
 });
 
@@ -45,9 +50,11 @@ vi.mock("../hooks/use-actor-emails", () => ({
 const toastSuccess = vi.fn();
 const toastError = vi.fn();
 vi.mock("sonner", () => ({
-  toast: { success: (...a: unknown[]) => toastSuccess(...a), error: (...a: unknown[]) => toastError(...a) },
+  toast: {
+    success: (...a: unknown[]) => toastSuccess(...a),
+    error: (...a: unknown[]) => toastError(...a),
+  },
 }));
-
 
 // Avoid importing jspdf in jsdom (heavy + not needed for these assertions).
 vi.mock("jspdf", () => ({
@@ -103,7 +110,9 @@ describe("BlockerHistory - resolve/export UI", () => {
     await user.hover(csvBtn);
 
     // Visible status bar with spinner
-    const bar = await screen.findByText(/Menyiapkan nama aktor untuk pencarian & ekspor/i);
+    const bar = await screen.findByText(
+      /Menyiapkan nama aktor untuk pencarian & ekspor/i,
+    );
     expect(bar).toBeInTheDocument();
     // Spinner icon (Loader2) has class animate-spin
     expect(bar.parentElement?.querySelector(".animate-spin")).toBeTruthy();
@@ -133,16 +142,22 @@ describe("BlockerHistory - resolve/export UI", () => {
     });
     const container = retry.closest("div");
     expect(container?.className).toMatch(/destructive/);
-    expect(container?.textContent).toMatch(/Gagal memuat nama aktor: Network down/i);
+    expect(container?.textContent).toMatch(
+      /Gagal memuat nama aktor: Network down/i,
+    );
 
     // Assertive alert live region present
-    const alertRegion = document.querySelector('[role="alert"][aria-live="assertive"]');
+    const alertRegion = document.querySelector(
+      '[role="alert"][aria-live="assertive"]',
+    );
     expect(alertRegion?.textContent).toMatch(/Gagal memuat nama aktor/i);
 
     // Clicking retry triggers another resolveActorEmails call
     resolveActorEmailsMock.mockResolvedValueOnce(new Map());
     await user.click(retry);
-    await waitFor(() => expect(resolveActorEmailsMock).toHaveBeenCalledTimes(2));
+    await waitFor(() =>
+      expect(resolveActorEmailsMock).toHaveBeenCalledTimes(2),
+    );
   });
 
   it("menonaktifkan tombol CSV & PDF selama ekspor berlangsung", async () => {
@@ -193,9 +208,14 @@ describe("BlockerHistory - resolve/export UI", () => {
       await waitFor(() => expect(toastSuccess).toHaveBeenCalledTimes(1));
 
       // Toast sukses berisi format + jumlah baris + label batch
-      const [title, opts] = toastSuccess.mock.calls[0] as [string, { description: string }];
+      const [title, opts] = toastSuccess.mock.calls[0] as [
+        string,
+        { description: string },
+      ];
       expect(title).toMatch(new RegExp(`Ekspor ${fmt} berhasil`, "i"));
-      expect(opts.description).toMatch(new RegExp(`${sampleEvents.length} baris`));
+      expect(opts.description).toMatch(
+        new RegExp(`${sampleEvents.length} baris`),
+      );
       expect(opts.description).toMatch(/Batch A/);
       expect(toastError).not.toHaveBeenCalled();
 
@@ -208,8 +228,9 @@ describe("BlockerHistory - resolve/export UI", () => {
       expect(document.querySelector(".animate-spin")).toBeNull();
 
       // Tidak ada state error tersisa
-      expect(screen.queryByText(/Gagal memuat nama aktor/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Gagal memuat nama aktor/i),
+      ).not.toBeInTheDocument();
     },
   );
 });
-

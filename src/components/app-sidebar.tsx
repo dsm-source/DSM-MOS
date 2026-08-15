@@ -49,21 +49,86 @@ const items: MenuItem[] = [
       "viewer",
     ],
   },
-  { title: "Sales Order", url: "/sales-orders", icon: FileText, roles: ["admin", "sales", "viewer"] },
-  { title: "Customers", url: "/customers", icon: Contact, roles: ["admin", "sales"] },
-  { title: "Engineering", url: "/engineering", icon: Ruler, roles: ["admin", "sales", "engineering", "material", "production_planning", "production", "qc", "delivery", "viewer"] },
-  { title: "Engineering Workload", url: "/engineering/workload", icon: Ruler, roles: ["admin", "sales", "engineering", "material", "production_planning", "production", "qc", "delivery", "viewer"] },
-  { title: "Material", url: "/material", icon: Boxes, roles: ["admin", "material", "viewer"] },
+  {
+    title: "Sales Order",
+    url: "/sales-orders",
+    icon: FileText,
+    roles: ["admin", "sales", "viewer"],
+  },
+  {
+    title: "Customers",
+    url: "/customers",
+    icon: Contact,
+    roles: ["admin", "sales"],
+  },
+  {
+    title: "Engineering",
+    url: "/engineering",
+    icon: Ruler,
+    roles: [
+      "admin",
+      "sales",
+      "engineering",
+      "material",
+      "production_planning",
+      "production",
+      "qc",
+      "delivery",
+      "viewer",
+    ],
+  },
+  {
+    title: "Engineering Workload",
+    url: "/engineering/workload",
+    icon: Ruler,
+    roles: [
+      "admin",
+      "sales",
+      "engineering",
+      "material",
+      "production_planning",
+      "production",
+      "qc",
+      "delivery",
+      "viewer",
+    ],
+  },
+  {
+    title: "Material",
+    url: "/material",
+    icon: Boxes,
+    roles: ["admin", "material", "viewer"],
+  },
   {
     title: "Production Planning",
     url: "/production-planning",
     icon: CalendarRange,
     roles: ["admin", "production_planning"],
   },
-  { title: "Production", url: "/production", icon: Factory, roles: ["admin", "production", "viewer"] },
-  { title: "QC", url: "/qc", icon: ShieldCheck, roles: ["admin", "qc", "viewer"] },
-  { title: "Delivery", url: "/delivery", icon: Truck, roles: ["admin", "delivery", "viewer"] },
-  { title: "Jadwal Pengiriman", url: "/delivery/schedule", icon: CalendarRange, roles: ["admin", "delivery", "viewer"] },
+  {
+    title: "Production",
+    url: "/production",
+    icon: Factory,
+    roles: ["admin", "production", "viewer"],
+  },
+  {
+    title: "QC",
+    url: "/qc",
+    icon: ShieldCheck,
+    roles: ["admin", "qc", "viewer"],
+  },
+  {
+    title: "Delivery",
+    url: "/delivery",
+    icon: Truck,
+    roles: ["admin", "delivery", "viewer"],
+  },
+  {
+    title: "Jadwal Pengiriman",
+    url: "/delivery/schedule",
+    icon: CalendarRange,
+    roles: ["admin", "delivery", "viewer"],
+  },
   { title: "Kelola User", url: "/admin", icon: Users, roles: ["admin"] },
 ];
 
@@ -94,7 +159,11 @@ export function AppSidebar() {
                 const active = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active}
+                      tooltip={item.title}
+                    >
                       <Link to={item.url} className="flex items-center gap-2">
                         <item.icon className="h-4 w-4" />
                         <span>{item.title}</span>

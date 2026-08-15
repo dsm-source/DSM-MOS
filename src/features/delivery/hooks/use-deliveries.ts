@@ -16,11 +16,14 @@ const SELECT = `
 const KEY = ["deliveries"] as const;
 
 function normalize(row: unknown): DeliveryWithContext {
-  const r = row as DeliveryWithContext & { sales_order: { customer: unknown } | null };
+  const r = row as DeliveryWithContext & {
+    sales_order: { customer: unknown } | null;
+  };
   if (r.sales_order) {
     const cu = r.sales_order.customer as unknown;
     if (Array.isArray(cu))
-      r.sales_order.customer = (cu[0] as { id: string; name: string } | undefined) ?? null;
+      r.sales_order.customer =
+        (cu[0] as { id: string; name: string } | undefined) ?? null;
   }
   return r;
 }
@@ -30,11 +33,15 @@ export function useDeliveries() {
   useEffect(() => {
     const channel = supabase
       .channel("deliveries-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "deliveries" }, () =>
-        qc.invalidateQueries({ queryKey: KEY }),
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "deliveries" },
+        () => qc.invalidateQueries({ queryKey: KEY }),
       )
-      .on("postgres_changes", { event: "*", schema: "public", table: "delivery_items" }, () =>
-        qc.invalidateQueries({ queryKey: KEY }),
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "delivery_items" },
+        () => qc.invalidateQueries({ queryKey: KEY }),
       )
       .subscribe();
     return () => {
@@ -143,7 +150,9 @@ export function useAddDeliveryItem() {
       qc_inspection_id: string;
       quantity: number;
     }) => {
-      const { error } = await supabase.from("delivery_items").insert(input as never);
+      const { error } = await supabase
+        .from("delivery_items")
+        .insert(input as never);
       if (error) throw new Error(mapPgError(error));
     },
     onSuccess: (_r, v) => {
@@ -157,7 +166,10 @@ export function useRemoveDeliveryItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id }: { id: string; delivery_id: string }) => {
-      const { error } = await supabase.from("delivery_items").delete().eq("id", id);
+      const { error } = await supabase
+        .from("delivery_items")
+        .delete()
+        .eq("id", id);
       if (error) throw new Error(mapPgError(error));
     },
     onSuccess: (_r, v) => {
@@ -203,7 +215,9 @@ export function useEligibleQcInspections(salesOrderId: string | undefined) {
         .eq("delivery.sales_order_id", salesOrderId!);
       if (uErr) throw new Error(mapPgError(uErr));
       const usedSet = new Set(
-        (used ?? []).map((u: { qc_inspection_id: string }) => u.qc_inspection_id),
+        (used ?? []).map(
+          (u: { qc_inspection_id: string }) => u.qc_inspection_id,
+        ),
       );
 
       type Row = {
@@ -219,12 +233,14 @@ export function useEligibleQcInspections(salesOrderId: string | undefined) {
       return (data as unknown as Row[])
         .filter(
           (r) =>
-            r.production_batch?.engineering_job?.sales_order_item?.sales_order_id === salesOrderId,
+            r.production_batch?.engineering_job?.sales_order_item
+              ?.sales_order_id === salesOrderId,
         )
         .map((r) => ({
           id: r.id,
           batch_number: r.production_batch.batch_number,
-          item_name: r.production_batch.engineering_job.sales_order_item.item_name,
+          item_name:
+            r.production_batch.engineering_job.sales_order_item.item_name,
           qty_ok: Number(r.qty_ok),
           already_used: usedSet.has(r.id),
         }));
@@ -246,11 +262,16 @@ export function useSalesOrdersForDelivery() {
         id: string;
         so_number: string;
         status: string;
-        customer: { id: string; name: string } | { id: string; name: string }[] | null;
+        customer:
+          | { id: string; name: string }
+          | { id: string; name: string }[]
+          | null;
       };
       return (data as unknown as Row[]).map((r) => ({
         ...r,
-        customer: Array.isArray(r.customer) ? (r.customer[0] ?? null) : r.customer,
+        customer: Array.isArray(r.customer)
+          ? (r.customer[0] ?? null)
+          : r.customer,
       }));
     },
   });

@@ -18,11 +18,16 @@ export const ENG_STATUS_CLASS: Record<EngineeringStatus, string> = {
     "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-200 dark:border-emerald-800",
 };
 
-export function daysOverdue(target: string | null, status: EngineeringStatus): number {
+export function daysOverdue(
+  target: string | null,
+  status: EngineeringStatus,
+): number {
   if (!target || status === "approved") return 0;
   const t = new Date(target + "T00:00:00");
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const diff = Math.floor((today.getTime() - t.getTime()) / (1000 * 60 * 60 * 24));
+  const diff = Math.floor(
+    (today.getTime() - t.getTime()) / (1000 * 60 * 60 * 24),
+  );
   return diff > 0 ? diff : 0;
 }

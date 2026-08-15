@@ -12,7 +12,9 @@ function parseDate(d: string | null): Date | null {
   return isNaN(dt.getTime()) ? null : dt;
 }
 
-export function computeStatus(batch: BatchWithContext): PlanningStatus | "unscheduled" {
+export function computeStatus(
+  batch: BatchWithContext,
+): PlanningStatus | "unscheduled" {
   const end = parseDate(batch.planned_completion_date);
   if (!batch.planned_start_date || !end) return "unscheduled";
   const allDone = (batch.steps ?? []).every(

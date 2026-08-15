@@ -1,4 +1,8 @@
-import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 // Cache resolusi user_id -> email lintas komponen (Riwayat Blocker, ekspor, dsb).
@@ -28,7 +32,12 @@ const MAX_DELAY_MS = 4000;
 
 function isTransientError(err: unknown): boolean {
   if (!err) return false;
-  const e = err as { code?: string; status?: number; message?: string; name?: string };
+  const e = err as {
+    code?: string;
+    status?: number;
+    message?: string;
+    name?: string;
+  };
   const code = e.code ?? "";
   const status = e.status ?? 0;
   const msg = (e.message ?? "").toLowerCase();
@@ -39,7 +48,9 @@ function isTransientError(err: unknown): boolean {
   // 'PGRST' generik; anggap transient bila tidak ada status HTTP.
   if (
     !status &&
-    (msg.includes("failed to fetch") || msg.includes("network") || msg.includes("timeout"))
+    (msg.includes("failed to fetch") ||
+      msg.includes("network") ||
+      msg.includes("timeout"))
   ) {
     return true;
   }
@@ -62,7 +73,9 @@ async function rpcOnce(userIds: string[]): Promise<EmailRow[]> {
   return (data ?? []) as EmailRow[];
 }
 
-async function fetchEmails(userIds: string[]): Promise<Map<string, string | null>> {
+async function fetchEmails(
+  userIds: string[],
+): Promise<Map<string, string | null>> {
   const map = new Map<string, string | null>();
   if (userIds.length === 0) return map;
 
@@ -83,14 +96,18 @@ async function fetchEmails(userIds: string[]): Promise<Map<string, string | null
       await new Promise((r) => setTimeout(r, backoffDelay(attempt)));
     }
   }
-  throw lastErr instanceof Error ? lastErr : new Error("Gagal memuat nama aktor");
+  throw lastErr instanceof Error
+    ? lastErr
+    : new Error("Gagal memuat nama aktor");
 }
 
 function isFreshCache(
   queryClient: QueryClient,
   userId: string,
 ): { fresh: true; email: string | null } | { fresh: false } {
-  const cached = queryClient.getQueryState<string | null>(actorEmailKey(userId));
+  const cached = queryClient.getQueryState<string | null>(
+    actorEmailKey(userId),
+  );
   const fresh =
     cached?.data !== undefined &&
     cached.dataUpdatedAt > Date.now() - STALE_MS &&
@@ -151,7 +168,9 @@ export async function resolveActorEmails(
       });
 
     for (const id of missing) {
-      const perIdPromise = fetchPromise.then((fetched) => fetched.get(id) ?? null);
+      const perIdPromise = fetchPromise.then(
+        (fetched) => fetched.get(id) ?? null,
+      );
       inFlightEmails.set(id, perIdPromise);
       pending.push(
         perIdPromise.then((email) => {

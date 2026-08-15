@@ -1,22 +1,40 @@
 import { Package, Lock, ExternalLink } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { PROCESS_LABEL, STEP_STATUS_CLASS, formatDurationSince } from "../lib/process";
+import {
+  PROCESS_LABEL,
+  STEP_STATUS_CLASS,
+  formatDurationSince,
+} from "../lib/process";
 import { PRODUCTION_PROCESSES, type ProductionBatchStepRow } from "../types";
 import type { BatchWithContext } from "../hooks/use-batches";
 import { computeStartBlocker } from "./station-step-card";
 
-export function activeStep(steps: ProductionBatchStepRow[]): ProductionBatchStepRow | null {
+export function activeStep(
+  steps: ProductionBatchStepRow[],
+): ProductionBatchStepRow | null {
   // Step aktif: pertama yang bukan completed/skipped, urut sequence_order
   const sorted = [...steps].sort((a, b) => a.sequence_order - b.sequence_order);
-  return sorted.find((s) => s.status !== "completed" && s.status !== "skipped") ?? null;
+  return (
+    sorted.find((s) => s.status !== "completed" && s.status !== "skipped") ??
+    null
+  );
 }
 
 export function isBatchDone(steps: ProductionBatchStepRow[]): boolean {
-  return steps.length > 0 && steps.every((s) => s.status === "completed" || s.status === "skipped");
+  return (
+    steps.length > 0 &&
+    steps.every((s) => s.status === "completed" || s.status === "skipped")
+  );
 }
 
-export function BatchCard({ batch, onOpen }: { batch: BatchWithContext; onOpen: () => void }) {
+export function BatchCard({
+  batch,
+  onOpen,
+}: {
+  batch: BatchWithContext;
+  onOpen: () => void;
+}) {
   const item = batch.engineering_job?.sales_order_item;
   const so = item?.sales_order;
   const active = activeStep(batch.steps);
@@ -43,9 +61,15 @@ export function BatchCard({ batch, onOpen }: { batch: BatchWithContext; onOpen: 
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="font-mono text-xs text-muted-foreground">{batch.batch_number}</div>
-          <div className="font-medium text-sm truncate">{item?.item_name ?? "—"}</div>
-          {so && <div className="text-xs text-muted-foreground">{so.so_number}</div>}
+          <div className="font-mono text-xs text-muted-foreground">
+            {batch.batch_number}
+          </div>
+          <div className="font-medium text-sm truncate">
+            {item?.item_name ?? "—"}
+          </div>
+          {so && (
+            <div className="text-xs text-muted-foreground">{so.so_number}</div>
+          )}
         </div>
         <div className="text-right shrink-0">
           <div className="text-xs text-muted-foreground">Qty</div>
@@ -106,15 +130,21 @@ export function BatchCard({ batch, onOpen }: { batch: BatchWithContext; onOpen: 
 
       {active ? (
         <div className="text-xs text-muted-foreground">
-          <span className="font-medium text-foreground">{PROCESS_LABEL[active.process]}</span>
+          <span className="font-medium text-foreground">
+            {PROCESS_LABEL[active.process]}
+          </span>
           {active.status === "running" && active.started_at && (
             <span> · berjalan {formatDurationSince(active.started_at)}</span>
           )}
-          {active.status === "waiting" && !isBlocked && <span> · menunggu</span>}
+          {active.status === "waiting" && !isBlocked && (
+            <span> · menunggu</span>
+          )}
           {active.status === "paused" && <span> · dijeda</span>}
         </div>
       ) : (
-        <div className="text-xs text-emerald-700 dark:text-emerald-300">Semua tahapan selesai</div>
+        <div className="text-xs text-emerald-700 dark:text-emerald-300">
+          Semua tahapan selesai
+        </div>
       )}
     </div>
   );

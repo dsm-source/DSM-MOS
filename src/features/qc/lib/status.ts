@@ -29,4 +29,10 @@ export const QC_STATUS_ICON: Record<QcStatus, typeof Clock> = {
   rework: RotateCcw,
 };
 
-export const QC_STATUS_ORDER: QcStatus[] = ["waiting", "inspection", "reject", "rework", "pass"];
+export const QC_STATUS_ORDER: QcStatus[] = [
+  "waiting",
+  "inspection",
+  "reject",
+  "rework",
+  "pass",
+];

@@ -10,7 +10,12 @@ export type EngineeringJobWithContext = EngineeringJobRow & {
   sales_order_item:
     | (Pick<
         import("@/integrations/supabase/types").Database["public"]["Tables"]["sales_order_items"]["Row"],
-        "id" | "item_name" | "drawing_number" | "quantity" | "unit" | "material_spec"
+        | "id"
+        | "item_name"
+        | "drawing_number"
+        | "quantity"
+        | "unit"
+        | "material_spec"
       > & {
         sales_order: {
           id: string;

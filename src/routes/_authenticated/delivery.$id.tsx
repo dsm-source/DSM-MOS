@@ -94,7 +94,11 @@ function DeliveryDetail() {
     );
   }
   if (!d) {
-    return <div className="p-6 text-muted-foreground">Pengiriman tidak ditemukan.</div>;
+    return (
+      <div className="p-6 text-muted-foreground">
+        Pengiriman tidak ditemukan.
+      </div>
+    );
   }
 
   if (!initialized) {
@@ -155,7 +159,9 @@ function DeliveryDetail() {
 
   async function addItemSubmit() {
     if (!pickQc) {
-      toast.error("Data belum valid", { description: "Pilih hasil QC yang lolos." });
+      toast.error("Data belum valid", {
+        description: "Pilih hasil QC yang lolos.",
+      });
       return;
     }
     const n = Number(qty);
@@ -164,7 +170,11 @@ function DeliveryDetail() {
       return;
     }
     try {
-      await addItem.mutateAsync({ delivery_id: d!.id, qc_inspection_id: pickQc, quantity: n });
+      await addItem.mutateAsync({
+        delivery_id: d!.id,
+        qc_inspection_id: pickQc,
+        quantity: n,
+      });
       toast.success("Item ditambahkan");
       setPickQc("");
       setQty("");
@@ -188,8 +198,11 @@ function DeliveryDetail() {
               <DeliveryStatusBadge status={d.status} overdue={overdue} />
             </h1>
             <p className="text-xs text-muted-foreground">
-              SO {d.sales_order?.so_number} · {d.sales_order?.customer?.name ?? "-"} · Dibuat{" "}
-              {format(new Date(d.created_at), "d MMM yyyy HH:mm", { locale: idLocale })}
+              SO {d.sales_order?.so_number} ·{" "}
+              {d.sales_order?.customer?.name ?? "-"} · Dibuat{" "}
+              {format(new Date(d.created_at), "d MMM yyyy HH:mm", {
+                locale: idLocale,
+              })}
             </p>
             <p className="text-xs text-muted-foreground">
               Kode referensi internal — bukan dokumen surat jalan resmi.
@@ -203,11 +216,17 @@ function DeliveryDetail() {
               <Button
                 key={n}
                 variant={n === "draft" ? "outline" : "default"}
-                className={n === "delivered" ? "bg-emerald-600 hover:bg-emerald-700" : undefined}
+                className={
+                  n === "delivered"
+                    ? "bg-emerald-600 hover:bg-emerald-700"
+                    : undefined
+                }
                 onClick={() => transition(n)}
                 disabled={update.isPending}
               >
-                {n === "draft" ? "Kembalikan ke Draft" : `→ ${DELIVERY_STATUS_LABEL[n]}`}
+                {n === "draft"
+                  ? "Kembalikan ke Draft"
+                  : `→ ${DELIVERY_STATUS_LABEL[n]}`}
               </Button>
             ))}
           {canDelete && d.status === "draft" && (
@@ -302,19 +321,25 @@ function DeliveryDetail() {
               <div>
                 Disiapkan:{" "}
                 {d.prepared_at
-                  ? format(new Date(d.prepared_at), "d MMM yyyy HH:mm", { locale: idLocale })
+                  ? format(new Date(d.prepared_at), "d MMM yyyy HH:mm", {
+                      locale: idLocale,
+                    })
                   : "-"}
               </div>
               <div>
                 Dikirim:{" "}
                 {d.shipped_at
-                  ? format(new Date(d.shipped_at), "d MMM yyyy HH:mm", { locale: idLocale })
+                  ? format(new Date(d.shipped_at), "d MMM yyyy HH:mm", {
+                      locale: idLocale,
+                    })
                   : "-"}
               </div>
               <div>
                 Terkirim:{" "}
                 {d.delivered_at
-                  ? format(new Date(d.delivered_at), "d MMM yyyy HH:mm", { locale: idLocale })
+                  ? format(new Date(d.delivered_at), "d MMM yyyy HH:mm", {
+                      locale: idLocale,
+                    })
                   : "-"}
               </div>
             </div>
@@ -358,11 +383,17 @@ function DeliveryDetail() {
             {(d.delivery_items ?? []).map((it) => {
               const meta = eligible.find((e) => e.id === it.qc_inspection_id);
               return (
-                <div key={it.id} className="flex items-center justify-between p-3 gap-3">
+                <div
+                  key={it.id}
+                  className="flex items-center justify-between p-3 gap-3"
+                >
                   <div className="text-sm">
-                    <div className="font-medium">{meta?.item_name ?? "Item"}</div>
+                    <div className="font-medium">
+                      {meta?.item_name ?? "Item"}
+                    </div>
                     <div className="text-xs text-muted-foreground">
-                      Batch: {meta?.batch_number ?? "-"} · Qty: {Number(it.quantity)}
+                      Batch: {meta?.batch_number ?? "-"} · Qty:{" "}
+                      {Number(it.quantity)}
                     </div>
                   </div>
                   {canWrite && d.status === "draft" && (
@@ -371,7 +402,10 @@ function DeliveryDetail() {
                       size="icon"
                       onClick={async () => {
                         try {
-                          await removeItem.mutateAsync({ id: it.id, delivery_id: d.id });
+                          await removeItem.mutateAsync({
+                            id: it.id,
+                            delivery_id: d.id,
+                          });
                         } catch (e) {
                           notifyError(e);
                         }

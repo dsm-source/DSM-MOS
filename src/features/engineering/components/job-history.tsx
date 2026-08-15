@@ -1,8 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEngineeringJobHistory, type JobHistoryRow } from "../hooks/use-job-history";
-import { getEngineerEmails, type UserEmail } from "@/lib/engineering-users.functions";
+import {
+  useEngineeringJobHistory,
+  type JobHistoryRow,
+} from "../hooks/use-job-history";
+import {
+  getEngineerEmails,
+  type UserEmail,
+} from "@/lib/engineering-users.functions";
 import { ENG_STATUS_LABEL } from "../lib/status";
 import type { EngineeringStatus } from "../types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,11 +24,16 @@ const FIELD_LABEL: Record<string, string> = {
 };
 
 function isUuid(v: string | null | undefined): v is string {
-  return !!v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+  return (
+    !!v &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)
+  );
 }
 
 function isEngStatus(v: string | null): v is EngineeringStatus {
-  return v === "draft" || v === "in_progress" || v === "review" || v === "approved";
+  return (
+    v === "draft" || v === "in_progress" || v === "review" || v === "approved"
+  );
 }
 
 function formatValue(
@@ -50,7 +61,10 @@ export function JobHistory({ jobId }: { jobId: string }) {
     const ids = new Set<string>();
     for (const r of rows) {
       if (r.changed_by) ids.add(r.changed_by);
-      if (r.field_changed === "assigned_to" || r.field_changed === "approved_by") {
+      if (
+        r.field_changed === "assigned_to" ||
+        r.field_changed === "approved_by"
+      ) {
         if (isUuid(r.from_value)) ids.add(r.from_value);
         if (isUuid(r.to_value)) ids.add(r.to_value);
       }
@@ -114,7 +128,8 @@ function HistoryItem({
         <span className="font-medium">{label}</span>{" "}
         {isCreated ? (
           <span className="text-muted-foreground">
-            dengan status <span className="font-medium text-foreground">{to}</span>
+            dengan status{" "}
+            <span className="font-medium text-foreground">{to}</span>
           </span>
         ) : (
           <span className="text-muted-foreground">

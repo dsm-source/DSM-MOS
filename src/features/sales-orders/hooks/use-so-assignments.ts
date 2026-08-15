@@ -5,7 +5,8 @@ import { listUsersByRole, type UserOption } from "@/lib/assignments.functions";
 import type { Database } from "@/integrations/supabase/types";
 import type { AppRole } from "@/lib/roles.functions";
 
-export type SOAssignmentRow = Database["public"]["Tables"]["sales_order_assignments"]["Row"];
+export type SOAssignmentRow =
+  Database["public"]["Tables"]["sales_order_assignments"]["Row"];
 
 const KEY = ["so-assignments"] as const;
 
@@ -39,7 +40,11 @@ export function useUsersByRole(role: AppRole | null) {
 export function useUpsertAssignment() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { salesOrderId: string; role: AppRole; userId: string }) => {
+    mutationFn: async (input: {
+      salesOrderId: string;
+      role: AppRole;
+      userId: string;
+    }) => {
       const { data: userData } = await supabase.auth.getUser();
       const actor = userData.user?.id ?? null;
       const { error } = await supabase.from("sales_order_assignments").upsert(

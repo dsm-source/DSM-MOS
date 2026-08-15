@@ -42,7 +42,9 @@ export function usePlannableJobs() {
       if (error) throw new Error(mapPgError(error));
       return (data ?? []).map((row) => {
         const r = row as unknown as ApprovedJob & {
-          material_status: ApprovedJob["material_status"] | ApprovedJob["material_status"][];
+          material_status:
+            | ApprovedJob["material_status"]
+            | ApprovedJob["material_status"][];
           batches: { id: string }[] | null;
         };
         const ms = Array.isArray(r.material_status)

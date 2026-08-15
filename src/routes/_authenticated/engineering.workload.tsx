@@ -21,7 +21,8 @@ function WorkloadPage() {
   const { data = [], isLoading } = useEngineeringWorkload(true);
 
   const sorted = [...data].sort((a, b) => {
-    if (b.overdue_count !== a.overdue_count) return b.overdue_count - a.overdue_count;
+    if (b.overdue_count !== a.overdue_count)
+      return b.overdue_count - a.overdue_count;
     return b.total_jobs - a.total_jobs;
   });
 
@@ -63,7 +64,10 @@ function WorkloadPage() {
             <TableBody>
               {sorted.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                  <TableCell
+                    colSpan={8}
+                    className="text-center text-muted-foreground py-8"
+                  >
                     Belum ada job yang di-assign.
                   </TableCell>
                 </TableRow>
@@ -73,7 +77,9 @@ function WorkloadPage() {
                 return (
                   <TableRow
                     key={r.assigned_to}
-                    className={overdue ? "bg-rose-50/60 dark:bg-rose-900/10" : undefined}
+                    className={
+                      overdue ? "bg-rose-50/60 dark:bg-rose-900/10" : undefined
+                    }
                   >
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
@@ -83,14 +89,26 @@ function WorkloadPage() {
                             aria-label="Ada job terlambat"
                           />
                         )}
-                        <span>{r.assignee_email ?? r.assigned_to.slice(0, 8)}</span>
+                        <span>
+                          {r.assignee_email ?? r.assigned_to.slice(0, 8)}
+                        </span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-right font-mono">{r.total_jobs}</TableCell>
-                    <TableCell className="text-right font-mono">{r.draft_count}</TableCell>
-                    <TableCell className="text-right font-mono">{r.in_progress_count}</TableCell>
-                    <TableCell className="text-right font-mono">{r.review_count}</TableCell>
-                    <TableCell className="text-right font-mono">{r.approved_count}</TableCell>
+                    <TableCell className="text-right font-mono">
+                      {r.total_jobs}
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      {r.draft_count}
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      {r.in_progress_count}
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      {r.review_count}
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      {r.approved_count}
+                    </TableCell>
                     <TableCell className="text-right font-mono">
                       {r.avg_progress != null ? `${r.avg_progress}%` : "—"}
                     </TableCell>

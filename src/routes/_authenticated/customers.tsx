@@ -72,7 +72,9 @@ function CustomersPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Customers</h1>
-          <p className="text-sm text-muted-foreground">Master data pelanggan.</p>
+          <p className="text-sm text-muted-foreground">
+            Master data pelanggan.
+          </p>
         </div>
         {canWrite && (
           <Dialog open={openCreate} onOpenChange={setOpenCreate}>
@@ -119,7 +121,10 @@ function CustomersPage() {
               ))}
             {!isLoading && data.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                <TableCell
+                  colSpan={6}
+                  className="text-center text-muted-foreground py-8"
+                >
                   Belum ada customer.
                 </TableCell>
               </TableRow>
@@ -130,7 +135,9 @@ function CustomersPage() {
                 <TableCell className="font-medium">{c.name}</TableCell>
                 <TableCell>{c.contact_person ?? "—"}</TableCell>
                 <TableCell>{c.phone ?? "—"}</TableCell>
-                <TableCell className="max-w-xs truncate">{c.address ?? "—"}</TableCell>
+                <TableCell className="max-w-xs truncate">
+                  {c.address ?? "—"}
+                </TableCell>
                 {canWrite && (
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
@@ -153,13 +160,24 @@ function CustomersPage() {
       </div>
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        {editing && <CustomerFormDialog customer={editing} onClose={() => setEditing(null)} />}
+        {editing && (
+          <CustomerFormDialog
+            customer={editing}
+            onClose={() => setEditing(null)}
+          />
+        )}
       </Dialog>
     </div>
   );
 }
 
-function CustomerFormDialog({ customer, onClose }: { customer?: Customer; onClose: () => void }) {
+function CustomerFormDialog({
+  customer,
+  onClose,
+}: {
+  customer?: Customer;
+  onClose: () => void;
+}) {
   const create = useCreateCustomer();
   const update = useUpdateCustomer();
   const isEdit = !!customer;
@@ -190,7 +208,9 @@ function CustomerFormDialog({ customer, onClose }: { customer?: Customer; onClos
           try {
             if (isEdit) await update.mutateAsync({ id: customer!.id, values });
             else await create.mutateAsync(values);
-            toast.success(isEdit ? "Customer diperbarui" : "Customer ditambahkan");
+            toast.success(
+              isEdit ? "Customer diperbarui" : "Customer ditambahkan",
+            );
             onClose();
           } catch (e) {
             notifyError(e);
@@ -201,12 +221,16 @@ function CustomerFormDialog({ customer, onClose }: { customer?: Customer; onClos
           <div className="space-y-1.5">
             <Label>Kode</Label>
             <Input {...register("code")} placeholder="CUST-001" />
-            {errors.code && <p className="text-xs text-destructive">{errors.code.message}</p>}
+            {errors.code && (
+              <p className="text-xs text-destructive">{errors.code.message}</p>
+            )}
           </div>
           <div className="space-y-1.5">
             <Label>Nama</Label>
             <Input {...register("name")} />
-            {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+            {errors.name && (
+              <p className="text-xs text-destructive">{errors.name.message}</p>
+            )}
           </div>
         </div>
         <div className="space-y-1.5">
@@ -247,7 +271,8 @@ function DeleteCustomerButton({ id, name }: { id: string; name: string }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Hapus customer?</AlertDialogTitle>
           <AlertDialogDescription>
-            {name} akan dihapus. Tidak bisa dihapus bila masih dipakai di sales order.
+            {name} akan dihapus. Tidak bisa dihapus bila masih dipakai di sales
+            order.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

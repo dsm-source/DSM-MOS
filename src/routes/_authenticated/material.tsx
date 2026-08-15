@@ -17,7 +17,10 @@ export const Route = createFileRoute("/_authenticated/material")({
   head: () => ({
     meta: [
       { title: "Material Status — DSM MOS" },
-      { name: "description", content: "Papan status material DSM MOS: menunggu, sebagian, siap." },
+      {
+        name: "description",
+        content: "Papan status material DSM MOS: menunggu, sebagian, siap.",
+      },
       { property: "og:title", content: "Material Status — DSM MOS" },
       { property: "og:description", content: "Papan status material DSM MOS." },
     ],
@@ -65,7 +68,8 @@ function MaterialBoardPage() {
           <div>
             <h1 className="text-2xl font-semibold">Material Status</h1>
             <p className="text-sm text-muted-foreground">
-              Kesiapan bahan per engineering job. Salah satu penentu produksi boleh berjalan.
+              Kesiapan bahan per engineering job. Salah satu penentu produksi
+              boleh berjalan.
             </p>
           </div>
         </div>
@@ -88,11 +92,19 @@ function MaterialBoardPage() {
           {MATERIAL_STATUSES.map((s) => {
             const items = grouped.get(s.key) ?? [];
             return (
-              <div key={s.key} className={`rounded-xl border-2 p-3 space-y-3 ${s.className}`}>
+              <div
+                key={s.key}
+                className={`rounded-xl border-2 p-3 space-y-3 ${s.className}`}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className={`h-3 w-3 rounded-full ${s.dot}`} aria-hidden />
-                    <div className="text-sm font-bold uppercase tracking-wide">{s.label}</div>
+                    <span
+                      className={`h-3 w-3 rounded-full ${s.dot}`}
+                      aria-hidden
+                    />
+                    <div className="text-sm font-bold uppercase tracking-wide">
+                      {s.label}
+                    </div>
                   </div>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-background/70">
                     {items.length}
@@ -100,7 +112,9 @@ function MaterialBoardPage() {
                 </div>
                 <div className="space-y-2 min-h-[80px]">
                   {items.length === 0 && (
-                    <div className="text-xs text-muted-foreground text-center py-6">Kosong</div>
+                    <div className="text-xs text-muted-foreground text-center py-6">
+                      Kosong
+                    </div>
                   )}
                   {items.map((r) => (
                     <MaterialCard key={r.id} row={r} canEdit={canEdit} />

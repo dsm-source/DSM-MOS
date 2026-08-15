@@ -20,11 +20,15 @@ export function JobCard({
       className="block rounded-xl border bg-card p-3 hover:shadow-sm transition-shadow space-y-2"
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-xs text-muted-foreground">{job.job_number}</span>
+        <span className="font-mono text-xs text-muted-foreground">
+          {job.job_number}
+        </span>
         <TargetBadge target={job.target_completion_date} status={job.status} />
       </div>
       <div>
-        <div className="text-sm font-medium truncate">{item?.item_name ?? "—"}</div>
+        <div className="text-sm font-medium truncate">
+          {item?.item_name ?? "—"}
+        </div>
         <div className="text-xs text-muted-foreground truncate">
           {so ? `${so.so_number} · ${so.customer?.name ?? ""}` : ""}
         </div>
@@ -32,7 +36,9 @@ export function JobCard({
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <User className="h-3 w-3" />
         <span className="truncate">
-          {job.assigned_to ? (assigneeEmail ?? job.assigned_to.slice(0, 8)) : "Belum di-assign"}
+          {job.assigned_to
+            ? (assigneeEmail ?? job.assigned_to.slice(0, 8))
+            : "Belum di-assign"}
         </span>
       </div>
       <div className="space-y-1">

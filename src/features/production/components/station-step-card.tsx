@@ -21,7 +21,9 @@ export function computeStartBlocker(
   if (step.status !== "waiting") return null;
   const prev = [...batch.steps]
     .sort((a, b) => a.sequence_order - b.sequence_order)
-    .filter((s) => s.sequence_order < step.sequence_order && s.status !== "skipped")
+    .filter(
+      (s) => s.sequence_order < step.sequence_order && s.status !== "skipped",
+    )
     .pop();
 
   if (!prev) {
@@ -29,11 +31,15 @@ export function computeStartBlocker(
     const mat = batch.engineering_job?.material_status?.status;
     if (eng !== "approved")
       return { message: "Menunggu approval engineering", kind: "engineering" };
-    if (mat !== "material_ready") return { message: "Menunggu material ready", kind: "material" };
+    if (mat !== "material_ready")
+      return { message: "Menunggu material ready", kind: "material" };
     return null;
   }
   if (prev.status !== "completed") {
-    return { message: `Menunggu ${PROCESS_LABEL[prev.process]} selesai`, kind: "previous_step" };
+    return {
+      message: `Menunggu ${PROCESS_LABEL[prev.process]} selesai`,
+      kind: "previous_step",
+    };
   }
   return null;
 }
@@ -74,9 +80,15 @@ export function StationStepCard({
     <div className="rounded-xl border bg-card p-3 space-y-3 shadow-sm">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="font-mono text-xs text-muted-foreground">{batch.batch_number}</div>
-          <div className="font-medium text-sm truncate">{item?.item_name ?? "—"}</div>
-          {so && <div className="text-xs text-muted-foreground">{so.so_number}</div>}
+          <div className="font-mono text-xs text-muted-foreground">
+            {batch.batch_number}
+          </div>
+          <div className="font-medium text-sm truncate">
+            {item?.item_name ?? "—"}
+          </div>
+          {so && (
+            <div className="text-xs text-muted-foreground">{so.so_number}</div>
+          )}
         </div>
         <div className="text-right shrink-0">
           <div className="text-xs text-muted-foreground">Qty</div>
@@ -88,9 +100,12 @@ export function StationStepCard({
       </div>
 
       <div className="text-xs text-muted-foreground">
-        {step.status === "running" && `Berjalan ${formatDurationSince(timeAnchor)}`}
-        {step.status === "paused" && `Dijeda ${formatDurationSince(timeAnchor)}`}
-        {step.status === "waiting" && `Menunggu ${formatDurationSince(timeAnchor)}`}
+        {step.status === "running" &&
+          `Berjalan ${formatDurationSince(timeAnchor)}`}
+        {step.status === "paused" &&
+          `Dijeda ${formatDurationSince(timeAnchor)}`}
+        {step.status === "waiting" &&
+          `Menunggu ${formatDurationSince(timeAnchor)}`}
         {step.status === "completed" &&
           step.completed_at &&
           `Selesai ${new Date(step.completed_at).toLocaleString()}`}

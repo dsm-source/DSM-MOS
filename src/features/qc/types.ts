@@ -1,7 +1,8 @@
 import type { Database } from "@/integrations/supabase/types";
 
 export type QcStatus = Database["public"]["Enums"]["qc_status"];
-export type QcInspectionRow = Database["public"]["Tables"]["qc_inspections"]["Row"];
+export type QcInspectionRow =
+  Database["public"]["Tables"]["qc_inspections"]["Row"];
 
 export type QcInspectionWithContext = QcInspectionRow & {
   production_batch: {

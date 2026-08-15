@@ -10,7 +10,10 @@ import {
 import { useEngineers } from "@/features/engineering/hooks/use-engineers";
 import { JobCard } from "@/features/engineering/components/job-card";
 import { ENG_STATUS_LABEL } from "@/features/engineering/lib/status";
-import { ENGINEERING_STATUSES, type EngineeringStatus } from "@/features/engineering/types";
+import {
+  ENGINEERING_STATUSES,
+  type EngineeringStatus,
+} from "@/features/engineering/types";
 import { useMyRoles } from "@/hooks/use-my-roles";
 
 export const Route = createFileRoute("/_authenticated/engineering")({
@@ -19,7 +22,8 @@ export const Route = createFileRoute("/_authenticated/engineering")({
       { title: "Engineering Job — DSM MOS" },
       {
         name: "description",
-        content: "Papan Engineering Job DSM MOS: draft, in progress, review, approved.",
+        content:
+          "Papan Engineering Job DSM MOS: draft, in progress, review, approved.",
       },
       { property: "og:title", content: "Engineering Job — DSM MOS" },
       { property: "og:description", content: "Papan Engineering Job DSM MOS." },
@@ -34,7 +38,10 @@ function EngineeringBoardPage() {
   const { data: jobs = [], isLoading } = useEngineeringJobs();
   const { data: engineers = [] } = useEngineers(canManage);
 
-  const emailById = useMemo(() => new Map(engineers.map((e) => [e.user_id, e.email])), [engineers]);
+  const emailById = useMemo(
+    () => new Map(engineers.map((e) => [e.user_id, e.email])),
+    [engineers],
+  );
 
   const grouped = useMemo(() => {
     const map = new Map<EngineeringStatus, EngineeringJobWithContext[]>();
@@ -73,20 +80,33 @@ function EngineeringBoardPage() {
           {ENGINEERING_STATUSES.map((s) => {
             const items = grouped.get(s) ?? [];
             return (
-              <div key={s} className="rounded-xl border bg-muted/30 p-3 space-y-3">
+              <div
+                key={s}
+                className="rounded-xl border bg-muted/30 p-3 space-y-3"
+              >
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold">{ENG_STATUS_LABEL[s]}</div>
-                  <span className="text-xs text-muted-foreground">{items.length}</span>
+                  <div className="text-sm font-semibold">
+                    {ENG_STATUS_LABEL[s]}
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {items.length}
+                  </span>
                 </div>
                 <div className="space-y-2 min-h-[80px]">
                   {items.length === 0 && (
-                    <div className="text-xs text-muted-foreground text-center py-6">Kosong</div>
+                    <div className="text-xs text-muted-foreground text-center py-6">
+                      Kosong
+                    </div>
                   )}
                   {items.map((j) => (
                     <JobCard
                       key={j.id}
                       job={j}
-                      assigneeEmail={j.assigned_to ? (emailById.get(j.assigned_to) ?? null) : null}
+                      assigneeEmail={
+                        j.assigned_to
+                          ? (emailById.get(j.assigned_to) ?? null)
+                          : null
+                      }
                     />
                   ))}
                 </div>

@@ -1,4 +1,11 @@
-import { Play, Pause, CheckCircle2, MinusCircle, Lock, CheckCircle } from "lucide-react";
+import {
+  Play,
+  Pause,
+  CheckCircle2,
+  MinusCircle,
+  Lock,
+  CheckCircle,
+} from "lucide-react";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
 import {
@@ -53,9 +60,12 @@ export function BatchDetailDrawer({
             return (
               <>
                 <SheetHeader>
-                  <SheetTitle className="font-mono text-base">{batch.batch_number}</SheetTitle>
+                  <SheetTitle className="font-mono text-base">
+                    {batch.batch_number}
+                  </SheetTitle>
                   <SheetDescription>
-                    {item?.item_name} · Qty {Number(batch.quantity)} {item?.unit ?? ""}
+                    {item?.item_name} · Qty {Number(batch.quantity)}{" "}
+                    {item?.unit ?? ""}
                     {so && <> · SO {so.so_number}</>}
                   </SheetDescription>
                 </SheetHeader>
@@ -75,23 +85,34 @@ export function BatchDetailDrawer({
                   )}
                   <div className="space-y-0.5">
                     <div className="font-medium">
-                      {gateOk ? "Siap diproduksi" : "Batch terkunci — belum boleh mulai"}
+                      {gateOk
+                        ? "Siap diproduksi"
+                        : "Batch terkunci — belum boleh mulai"}
                     </div>
                     <div className="text-xs">
                       Engineering:{" "}
-                      <span className={engOk ? "font-semibold" : "font-semibold underline"}>
+                      <span
+                        className={
+                          engOk ? "font-semibold" : "font-semibold underline"
+                        }
+                      >
                         {engStatus ?? "—"}
                       </span>
                       {" · "}
                       Material:{" "}
-                      <span className={matOk ? "font-semibold" : "font-semibold underline"}>
+                      <span
+                        className={
+                          matOk ? "font-semibold" : "font-semibold underline"
+                        }
+                      >
                         {matStatus ?? "—"}
                       </span>
                     </div>
                     {!gateOk && (
                       <div className="text-xs">
-                        Tahapan pertama hanya bisa <em>Start</em> saat Engineering{" "}
-                        <strong>approved</strong> dan Material <strong>material_ready</strong>.
+                        Tahapan pertama hanya bisa <em>Start</em> saat
+                        Engineering <strong>approved</strong> dan Material{" "}
+                        <strong>material_ready</strong>.
                       </div>
                     )}
                   </div>
@@ -106,15 +127,21 @@ export function BatchDetailDrawer({
 
                 <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <div className="text-xs text-muted-foreground">Rencana Mulai</div>
+                    <div className="text-xs text-muted-foreground">
+                      Rencana Mulai
+                    </div>
                     <div>{batch.planned_start_date ?? "—"}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Rencana Selesai</div>
+                    <div className="text-xs text-muted-foreground">
+                      Rencana Selesai
+                    </div>
                     <div>{batch.planned_completion_date ?? "—"}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Estimasi Kirim</div>
+                    <div className="text-xs text-muted-foreground">
+                      Estimasi Kirim
+                    </div>
                     <div>{batch.estimated_delivery_date ?? "—"}</div>
                   </div>
                 </div>
@@ -133,7 +160,10 @@ export function BatchDetailDrawer({
                   {batch.steps.map((step) => {
                     const blocker = computeStartBlocker(step, batch);
                     return (
-                      <li key={step.id} className="rounded-lg border p-3 space-y-2">
+                      <li
+                        key={step.id}
+                        className="rounded-lg border p-3 space-y-2"
+                      >
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
                             <span className="text-xs text-muted-foreground w-4 text-right">
@@ -148,13 +178,21 @@ export function BatchDetailDrawer({
 
                         <div className="text-xs text-muted-foreground space-x-3 pl-6">
                           {step.started_at && (
-                            <span>Mulai: {new Date(step.started_at).toLocaleString()}</span>
+                            <span>
+                              Mulai:{" "}
+                              {new Date(step.started_at).toLocaleString()}
+                            </span>
                           )}
                           {step.completed_at && (
-                            <span>Selesai: {new Date(step.completed_at).toLocaleString()}</span>
+                            <span>
+                              Selesai:{" "}
+                              {new Date(step.completed_at).toLocaleString()}
+                            </span>
                           )}
                           {step.status === "running" && (
-                            <span>({formatDurationSince(step.started_at)})</span>
+                            <span>
+                              ({formatDurationSince(step.started_at)})
+                            </span>
                           )}
                         </div>
 
@@ -180,12 +218,17 @@ export function BatchDetailDrawer({
                                   variant="outline"
                                   disabled={update.isPending}
                                   onClick={() => {
-                                    if (confirm(`Lewati tahapan ${PROCESS_LABEL[step.process]}?`)) {
+                                    if (
+                                      confirm(
+                                        `Lewati tahapan ${PROCESS_LABEL[step.process]}?`,
+                                      )
+                                    ) {
                                       act(step.id, "skipped");
                                     }
                                   }}
                                 >
-                                  <MinusCircle className="h-3.5 w-3.5 mr-1" /> Skip
+                                  <MinusCircle className="h-3.5 w-3.5 mr-1" />{" "}
+                                  Skip
                                 </Button>
                               </>
                             )}
@@ -204,7 +247,8 @@ export function BatchDetailDrawer({
                                   disabled={update.isPending}
                                   onClick={() => act(step.id, "completed")}
                                 >
-                                  <CheckCircle2 className="h-3.5 w-3.5 mr-1" /> Complete
+                                  <CheckCircle2 className="h-3.5 w-3.5 mr-1" />{" "}
+                                  Complete
                                 </Button>
                               </>
                             )}
@@ -223,7 +267,8 @@ export function BatchDetailDrawer({
                                   disabled={update.isPending}
                                   onClick={() => act(step.id, "completed")}
                                 >
-                                  <CheckCircle2 className="h-3.5 w-3.5 mr-1" /> Complete
+                                  <CheckCircle2 className="h-3.5 w-3.5 mr-1" />{" "}
+                                  Complete
                                 </Button>
                               </>
                             )}

@@ -22,7 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCreateDelivery, useSalesOrdersForDelivery } from "../hooks/use-deliveries";
+import {
+  useCreateDelivery,
+  useSalesOrdersForDelivery,
+} from "../hooks/use-deliveries";
 
 export function CreateDeliveryDialog({
   open,
@@ -143,11 +146,19 @@ export function CreateDeliveryDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="driver">Nama driver</Label>
-              <Input id="driver" value={driver} onChange={(e) => setDriver(e.target.value)} />
+              <Input
+                id="driver"
+                value={driver}
+                onChange={(e) => setDriver(e.target.value)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="veh">Nomor kendaraan</Label>
-              <Input id="veh" value={vehicle} onChange={(e) => setVehicle(e.target.value)} />
+              <Input
+                id="veh"
+                value={vehicle}
+                onChange={(e) => setVehicle(e.target.value)}
+              />
             </div>
           </div>
 
@@ -167,7 +178,9 @@ export function CreateDeliveryDialog({
             Batal
           </Button>
           <Button onClick={submit} disabled={create.isPending}>
-            {create.isPending && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
+            {create.isPending && (
+              <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
+            )}
             Buat Rencana
           </Button>
         </DialogFooter>

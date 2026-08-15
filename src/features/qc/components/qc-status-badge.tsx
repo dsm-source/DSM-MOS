@@ -1,8 +1,18 @@
 import { cn } from "@/lib/utils";
-import { QC_STATUS_CLASS, QC_STATUS_ICON, QC_STATUS_LABEL } from "../lib/status";
+import {
+  QC_STATUS_CLASS,
+  QC_STATUS_ICON,
+  QC_STATUS_LABEL,
+} from "../lib/status";
 import type { QcStatus } from "../types";
 
-export function QcStatusBadge({ status, className }: { status: QcStatus; className?: string }) {
+export function QcStatusBadge({
+  status,
+  className,
+}: {
+  status: QcStatus;
+  className?: string;
+}) {
   const Icon = QC_STATUS_ICON[status];
   return (
     <span

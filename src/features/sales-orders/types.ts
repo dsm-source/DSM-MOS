@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 
-export type SalesOrderStatus = Database["public"]["Enums"]["sales_order_status"];
+export type SalesOrderStatus =
+  Database["public"]["Enums"]["sales_order_status"];
 
 export const SALES_ORDER_STATUSES: SalesOrderStatus[] = [
   "draft",

@@ -30,7 +30,10 @@ import {
 } from "@/components/ui/pagination";
 import { useSalesOrders } from "@/features/sales-orders/hooks/use-sales-orders";
 import { StatusBadge } from "@/features/sales-orders/components/status-badge";
-import { SALES_ORDER_STATUSES, type SalesOrderStatus } from "@/features/sales-orders/types";
+import {
+  SALES_ORDER_STATUSES,
+  type SalesOrderStatus,
+} from "@/features/sales-orders/types";
 import { STATUS_LABEL } from "@/features/sales-orders/lib/status";
 import { useMyRoles } from "@/hooks/use-my-roles";
 
@@ -72,7 +75,9 @@ function SalesOrdersPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Sales Order</h1>
-          <p className="text-sm text-muted-foreground">Kelola pesanan pelanggan.</p>
+          <p className="text-sm text-muted-foreground">
+            Kelola pesanan pelanggan.
+          </p>
         </div>
         {canWrite && (
           <Button asChild>
@@ -188,7 +193,9 @@ function SalesOrdersPage() {
                   {so.customer ? (
                     <>
                       <span className="font-medium">{so.customer.name}</span>{" "}
-                      <span className="text-xs text-muted-foreground">({so.customer.code})</span>
+                      <span className="text-xs text-muted-foreground">
+                        ({so.customer.code})
+                      </span>
                     </>
                   ) : (
                     "—"

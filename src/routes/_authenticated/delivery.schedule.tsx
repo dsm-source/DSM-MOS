@@ -25,7 +25,10 @@ export const Route = createFileRoute("/_authenticated/delivery/schedule")({
   head: () => ({
     meta: [
       { title: "Jadwal Pengiriman — DSM MOS" },
-      { name: "description", content: "Gantt chart rencana pengiriman internal." },
+      {
+        name: "description",
+        content: "Gantt chart rencana pengiriman internal.",
+      },
     ],
   }),
   component: SchedulePage,
@@ -51,9 +54,11 @@ function SchedulePage() {
 
   const filtered = useMemo(() => {
     return data.filter((d) => {
-      if (customer !== "all" && d.sales_order?.customer?.id !== customer) return false;
+      if (customer !== "all" && d.sales_order?.customer?.id !== customer)
+        return false;
       if (status !== "all" && d.status !== status) return false;
-      if (from && d.planned_delivery_date && d.planned_delivery_date < from) return false;
+      if (from && d.planned_delivery_date && d.planned_delivery_date < from)
+        return false;
       if (to && d.planned_ship_date && d.planned_ship_date > to) return false;
       return true;
     });
@@ -110,7 +115,10 @@ function SchedulePage() {
         </div>
         <div className="min-w-[160px]">
           <div className="text-xs text-muted-foreground mb-1">Status</div>
-          <Select value={status} onValueChange={(v) => setStatus(v as DeliveryStatus | "all")}>
+          <Select
+            value={status}
+            onValueChange={(v) => setStatus(v as DeliveryStatus | "all")}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -126,11 +134,19 @@ function SchedulePage() {
         </div>
         <div>
           <div className="text-xs text-muted-foreground mb-1">Dari</div>
-          <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
+          <Input
+            type="date"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          />
         </div>
         <div>
           <div className="text-xs text-muted-foreground mb-1">Sampai</div>
-          <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+          <Input
+            type="date"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
         </div>
       </div>
 
@@ -145,7 +161,10 @@ function SchedulePage() {
           </div>
         ))}
         <div className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: "hsl(0 84% 60%)" }} />
+          <span
+            className="h-3 w-3 rounded-sm"
+            style={{ backgroundColor: "hsl(0 84% 60%)" }}
+          />
           Terlambat
         </div>
       </div>
@@ -158,7 +177,9 @@ function SchedulePage() {
         <DeliveryGantt
           deliveries={filtered}
           viewMode={view}
-          onSelect={(d) => navigate({ to: "/delivery/$id", params: { id: d.id } })}
+          onSelect={(d) =>
+            navigate({ to: "/delivery/$id", params: { id: d.id } })
+          }
         />
       )}
     </div>

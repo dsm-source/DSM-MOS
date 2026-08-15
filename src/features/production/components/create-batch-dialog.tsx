@@ -10,11 +10,14 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateBatch } from "../hooks/use-batches";
 import type { ApprovedJob } from "../hooks/use-approved-jobs";
+import { PRODUCTION_PROCESSES } from "../types";
+import { PROCESS_LABEL } from "../lib/process";
 
 export function CreateBatchDialog({
   job,
@@ -31,6 +34,9 @@ export function CreateBatchDialog({
   const [complete, setComplete] = useState("");
   const [delivery, setDelivery] = useState("");
   const [notes, setNotes] = useState("");
+  const [selectedProcesses, setSelectedProcesses] = useState<string[]>([
+    ...PRODUCTION_PROCESSES,
+  ]);
 
   const reset = () => {
     setQty("");
@@ -38,13 +44,28 @@ export function CreateBatchDialog({
     setComplete("");
     setDelivery("");
     setNotes("");
+    setSelectedProcesses([...PRODUCTION_PROCESSES]);
+  };
+
+  const toggleProcess = (process: string, checked: boolean) => {
+    setSelectedProcesses((prev) =>
+      checked ? [...prev, process] : prev.filter((p) => p !== process),
+    );
   };
 
   const submit = async () => {
     if (!job) return;
     const q = Number(qty);
     if (!Number.isFinite(q) || q <= 0) {
-      toast.error("Data belum valid", { description: "Kuantitas harus lebih dari 0" });
+      toast.error("Data belum valid", {
+        description: "Kuantitas harus lebih dari 0",
+      });
+      return;
+    }
+    if (selectedProcesses.length === 0) {
+      toast.error("Data belum valid", {
+        description: "Pilih minimal 1 tahapan proses",
+      });
       return;
     }
     try {
@@ -55,6 +76,9 @@ export function CreateBatchDialog({
         planned_completion_date: complete || null,
         estimated_delivery_date: delivery || null,
         notes: notes.trim() || null,
+        routing: PRODUCTION_PROCESSES.filter((p) =>
+          selectedProcesses.includes(p),
+        ),
       });
       toast.success("Batch dibuat");
       reset();
@@ -80,7 +104,9 @@ export function CreateBatchDialog({
               <>
                 <span className="font-mono">{job.job_number}</span> ·{" "}
                 {job.sales_order_item?.item_name} · Total qty item:{" "}
-                {job.sales_order_item ? Number(job.sales_order_item.quantity) : "—"}{" "}
+                {job.sales_order_item
+                  ? Number(job.sales_order_item.quantity)
+                  : "—"}{" "}
                 {job.sales_order_item?.unit ?? ""}
               </>
             ) : (
@@ -130,6 +156,25 @@ export function CreateBatchDialog({
               value={delivery}
               onChange={(e) => setDelivery(e.target.value)}
             />
+          </div>
+          <div className="grid gap-1.5">
+            <Label>Tahapan Proses (Routing)</Label>
+            <div className="grid gap-2">
+              {PRODUCTION_PROCESSES.map((process) => (
+                <div key={process} className="flex items-center gap-2">
+                  <Checkbox
+                    id={`process-${process}`}
+                    checked={selectedProcesses.includes(process)}
+                    onCheckedChange={(checked) =>
+                      toggleProcess(process, checked === true)
+                    }
+                  />
+                  <Label htmlFor={`process-${process}`} className="font-normal">
+                    {PROCESS_LABEL[process]}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="notes">Catatan (opsional)</Label>

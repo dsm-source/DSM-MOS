@@ -5,7 +5,8 @@ import { mapPgError } from "@/lib/pg-error";
 import type { Database } from "@/integrations/supabase/types";
 
 export type MaterialStatus = Database["public"]["Enums"]["material_status"];
-export type MaterialStatusRow = Database["public"]["Tables"]["material_statuses"]["Row"];
+export type MaterialStatusRow =
+  Database["public"]["Tables"]["material_statuses"]["Row"];
 
 export type MaterialWithContext = MaterialStatusRow & {
   engineering_job: {
@@ -51,9 +52,13 @@ export function useMaterialStatusesRealtime() {
   useEffect(() => {
     const channel = supabase
       .channel("material-statuses-changes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "material_statuses" }, () => {
-        qc.invalidateQueries({ queryKey: LIST_KEY });
-      })
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "material_statuses" },
+        () => {
+          qc.invalidateQueries({ queryKey: LIST_KEY });
+        },
+      )
       .subscribe();
     return () => {
       supabase.removeChannel(channel);
@@ -95,19 +100,22 @@ export const MATERIAL_STATUSES: {
   {
     key: "waiting_material",
     label: "Menunggu Material",
-    className: "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-300",
+    className:
+      "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-300",
     dot: "bg-rose-500",
   },
   {
     key: "partial_material",
     label: "Material Sebagian",
-    className: "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
+    className:
+      "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
     dot: "bg-amber-500",
   },
   {
     key: "material_ready",
     label: "Material Siap",
-    className: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    className:
+      "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
     dot: "bg-emerald-500",
   },
 ];

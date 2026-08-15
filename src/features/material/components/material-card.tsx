@@ -63,7 +63,10 @@ export function EditMaterialDialog({ row, open, onOpenChange }: Props) {
             try {
               await update.mutateAsync({
                 id: row.id,
-                values: { status: values.status as MaterialStatus, notes: values.notes || null },
+                values: {
+                  status: values.status as MaterialStatus,
+                  notes: values.notes || null,
+                },
               });
               toast.success("Status material diperbarui");
               onOpenChange(false);
@@ -77,7 +80,9 @@ export function EditMaterialDialog({ row, open, onOpenChange }: Props) {
             <Label>Status</Label>
             <Select
               value={form.watch("status")}
-              onValueChange={(v) => form.setValue("status", v as MaterialStatus)}
+              onValueChange={(v) =>
+                form.setValue("status", v as MaterialStatus)
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -96,7 +101,11 @@ export function EditMaterialDialog({ row, open, onOpenChange }: Props) {
             <Textarea rows={4} {...form.register("notes")} />
           </div>
           <DialogFooter>
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            >
               Batal
             </Button>
             <Button type="submit" disabled={update.isPending}>
@@ -109,7 +118,13 @@ export function EditMaterialDialog({ row, open, onOpenChange }: Props) {
   );
 }
 
-export function MaterialCard({ row, canEdit }: { row: MaterialWithContext; canEdit: boolean }) {
+export function MaterialCard({
+  row,
+  canEdit,
+}: {
+  row: MaterialWithContext;
+  canEdit: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const item = row.engineering_job?.sales_order_item;
   const so = item?.sales_order;
@@ -122,7 +137,9 @@ export function MaterialCard({ row, canEdit }: { row: MaterialWithContext; canEd
         className="w-full text-left rounded-lg border bg-card p-3 hover:bg-accent/40 transition disabled:cursor-default disabled:hover:bg-card"
       >
         <div className="flex items-center justify-between gap-2">
-          <div className="text-sm font-semibold truncate">{item?.item_name ?? "-"}</div>
+          <div className="text-sm font-semibold truncate">
+            {item?.item_name ?? "-"}
+          </div>
           <span className="text-[10px] font-mono text-muted-foreground shrink-0">
             {row.engineering_job?.job_number}
           </span>
@@ -132,7 +149,8 @@ export function MaterialCard({ row, canEdit }: { row: MaterialWithContext; canEd
         </div>
         {item?.material_spec && (
           <div className="mt-1 text-xs truncate">
-            <span className="text-muted-foreground">Spek:</span> {item.material_spec}
+            <span className="text-muted-foreground">Spek:</span>{" "}
+            {item.material_spec}
           </div>
         )}
         <div className="mt-1 text-xs text-muted-foreground">
@@ -144,7 +162,9 @@ export function MaterialCard({ row, canEdit }: { row: MaterialWithContext; canEd
           </div>
         )}
       </button>
-      {canEdit && open && <EditMaterialDialog row={row} open={open} onOpenChange={setOpen} />}
+      {canEdit && open && (
+        <EditMaterialDialog row={row} open={open} onOpenChange={setOpen} />
+      )}
     </>
   );
 }

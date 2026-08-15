@@ -23,7 +23,11 @@ import {
   type ProductionStepStatus,
 } from "@/features/production/types";
 import { PROCESS_LABEL } from "@/features/production/lib/process";
-import { BatchCard, activeStep, isBatchDone } from "@/features/production/components/batch-card";
+import {
+  BatchCard,
+  activeStep,
+  isBatchDone,
+} from "@/features/production/components/batch-card";
 import {
   StationStepCard,
   computeStartBlocker,
@@ -36,10 +40,14 @@ export const Route = createFileRoute("/_authenticated/production")({
       { title: "Production — DSM MOS" },
       {
         name: "description",
-        content: "Papan produksi shop floor: per batch (supervisor) dan per stasiun (operator).",
+        content:
+          "Papan produksi shop floor: per batch (supervisor) dan per stasiun (operator).",
       },
       { property: "og:title", content: "Production — DSM MOS" },
-      { property: "og:description", content: "Papan produksi shop floor DSM MOS." },
+      {
+        property: "og:description",
+        content: "Papan produksi shop floor DSM MOS.",
+      },
     ],
   }),
   component: ProductionPage,
@@ -58,7 +66,8 @@ function ProductionPage() {
         <div>
           <h1 className="text-2xl font-semibold">Production</h1>
           <p className="text-sm text-muted-foreground">
-            Kelola eksekusi batch di shop floor. Batch dibuat oleh Production Planning.
+            Kelola eksekusi batch di shop floor. Batch dibuat oleh Production
+            Planning.
           </p>
         </div>
       </div>
@@ -82,11 +91,19 @@ function ProductionPage() {
         </TabsContent>
 
         <TabsContent value="station">
-          <StationBoard batches={batches} canWrite={canWrite} isLoading={isLoading} />
+          <StationBoard
+            batches={batches}
+            canWrite={canWrite}
+            isLoading={isLoading}
+          />
         </TabsContent>
       </Tabs>
 
-      <BatchDetailDrawer batch={openBatch} onClose={() => setOpenBatch(null)} canWrite={canWrite} />
+      <BatchDetailDrawer
+        batch={openBatch}
+        onClose={() => setOpenBatch(null)}
+        canWrite={canWrite}
+      />
     </div>
   );
 }
@@ -124,7 +141,8 @@ function BatchBoard({
   }, [batches]);
 
   const readyCount = useMemo(
-    () => Array.from(grouped.map.values()).reduce((n, arr) => n + arr.length, 0),
+    () =>
+      Array.from(grouped.map.values()).reduce((n, arr) => n + arr.length, 0),
     [grouped.map],
   );
 
@@ -162,12 +180,14 @@ function BatchBoard({
           <div className="flex items-center gap-2 mb-2 text-amber-900 dark:text-amber-100">
             <Lock className="h-4 w-4" />
             <div className="text-sm font-semibold">
-              Terblokir — menunggu Engineering / Material ({grouped.blocked.length})
+              Terblokir — menunggu Engineering / Material (
+              {grouped.blocked.length})
             </div>
           </div>
           <p className="text-xs text-amber-800 dark:text-amber-200 mb-2">
-            Batch di bawah belum boleh mulai diproses. Tahapan pertama hanya bisa <em>Start</em>{" "}
-            saat Engineering <strong>approved</strong> dan Material <strong>material_ready</strong>.
+            Batch di bawah belum boleh mulai diproses. Tahapan pertama hanya
+            bisa <em>Start</em> saat Engineering <strong>approved</strong> dan
+            Material <strong>material_ready</strong>.
           </p>
           <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
             {grouped.blocked.map((b) => (
@@ -188,14 +208,23 @@ function BatchBoard({
           {PRODUCTION_PROCESSES.map((p) => {
             const items = grouped.map.get(p) ?? [];
             return (
-              <div key={p} className="rounded-xl border bg-muted/30 p-3 space-y-3 min-h-[200px]">
+              <div
+                key={p}
+                className="rounded-xl border bg-muted/30 p-3 space-y-3 min-h-[200px]"
+              >
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold">{PROCESS_LABEL[p]}</div>
-                  <span className="text-xs text-muted-foreground">{items.length}</span>
+                  <div className="text-sm font-semibold">
+                    {PROCESS_LABEL[p]}
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {items.length}
+                  </span>
                 </div>
                 <div className="space-y-2">
                   {items.length === 0 && (
-                    <div className="text-xs text-muted-foreground text-center py-6">Kosong</div>
+                    <div className="text-xs text-muted-foreground text-center py-6">
+                      Kosong
+                    </div>
                   )}
                   {items.map((b) => (
                     <BatchCard key={b.id} batch={b} onOpen={() => onOpen(b)} />
@@ -209,7 +238,9 @@ function BatchBoard({
 
       {filter === "all" && grouped.done.length > 0 && (
         <div className="rounded-xl border p-3">
-          <div className="text-sm font-semibold mb-2">Batch Selesai ({grouped.done.length})</div>
+          <div className="text-sm font-semibold mb-2">
+            Batch Selesai ({grouped.done.length})
+          </div>
           <div className="grid gap-2 md:grid-cols-3 xl:grid-cols-5">
             {grouped.done.map((b) => (
               <BatchCard key={b.id} batch={b} onOpen={() => onOpen(b)} />
@@ -237,14 +268,24 @@ function StationBoard({
     label: string;
     test: (s: ProductionStepStatus) => boolean;
   }[] = [
-    { key: "waiting", label: "Waiting", test: (s) => s === "waiting" || s === "paused" },
+    {
+      key: "waiting",
+      label: "Waiting",
+      test: (s) => s === "waiting" || s === "paused",
+    },
     { key: "running", label: "Running", test: (s) => s === "running" },
-    { key: "completed", label: "Completed", test: (s) => s === "completed" || s === "skipped" },
+    {
+      key: "completed",
+      label: "Completed",
+      test: (s) => s === "completed" || s === "skipped",
+    },
   ];
 
   const stepsForStation = useMemo(() => {
     return batches.flatMap((b) =>
-      b.steps.filter((s) => s.process === station).map((s) => ({ step: s, batch: b })),
+      b.steps
+        .filter((s) => s.process === station)
+        .map((s) => ({ step: s, batch: b })),
     );
   }, [batches, station]);
 
@@ -252,7 +293,10 @@ function StationBoard({
     <div className="space-y-4">
       <div className="flex items-center gap-3 flex-wrap">
         <div className="text-sm text-muted-foreground">Stasiun:</div>
-        <Select value={station} onValueChange={(v) => setStation(v as ProductionProcess)}>
+        <Select
+          value={station}
+          onValueChange={(v) => setStation(v as ProductionProcess)}
+        >
           <SelectTrigger className="w-64">
             <SelectValue />
           </SelectTrigger>
@@ -275,7 +319,9 @@ function StationBoard({
       ) : (
         <div className="grid gap-3 md:grid-cols-3">
           {columns.map((col) => {
-            const items = stepsForStation.filter((x) => col.test(x.step.status));
+            const items = stepsForStation.filter((x) =>
+              col.test(x.step.status),
+            );
             return (
               <div
                 key={col.key}
@@ -283,14 +329,23 @@ function StationBoard({
               >
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">{col.label}</div>
-                  <span className="text-xs text-muted-foreground">{items.length}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {items.length}
+                  </span>
                 </div>
                 <div className="space-y-2">
                   {items.length === 0 && (
-                    <div className="text-xs text-muted-foreground text-center py-6">Kosong</div>
+                    <div className="text-xs text-muted-foreground text-center py-6">
+                      Kosong
+                    </div>
                   )}
                   {items.map(({ step, batch }) => (
-                    <StationStepCard key={step.id} step={step} batch={batch} canWrite={canWrite} />
+                    <StationStepCard
+                      key={step.id}
+                      step={step}
+                      batch={batch}
+                      canWrite={canWrite}
+                    />
                   ))}
                 </div>
               </div>

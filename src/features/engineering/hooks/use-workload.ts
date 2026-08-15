@@ -20,7 +20,9 @@ export function useEngineeringWorkload(enabled: boolean) {
     queryKey: ["engineering-workload"],
     queryFn: async (): Promise<WorkloadRow[]> => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase as any).rpc("get_engineering_workload");
+      const { data, error } = await (supabase as any).rpc(
+        "get_engineering_workload",
+      );
       if (error) throw new Error(mapPgError(error));
       return (data ?? []) as WorkloadRow[];
     },

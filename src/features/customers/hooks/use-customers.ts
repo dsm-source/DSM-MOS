@@ -21,7 +21,11 @@ export function useCustomers(search?: string) {
   return useQuery({
     queryKey: [...KEY, { search: search ?? "" }],
     queryFn: async (): Promise<Customer[]> => {
-      let q = supabase.from("customers").select("*").order("name", { ascending: true }).limit(500);
+      let q = supabase
+        .from("customers")
+        .select("*")
+        .order("name", { ascending: true })
+        .limit(500);
       if (search && search.trim()) {
         const s = `%${search.trim()}%`;
         q = q.or(`name.ilike.${s},code.ilike.${s}`);
@@ -48,8 +52,15 @@ export function useCreateCustomer() {
   return useMutation({
     mutationFn: async (values: CustomerFormValues) => {
       const { data: userData } = await supabase.auth.getUser();
-      const payload = { ...normalize(values), created_by: userData.user?.id ?? null };
-      const { data, error } = await supabase.from("customers").insert(payload).select("*").single();
+      const payload = {
+        ...normalize(values),
+        created_by: userData.user?.id ?? null,
+      };
+      const { data, error } = await supabase
+        .from("customers")
+        .insert(payload)
+        .select("*")
+        .single();
       if (error) throw new Error(mapPgError(error));
       return data;
     },
@@ -60,7 +71,13 @@ export function useCreateCustomer() {
 export function useUpdateCustomer() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, values }: { id: string; values: CustomerFormValues }) => {
+    mutationFn: async ({
+      id,
+      values,
+    }: {
+      id: string;
+      values: CustomerFormValues;
+    }) => {
       const { data, error } = await supabase
         .from("customers")
         .update(normalize(values))

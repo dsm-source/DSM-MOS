@@ -25,14 +25,15 @@
 - [x] **Checkpoint M1**: SO confirmed → job+material otomatis (trigger terverifikasi), notifikasi masuk (Realtime aktif), pgTAP 23/23 pass, build+lint lulus
 
 ## M2 — Engineering
-- [ ] M2.1 Migration: hapus `drawing_url`
-- [ ] M2.2 Buat/verifikasi `v_engineering_workload` (akses semua peran)
-- [ ] M2.3 UI papan Engineering Job per status
-- [ ] M2.4 UI detail job (tanpa upload drawing)
-- [ ] M2.5 Tab riwayat dari `engineering_job_history`
-- [ ] M2.6 Halaman Engineering Workload (semua peran)
-- [ ] M2.7 pgTAP: gate in_progress, progress lock 100, workload RLS
-- [ ] **Checkpoint M2**: full flow assign→approve, riwayat muncul; `get_advisors` bersih
+- [x] M2.1 Migration: hapus `drawing_url`
+- [x] M2.2 Buat/verifikasi `v_engineering_workload` (akses semua peran)
+- [x] M2.3 UI papan Engineering Job per status
+- [x] M2.4 UI detail job (tanpa upload drawing)
+- [x] M2.5 Tab riwayat dari `engineering_job_history`
+- [x] M2.6 Halaman Engineering Workload (semua peran)
+- [x] M2.7 pgTAP: gate in_progress, progress lock 100, workload RLS (23/23 pass)
+- [x] **Checkpoint M2**: full flow assign→approve, riwayat muncul; pgTAP 46/46 pass (M1+M2), build lulus
+
 
 ## M3 — Material Status
 - [ ] M3.1 Verifikasi migration & RLS
@@ -42,8 +43,8 @@
 - [ ] **Checkpoint M3**: full flow waiting→ready, riwayat tercatat; `get_advisors` bersih
 
 ## M4 — Production Planning
-- [ ] M4.1 Migration: tambah `production_batches.routing jsonb`
-- [ ] M4.2 Migration: `operator_id` FK → `operators`; revisi trigger steps ikuti routing
+- [x] M4.1 Migration: tambah `production_batches.routing jsonb` (file: `20260816000006_production_routing_operator_fk.sql`)
+- [x] M4.2 Migration: `operator_id` FK → `operators`; revisi trigger steps ikuti routing (juga menghapus auto-set `operator_id := auth.uid()` di trigger validasi transisi, karena tidak valid lagi terhadap FK baru — operator kini harus dipilih eksplisit, sesuai M5.4)
 - [ ] M4.3 UI master data Operators CRUD
 - [ ] M4.4 UI form buat batch + routing checkbox
 - [ ] M4.5 Gantt Production (tombol, bukan drag)

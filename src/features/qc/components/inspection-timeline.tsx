@@ -21,7 +21,9 @@ export function InspectionTimeline({
     );
   }
   if (data.length === 0) {
-    return <div className="text-sm text-muted-foreground">Belum ada riwayat.</div>;
+    return (
+      <div className="text-sm text-muted-foreground">Belum ada riwayat.</div>
+    );
   }
 
   return (
@@ -32,22 +34,30 @@ export function InspectionTimeline({
           <li key={r.id} className="relative">
             <span
               className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 ${
-                active ? "bg-primary border-primary" : "bg-background border-muted-foreground/40"
+                active
+                  ? "bg-primary border-primary"
+                  : "bg-background border-muted-foreground/40"
               }`}
             />
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-medium">Putaran {idx + 1}</span>
               <QcStatusBadge status={r.status} />
               <span className="text-xs text-muted-foreground">
-                {format(new Date(r.updated_at), "d MMM yyyy HH:mm", { locale: idLocale })}
+                {format(new Date(r.updated_at), "d MMM yyyy HH:mm", {
+                  locale: idLocale,
+                })}
               </span>
             </div>
             <div className="text-xs text-muted-foreground mt-0.5">
               Total: {r.qty_total} · OK: {r.qty_ok} · Tolak: {r.qty_reject}
-              {r.photo_urls && r.photo_urls.length > 0 ? ` · ${r.photo_urls.length} foto` : ""}
+              {r.photo_urls && r.photo_urls.length > 0
+                ? ` · ${r.photo_urls.length} foto`
+                : ""}
             </div>
             {r.defect_notes && (
-              <div className="text-xs mt-1 whitespace-pre-wrap">{r.defect_notes}</div>
+              <div className="text-xs mt-1 whitespace-pre-wrap">
+                {r.defect_notes}
+              </div>
             )}
           </li>
         );

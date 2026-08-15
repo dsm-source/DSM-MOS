@@ -30,7 +30,8 @@ export const isRolesTableEmpty = createServerFn({ method: "GET" })
     // Menggunakan has_role: jika tabel kosong, tak ada admin — tapi kita perlu
     // cek eksplisit apakah tabel kosong. RLS: authenticated hanya lihat baris
     // sendiri, jadi count via client tidak akurat. Pakai admin client.
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } =
+      await import("@/integrations/supabase/client.server");
     const { count, error } = await supabaseAdmin
       .from("user_roles")
       .select("id", { count: "exact", head: true });

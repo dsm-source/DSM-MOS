@@ -40,7 +40,9 @@ export function InspectionDialog({
   const [qtyOk, setQtyOk] = useState("0");
   const [qtyReject, setQtyReject] = useState("0");
   const [notes, setNotes] = useState("");
-  const [signedUrls, setSignedUrls] = useState<{ path: string; url: string }[]>([]);
+  const [signedUrls, setSignedUrls] = useState<{ path: string; url: string }[]>(
+    [],
+  );
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -62,7 +64,9 @@ export function InspectionDialog({
       }
       const resolved = await Promise.all(
         paths.map(async (p) => {
-          const { data } = await supabase.storage.from(BUCKET).createSignedUrl(p, 60 * 10);
+          const { data } = await supabase.storage
+            .from(BUCKET)
+            .createSignedUrl(p, 60 * 10);
           return { path: p, url: data?.signedUrl ?? "" };
         }),
       );
@@ -100,7 +104,9 @@ export function InspectionDialog({
 
   async function saveDraft() {
     if (overCap) {
-      toast.error("Data belum valid", { description: "Jumlah OK + Tolak melebihi Total" });
+      toast.error("Data belum valid", {
+        description: "Jumlah OK + Tolak melebihi Total",
+      });
       return;
     }
     try {
@@ -119,7 +125,9 @@ export function InspectionDialog({
 
   async function transition(next: QcStatus) {
     if ((next === "pass" || next === "reject") && overCap) {
-      toast.error("Data belum valid", { description: "Jumlah OK + Tolak melebihi Total" });
+      toast.error("Data belum valid", {
+        description: "Jumlah OK + Tolak melebihi Total",
+      });
       return;
     }
     try {
@@ -143,11 +151,13 @@ export function InspectionDialog({
     try {
       const uploaded: string[] = [];
       for (const file of Array.from(files)) {
-        const safe = file.name.replace(/[^\w.\-]/g, "_");
+        const safe = file.name.replace(/[^\w.-]/g, "_");
         const path = `${inspection!.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safe}`;
-        const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
-          upsert: false,
-        });
+        const { error: upErr } = await supabase.storage
+          .from(BUCKET)
+          .upload(path, file, {
+            upsert: false,
+          });
         if (upErr) throw new Error(upErr.message);
         uploaded.push(path);
       }
@@ -179,11 +189,13 @@ export function InspectionDialog({
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 flex-wrap">
-            Inspeksi QC — {batch?.batch_number ?? "?"} <QcStatusBadge status={inspection.status} />
+            Inspeksi QC — {batch?.batch_number ?? "?"}{" "}
+            <QcStatusBadge status={inspection.status} />
           </DialogTitle>
           <DialogDescription>
-            SO {so?.so_number ?? "?"} · {so?.customer?.name ?? "-"} · {item?.item_name ?? "-"} · Qty
-            batch: {batch?.quantity} {item?.unit ?? ""}
+            SO {so?.so_number ?? "?"} · {so?.customer?.name ?? "-"} ·{" "}
+            {item?.item_name ?? "-"} · Qty batch: {batch?.quantity}{" "}
+            {item?.unit ?? ""}
           </DialogDescription>
         </DialogHeader>
 
@@ -249,9 +261,21 @@ export function InspectionDialog({
             {signedUrls.length > 0 ? (
               <div className="grid grid-cols-3 gap-2">
                 {signedUrls.map((p) => (
-                  <div key={p.path} className="relative group overflow-hidden rounded-lg border">
-                    <a href={p.url} target="_blank" rel="noreferrer" className="block">
-                      <img src={p.url} alt="Bukti QC" className="w-full h-32 object-cover" />
+                  <div
+                    key={p.path}
+                    className="relative group overflow-hidden rounded-lg border"
+                  >
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block"
+                    >
+                      <img
+                        src={p.url}
+                        alt="Bukti QC"
+                        className="w-full h-32 object-cover"
+                      />
                     </a>
                     {canWrite && inspection.status !== "pass" && (
                       <button
@@ -281,7 +305,8 @@ export function InspectionDialog({
                   multiple
                   className="hidden"
                   onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 0) handleUpload(e.target.files);
+                    if (e.target.files && e.target.files.length > 0)
+                      handleUpload(e.target.files);
                   }}
                 />
                 <Button
@@ -307,7 +332,10 @@ export function InspectionDialog({
               <Separator />
               <div className="space-y-2">
                 <Label>Riwayat inspeksi batch</Label>
-                <InspectionTimeline batchId={batch.id} currentId={inspection.id} />
+                <InspectionTimeline
+                  batchId={batch.id}
+                  currentId={inspection.id}
+                />
               </div>
             </>
           )}
@@ -321,7 +349,11 @@ export function InspectionDialog({
           </Button>
           {canWrite && !readOnly && (
             <div className="flex gap-2 flex-wrap">
-              <Button variant="outline" onClick={saveDraft} disabled={update.isPending}>
+              <Button
+                variant="outline"
+                onClick={saveDraft}
+                disabled={update.isPending}
+              >
                 Simpan
               </Button>
               {allowed.map((next) => {
@@ -333,7 +365,11 @@ export function InspectionDialog({
                     onClick={() => transition(next)}
                     disabled={update.isPending}
                     variant={isDanger ? "destructive" : "default"}
-                    className={isSuccess ? "bg-emerald-600 hover:bg-emerald-700" : undefined}
+                    className={
+                      isSuccess
+                        ? "bg-emerald-600 hover:bg-emerald-700"
+                        : undefined
+                    }
                   >
                     {QC_STATUS_LABEL[next]}
                   </Button>

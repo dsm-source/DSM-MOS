@@ -28,7 +28,9 @@ export function useBlockerHistory(engineeringJobId: string | undefined) {
       const [engRes, matRes] = await Promise.all([
         supabase
           .from("engineering_job_history")
-          .select("id, field_changed, from_value, to_value, changed_at, changed_by")
+          .select(
+            "id, field_changed, from_value, to_value, changed_at, changed_by",
+          )
           .eq("engineering_job_id", engineeringJobId!)
           .eq("field_changed", "status")
           .order("changed_at", { ascending: true }),
@@ -62,7 +64,9 @@ export function useBlockerHistory(engineeringJobId: string | undefined) {
         })),
       ];
 
-      const userIds = base.map((e) => e.changed_by).filter((v): v is string => !!v);
+      const userIds = base
+        .map((e) => e.changed_by)
+        .filter((v): v is string => !!v);
 
       // Kegagalan resolusi email tidak boleh menggagalkan render timeline.
       // Panel Riwayat Blocker punya indikator loading/error + tombol retry

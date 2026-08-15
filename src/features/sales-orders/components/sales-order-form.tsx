@@ -30,14 +30,20 @@ const EMPTY_ITEM = {
   material_spec: "",
 };
 
-export function SalesOrderForm({ defaultValues, onSubmit, submitLabel, submitting }: Props) {
+export function SalesOrderForm({
+  defaultValues,
+  onSubmit,
+  submitLabel,
+  submitting,
+}: Props) {
   const { data: customers = [], isLoading: loadingCust } = useCustomers();
 
   const form = useForm<SalesOrderFormValues>({
     resolver: zodResolver(salesOrderFormSchema),
     defaultValues: {
       customer_id: defaultValues?.customer_id ?? "",
-      order_date: defaultValues?.order_date ?? new Date().toISOString().slice(0, 10),
+      order_date:
+        defaultValues?.order_date ?? new Date().toISOString().slice(0, 10),
       due_date: defaultValues?.due_date ?? "",
       notes: defaultValues?.notes ?? "",
       items: defaultValues?.items?.length ? defaultValues.items : [EMPTY_ITEM],
@@ -62,10 +68,14 @@ export function SalesOrderForm({ defaultValues, onSubmit, submitLabel, submittin
           <Label>Customer</Label>
           <Select
             value={customerId}
-            onValueChange={(v) => setValue("customer_id", v, { shouldValidate: true })}
+            onValueChange={(v) =>
+              setValue("customer_id", v, { shouldValidate: true })
+            }
           >
             <SelectTrigger>
-              <SelectValue placeholder={loadingCust ? "Memuat..." : "Pilih customer"} />
+              <SelectValue
+                placeholder={loadingCust ? "Memuat..." : "Pilih customer"}
+              />
             </SelectTrigger>
             <SelectContent>
               {customers.map((c) => (
@@ -76,7 +86,9 @@ export function SalesOrderForm({ defaultValues, onSubmit, submitLabel, submittin
             </SelectContent>
           </Select>
           {errors.customer_id && (
-            <p className="text-xs text-destructive">{errors.customer_id.message}</p>
+            <p className="text-xs text-destructive">
+              {errors.customer_id.message}
+            </p>
           )}
         </div>
 
@@ -84,13 +96,19 @@ export function SalesOrderForm({ defaultValues, onSubmit, submitLabel, submittin
           <Label>Tanggal Order</Label>
           <Input type="date" {...register("order_date")} />
           {errors.order_date && (
-            <p className="text-xs text-destructive">{errors.order_date.message}</p>
+            <p className="text-xs text-destructive">
+              {errors.order_date.message}
+            </p>
           )}
         </div>
         <div className="space-y-1.5">
           <Label>Jatuh Tempo</Label>
           <Input type="date" {...register("due_date")} />
-          {errors.due_date && <p className="text-xs text-destructive">{errors.due_date.message}</p>}
+          {errors.due_date && (
+            <p className="text-xs text-destructive">
+              {errors.due_date.message}
+            </p>
+          )}
         </div>
         <div className="space-y-1.5 md:col-span-1">
           <Label>Catatan</Label>
@@ -101,7 +119,12 @@ export function SalesOrderForm({ defaultValues, onSubmit, submitLabel, submittin
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold">Item</h3>
-          <Button type="button" size="sm" variant="outline" onClick={() => append(EMPTY_ITEM)}>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => append(EMPTY_ITEM)}
+          >
             <Plus className="h-4 w-4 mr-1" /> Tambah item
           </Button>
         </div>
@@ -122,7 +145,10 @@ export function SalesOrderForm({ defaultValues, onSubmit, submitLabel, submittin
               {fields.map((f, i) => (
                 <tr key={f.id} className="border-t align-top">
                   <td className="px-3 py-2">
-                    <Input {...register(`items.${i}.item_name`)} placeholder="mis. Bracket AC-01" />
+                    <Input
+                      {...register(`items.${i}.item_name`)}
+                      placeholder="mis. Bracket AC-01"
+                    />
                     {errors.items?.[i]?.item_name && (
                       <p className="text-xs text-destructive mt-1">
                         {errors.items[i]?.item_name?.message}
@@ -130,14 +156,19 @@ export function SalesOrderForm({ defaultValues, onSubmit, submitLabel, submittin
                     )}
                   </td>
                   <td className="px-3 py-2">
-                    <Input {...register(`items.${i}.drawing_number`)} placeholder="DWG-..." />
+                    <Input
+                      {...register(`items.${i}.drawing_number`)}
+                      placeholder="DWG-..."
+                    />
                   </td>
                   <td className="px-3 py-2">
                     <Input
                       type="number"
                       step="0.0001"
                       min="0"
-                      {...register(`items.${i}.quantity`, { valueAsNumber: true })}
+                      {...register(`items.${i}.quantity`, {
+                        valueAsNumber: true,
+                      })}
                     />
                     {errors.items?.[i]?.quantity && (
                       <p className="text-xs text-destructive mt-1">

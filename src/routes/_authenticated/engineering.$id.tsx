@@ -24,7 +24,10 @@ import { useEngineers } from "@/features/engineering/hooks/use-engineers";
 import { EngStatusBadge } from "@/features/engineering/components/status-badge";
 import { TargetBadge } from "@/features/engineering/components/target-badge";
 import { ENG_STATUS_LABEL } from "@/features/engineering/lib/status";
-import { ENGINEERING_STATUSES, type EngineeringStatus } from "@/features/engineering/types";
+import {
+  ENGINEERING_STATUSES,
+  type EngineeringStatus,
+} from "@/features/engineering/types";
 import { JobHistory } from "@/features/engineering/components/job-history";
 import { useMyRoles } from "@/hooks/use-my-roles";
 
@@ -125,12 +128,18 @@ function EngineeringDetailPage() {
           </Button>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-semibold font-mono">{job.job_number}</h1>
+              <h1 className="text-2xl font-semibold font-mono">
+                {job.job_number}
+              </h1>
               <EngStatusBadge status={job.status} />
-              <TargetBadge target={job.target_completion_date} status={job.status} />
+              <TargetBadge
+                target={job.target_completion_date}
+                status={job.status}
+              />
             </div>
             <p className="text-sm text-muted-foreground">
-              {item?.item_name} — {so ? `${so.so_number} · ${so.customer?.name ?? ""}` : ""}
+              {item?.item_name} —{" "}
+              {so ? `${so.so_number} · ${so.customer?.name ?? ""}` : ""}
             </p>
           </div>
         </div>
@@ -138,7 +147,10 @@ function EngineeringDetailPage() {
 
       <div className="grid gap-4 md:grid-cols-3">
         <Info label="No. Gambar" value={item?.drawing_number ?? "—"} />
-        <Info label="Qty" value={`${item?.quantity ?? "—"} ${item?.unit ?? ""}`} />
+        <Info
+          label="Qty"
+          value={`${item?.quantity ?? "—"} ${item?.unit ?? ""}`}
+        />
         <Info label="Spesifikasi" value={item?.material_spec ?? "—"} />
       </div>
 
@@ -199,7 +211,9 @@ function EngineeringDetailPage() {
                 max={100}
                 value={progress}
                 onChange={(e) =>
-                  setProgress(Math.max(0, Math.min(100, Number(e.target.value) || 0)))
+                  setProgress(
+                    Math.max(0, Math.min(100, Number(e.target.value) || 0)),
+                  )
                 }
                 className="w-20"
               />
@@ -244,15 +258,17 @@ function EngineeringDetailPage() {
             )}
           </div>
           <p className="text-xs text-muted-foreground">
-            Transisi hanya bisa: Draft → In Progress → Review → Approved (Review boleh dikembalikan
-            ke In Progress). Database akan menolak transisi ilegal.
+            Transisi hanya bisa: Draft → In Progress → Review → Approved (Review
+            boleh dikembalikan ke In Progress). Database akan menolak transisi
+            ilegal.
           </p>
         </div>
       )}
 
       {!canWrite && (
         <div className="rounded-xl border p-4 text-sm text-muted-foreground">
-          Anda hanya dapat melihat. Hanya Engineering & Admin yang dapat mengubah job.
+          Anda hanya dapat melihat. Hanya Engineering & Admin yang dapat
+          mengubah job.
         </div>
       )}
 

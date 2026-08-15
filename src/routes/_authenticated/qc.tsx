@@ -15,7 +15,10 @@ export const Route = createFileRoute("/_authenticated/qc")({
   head: () => ({
     meta: [
       { title: "Quality Control — DSM MOS" },
-      { name: "description", content: "Antrian & riwayat inspeksi mutu batch produksi." },
+      {
+        name: "description",
+        content: "Antrian & riwayat inspeksi mutu batch produksi.",
+      },
     ],
   }),
   component: QcPage,
@@ -26,13 +29,16 @@ function QcPage() {
   const canWrite = hasAnyRole(["qc", "admin"]);
   const { data: inspections = [], isLoading } = useQcInspections();
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<QcInspectionWithContext | null>(null);
+  const [selected, setSelected] = useState<QcInspectionWithContext | null>(
+    null,
+  );
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return inspections;
     return inspections.filter((i) => {
-      const so = i.production_batch?.engineering_job?.sales_order_item?.sales_order;
+      const so =
+        i.production_batch?.engineering_job?.sales_order_item?.sales_order;
       const item = i.production_batch?.engineering_job?.sales_order_item;
       return (
         i.production_batch?.batch_number.toLowerCase().includes(q) ||
@@ -75,7 +81,9 @@ function QcPage() {
       <Tabs defaultValue="queue" className="space-y-4">
         <TabsList>
           <TabsTrigger value="queue">Antrian ({queue.length})</TabsTrigger>
-          <TabsTrigger value="history">Riwayat Lulus ({history.length})</TabsTrigger>
+          <TabsTrigger value="history">
+            Riwayat Lulus ({history.length})
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="queue" className="space-y-4">
@@ -85,12 +93,17 @@ function QcPage() {
             </Card>
           ) : queue.length === 0 ? (
             <Card className="p-8 text-center text-sm text-muted-foreground">
-              Antrian kosong. Batch akan muncul di sini setelah semua tahapan produksi selesai.
+              Antrian kosong. Batch akan muncul di sini setelah semua tahapan
+              produksi selesai.
             </Card>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {queue.map((i) => (
-                <InspectionCard key={i.id} inspection={i} onOpen={() => setSelected(i)} />
+                <InspectionCard
+                  key={i.id}
+                  inspection={i}
+                  onOpen={() => setSelected(i)}
+                />
               ))}
             </div>
           )}
@@ -110,7 +123,11 @@ function QcPage() {
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {history.map((i) => (
-                <InspectionCard key={i.id} inspection={i} onOpen={() => setSelected(i)} />
+                <InspectionCard
+                  key={i.id}
+                  inspection={i}
+                  onOpen={() => setSelected(i)}
+                />
               ))}
             </div>
           )}
