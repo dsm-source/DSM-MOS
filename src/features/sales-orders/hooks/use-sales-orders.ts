@@ -5,7 +5,11 @@ import type { Database } from "@/integrations/supabase/types";
 import type { SalesOrderFormValues, SalesOrderStatus } from "../types";
 
 export type SalesOrderRow = Database["public"]["Tables"]["sales_orders"]["Row"];
-export type SalesOrderItemRow = Database["public"]["Tables"]["sales_order_items"]["Row"];
+export type SalesOrderItemRow =
+  Database["public"]["Tables"]["sales_order_items"]["Row"];
+
+export type SalesOrderStatusHistoryRow =
+  Database["public"]["Tables"]["sales_order_status_history"]["Row"];
 
 export type SalesOrderListItem = SalesOrderRow & {
   customer: { id: string; code: string; name: string } | null;
@@ -25,34 +29,46 @@ const DETAIL_KEY = ["sales-order"] as const;
 export function useSalesOrders(params: SalesOrderListParams) {
   return useQuery({
     queryKey: [...LIST_KEY, params],
-    queryFn: async (): Promise<{ rows: SalesOrderListItem[]; total: number }> => {
+    queryFn: async (): Promise<{
+      rows: SalesOrderListItem[];
+      total: number;
+    }> => {
       const from = (params.page - 1) * params.pageSize;
       const to = from + params.pageSize - 1;
 
       let q = supabase
         .from("sales_orders")
-        .select("*, customer:customers!inner(id, code, name), sales_order_items(count)", {
-          count: "exact",
-        })
+        .select(
+          "*, customer:customers!inner(id, code, name), sales_order_items(count)",
+          {
+            count: "exact",
+          },
+        )
         .order("created_at", { ascending: false })
         .range(from, to);
 
-      if (params.status && params.status !== "all") q = q.eq("status", params.status);
+      if (params.status && params.status !== "all")
+        q = q.eq("status", params.status);
 
       const s = params.search?.trim();
       if (s) {
         // Cari di so_number ATAU nama/kode customer (via inner join filter)
         const like = `%${s}%`;
-        q = q.or(`so_number.ilike.${like},customer.name.ilike.${like},customer.code.ilike.${like}`);
+        q = q.or(
+          `so_number.ilike.${like},customer.name.ilike.${like},customer.code.ilike.${like}`,
+        );
       }
 
       const { data, error, count } = await q;
       if (error) throw new Error(mapPgError(error));
       const rows: SalesOrderListItem[] = (data ?? []).map((r) => {
-        const items = (r as unknown as { sales_order_items: { count: number }[] })
-          .sales_order_items;
+        const items = (
+          r as unknown as { sales_order_items: { count: number }[] }
+        ).sales_order_items;
         return {
-          ...(r as SalesOrderRow & { customer: SalesOrderListItem["customer"] }),
+          ...(r as SalesOrderRow & {
+            customer: SalesOrderListItem["customer"];
+          }),
           item_count: items?.[0]?.count ?? 0,
         };
       });
@@ -77,6 +93,22 @@ export function useSalesOrder(id: string | undefined) {
   });
 }
 
+export function useSalesOrderStatusHistory(salesOrderId: string | undefined) {
+  return useQuery({
+    enabled: !!salesOrderId,
+    queryKey: ["sales-order-status-history", salesOrderId],
+    queryFn: async (): Promise<SalesOrderStatusHistoryRow[]> => {
+      const { data, error } = await supabase
+        .from("sales_order_status_history")
+        .select("*")
+        .eq("sales_order_id", salesOrderId!)
+        .order("changed_at", { ascending: false });
+      if (error) throw new Error(mapPgError(error));
+      return data ?? [];
+    },
+  });
+}
+
 async function replaceItems(
   salesOrderId: string,
   items: SalesOrderFormValues["items"],
@@ -97,7 +129,9 @@ async function replaceItems(
     material_spec: it.material_spec?.trim() || null,
     created_by: userId,
   }));
-  const { error: insErr } = await supabase.from("sales_order_items").insert(payload);
+  const { error: insErr } = await supabase
+    .from("sales_order_items")
+    .insert(payload);
   if (insErr) throw new Error(mapPgError(insErr));
 }
 
@@ -132,7 +166,13 @@ export function useCreateSalesOrder() {
 export function useUpdateSalesOrder() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, values }: { id: string; values: SalesOrderFormValues }) => {
+    mutationFn: async ({
+      id,
+      values,
+    }: {
+      id: string;
+      values: SalesOrderFormValues;
+    }) => {
       const { data: userData } = await supabase.auth.getUser();
       const uid = userData.user?.id ?? null;
 
@@ -177,7 +217,13 @@ export function useDeleteSalesOrder() {
 export function useTransitionSalesOrder() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, next }: { id: string; next: SalesOrderStatus }) => {
+    mutationFn: async ({
+      id,
+      next,
+    }: {
+      id: string;
+      next: SalesOrderStatus;
+    }) => {
       const { data, error } = await supabase
         .from("sales_orders")
         .update({ status: next })
@@ -190,6 +236,7 @@ export function useTransitionSalesOrder() {
     onSuccess: (_d, v) => {
       qc.invalidateQueries({ queryKey: LIST_KEY });
       qc.invalidateQueries({ queryKey: [...DETAIL_KEY, v.id] });
+      qc.invalidateQueries({ queryKey: ["sales-order-status-history", v.id] });
     },
   });
 }

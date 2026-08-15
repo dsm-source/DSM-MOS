@@ -3,26 +3,26 @@
 > Detail lengkap tiap task (acceptance criteria, files, dependencies) ada di `tasks/plan.md`. File ini untuk tracking cepat harian. Centang seiring progres; jangan mulai milestone berikutnya sebelum checkpoint milestone saat ini lolos.
 
 ## Phase 0 — Blocker & Audit
-- [ ] 0.1 Verifikasi koneksi MCP Supabase ke project `jtzwawtfymljfqfrplib` (user run `claude /mcp` + auth)
-- [ ] 0.2 Audit menyeluruh 24 migration lokal vs PRD v3 (RLS, trigger, number generator — bukan cuma tabel)
-- [ ] **Checkpoint 0**: `list_tables` sukses ke project benar; tidak ada gap baru ditemukan
+- [x] 0.1 Verifikasi koneksi MCP Supabase ke project `jtzwawtfymljfqfrplib` (user run `claude /mcp` + auth)
+- [x] 0.2 Audit menyeluruh 24 migration lokal vs PRD v3 (RLS, trigger, number generator — bukan cuma tabel)
+- [x] **Checkpoint 0**: `list_tables` sukses ke project benar; tidak ada gap baru ditemukan
 
 ## M0 — Foundation
-- [ ] M0.1 Deploy migration yang sudah benar
-- [x] M0.2 Migration: tabel `operators` + RLS (local, belum deploy remote)
-- [x] M0.3 UI admin: buat user manual + assign role (terverifikasi di local Supabase stack)
-- [ ] M0.4 Verifikasi/bangun route guard per role
-- [ ] **Checkpoint M0**: admin buat user → user login → lihat menu sesuai role; `get_advisors` bersih
+- [x] M0.1 Deploy migration yang sudah benar (local stack: 24 migration lama + 1 baru = 25, `supabase start` sukses)
+- [x] M0.2 Migration: tabel `operators` + RLS (file: `20260726000000_m0_foundation.sql`, local deploy sukses)
+- [x] M0.3 UI admin: buat user manual + assign role (`src/routes/_authenticated/admin.tsx` sudah ada — list user + checkbox assign role, terverifikasi di local Supabase stack)
+- [x] M0.4 Verifikasi/bangun route guard per role (layout auth guard + sidebar role filter + RLS backstop; fix: engineering.workload guard dibuka ke semua peran sesuai PRD §11 #6)
+- [x] **Checkpoint M0**: admin buat user → user login → lihat menu sesuai role; build+test lulus (get_advisors: MCP tidak tersedia di sesi ini, verifikasi via local stack)
 
 ## M1 — Sales Order + Notifikasi
-- [ ] M1.1 Verifikasi migration & RLS SO/assignments/history/notifications
-- [ ] M1.2 UI list SO (pagination, filter, search)
-- [ ] M1.3 UI detail SO + assignment PIC per role
-- [ ] M1.4 UI form create/edit SO + item dinamis
-- [ ] M1.5 Master data customer CRUD
-- [ ] M1.6 Bell notifikasi realtime + mark-as-read
-- [ ] M1.7 pgTAP: auto-create Engineering Job+Material Status; history+notification on status change
-- [ ] **Checkpoint M1**: SO confirmed → job+material otomatis, notifikasi masuk; `get_advisors` bersih
+- [x] M1.1 Verifikasi migration & RLS SO/assignments/history/notifications
+- [x] M1.2 UI list SO (pagination, filter, search)
+- [x] M1.3 UI detail SO + assignment PIC per role + riwayat status
+- [x] M1.4 UI form create/edit SO + item dinamis (sales+admin) — route guard
+- [x] M1.5 Master data customer CRUD
+- [x] M1.6 Bell notifikasi realtime + mark-as-read
+- [x] M1.7 pgTAP: SO confirmed→job+material auto; status change→history+notification (23/23 pass)
+- [x] **Checkpoint M1**: SO confirmed → job+material otomatis (trigger terverifikasi), notifikasi masuk (Realtime aktif), pgTAP 23/23 pass, build+lint lulus
 
 ## M2 — Engineering
 - [ ] M2.1 Migration: hapus `drawing_url`

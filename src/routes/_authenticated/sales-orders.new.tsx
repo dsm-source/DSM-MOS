@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { SalesOrderForm } from "@/features/sales-orders/components/sales-order-form";
 import { useCreateSalesOrder } from "@/features/sales-orders/hooks/use-sales-orders";
+import { useMyRoles } from "@/hooks/use-my-roles";
 
 export const Route = createFileRoute("/_authenticated/sales-orders/new")({
   head: () => ({ meta: [{ title: "SO Baru — DSM MOS" }] }),
@@ -14,6 +15,17 @@ export const Route = createFileRoute("/_authenticated/sales-orders/new")({
 function NewSalesOrderPage() {
   const navigate = useNavigate();
   const create = useCreateSalesOrder();
+  const { hasAnyRole } = useMyRoles();
+
+  if (!hasAnyRole(["admin", "sales"])) {
+    return (
+      <div className="p-6">
+        <p className="text-sm text-muted-foreground">
+          Anda tidak memiliki akses untuk membuat sales order.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-4 max-w-5xl">

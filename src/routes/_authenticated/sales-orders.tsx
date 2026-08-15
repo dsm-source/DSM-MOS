@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -46,7 +47,7 @@ export const Route = createFileRoute("/_authenticated/sales-orders")({
   component: SalesOrdersPage,
 });
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 function SalesOrdersPage() {
   const { hasAnyRole } = useMyRoles();
@@ -57,7 +58,7 @@ function SalesOrdersPage() {
   const [debounced, setDebounced] = useState("");
 
   // Debounce simple via onBlur/Enter — cukup untuk operator
-  const { data, isLoading } = useSalesOrders({
+  const { data, isLoading, isError, error } = useSalesOrders({
     page,
     pageSize: PAGE_SIZE,
     status,
@@ -123,6 +124,14 @@ function SalesOrdersPage() {
         </Select>
       </div>
 
+      {isError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Gagal memuat data</AlertTitle>
+          <AlertDescription>{error?.message}</AlertDescription>
+        </Alert>
+      )}
+
       <div className="rounded-xl border bg-card overflow-x-auto">
         <Table>
           <TableHeader>
@@ -133,21 +142,34 @@ function SalesOrdersPage() {
               <TableHead>Jatuh Tempo</TableHead>
               <TableHead className="text-center">Item</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading &&
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={7}>
                     <Skeleton className="h-8 w-full" />
                   </TableCell>
                 </TableRow>
               ))}
             {!isLoading && data?.rows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
-                  Tidak ada data.
+                <TableCell
+                  colSpan={7}
+                  className="text-center text-muted-foreground py-8"
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <span>Tidak ada data.</span>
+                    {canWrite && (
+                      <Button asChild size="sm">
+                        <Link to="/sales-orders/new">
+                          <Plus className="h-4 w-4 mr-1" /> Buat SO Baru
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
                 </TableCell>
               </TableRow>
             )}
@@ -177,6 +199,13 @@ function SalesOrdersPage() {
                 <TableCell className="text-center">{so.item_count}</TableCell>
                 <TableCell>
                   <StatusBadge status={so.status} />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/sales-orders/$id" params={{ id: so.id }}>
+                      Detail
+                    </Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

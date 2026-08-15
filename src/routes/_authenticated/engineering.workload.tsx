@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { AlertTriangle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,15 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEngineeringWorkload } from "@/features/engineering/hooks/use-workload";
-import { getMyRoles } from "@/lib/roles.functions";
 
 export const Route = createFileRoute("/_authenticated/engineering/workload")({
   head: () => ({ meta: [{ title: "Engineering Workload — DSM MOS" }] }),
-  beforeLoad: async () => {
-    const roles = await getMyRoles();
-    const allowed = roles.some((r) => r === "admin" || r === "engineering");
-    if (!allowed) throw redirect({ to: "/dashboard" });
-  },
   component: WorkloadPage,
 });
 

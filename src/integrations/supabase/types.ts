@@ -241,7 +241,6 @@ export type Database = {
           assigned_to: string | null
           created_at: string
           created_by: string | null
-          drawing_url: string | null
           id: string
           job_number: string
           notes: string | null
@@ -257,7 +256,6 @@ export type Database = {
           assigned_to?: string | null
           created_at?: string
           created_by?: string | null
-          drawing_url?: string | null
           id?: string
           job_number: string
           notes?: string | null
@@ -273,7 +271,6 @@ export type Database = {
           assigned_to?: string | null
           created_at?: string
           created_by?: string | null
-          drawing_url?: string | null
           id?: string
           job_number?: string
           notes?: string | null

@@ -13,7 +13,6 @@ const FIELD_LABEL: Record<string, string> = {
   assigned_to: "Penanggung jawab",
   progress_percent: "Progress",
   target_completion_date: "Target penyelesaian",
-  drawing_url: "Drawing",
   notes: "Catatan",
   approved_by: "Approved oleh",
 };
@@ -39,7 +38,6 @@ function formatValue(
     return emailById.get(value) ?? value.slice(0, 8);
   }
   if (field === "progress_percent") return `${value}%`;
-  if (field === "drawing_url") return value.split("/").pop() ?? "file";
   if (field === "notes" && value.length > 80) return value.slice(0, 80) + "…";
   return value;
 }

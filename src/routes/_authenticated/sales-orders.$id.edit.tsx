@@ -5,7 +5,11 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SalesOrderForm } from "@/features/sales-orders/components/sales-order-form";
-import { useSalesOrder, useUpdateSalesOrder } from "@/features/sales-orders/hooks/use-sales-orders";
+import {
+  useSalesOrder,
+  useUpdateSalesOrder,
+} from "@/features/sales-orders/hooks/use-sales-orders";
+import { useMyRoles } from "@/hooks/use-my-roles";
 
 export const Route = createFileRoute("/_authenticated/sales-orders/$id/edit")({
   head: () => ({ meta: [{ title: "Edit SO — DSM MOS" }] }),
@@ -17,6 +21,17 @@ function EditSalesOrderPage() {
   const navigate = useNavigate();
   const { data, isLoading } = useSalesOrder(id);
   const update = useUpdateSalesOrder();
+  const { hasAnyRole } = useMyRoles();
+
+  if (!hasAnyRole(["admin", "sales"])) {
+    return (
+      <div className="p-6">
+        <p className="text-sm text-muted-foreground">
+          Anda tidak memiliki akses untuk mengubah sales order.
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading)
     return (

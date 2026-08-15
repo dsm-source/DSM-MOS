@@ -60,7 +60,6 @@ type UpdateInput = Partial<{
   assigned_to: string | null;
   progress_percent: number;
   target_completion_date: string | null;
-  drawing_url: string | null;
   notes: string | null;
 }>;
 

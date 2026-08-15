@@ -52,7 +52,7 @@ const items: MenuItem[] = [
   { title: "Sales Order", url: "/sales-orders", icon: FileText, roles: ["admin", "sales", "viewer"] },
   { title: "Customers", url: "/customers", icon: Contact, roles: ["admin", "sales"] },
   { title: "Engineering", url: "/engineering", icon: Ruler, roles: ["admin", "sales", "engineering", "material", "production_planning", "production", "qc", "delivery", "viewer"] },
-  { title: "Engineering Workload", url: "/engineering/workload", icon: Ruler, roles: ["admin", "engineering"] },
+  { title: "Engineering Workload", url: "/engineering/workload", icon: Ruler, roles: ["admin", "sales", "engineering", "material", "production_planning", "production", "qc", "delivery", "viewer"] },
   { title: "Material", url: "/material", icon: Boxes, roles: ["admin", "material", "viewer"] },
   {
     title: "Production Planning",

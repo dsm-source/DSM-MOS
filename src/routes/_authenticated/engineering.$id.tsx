@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { notifyError } from "@/lib/error-message";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { ArrowLeft, CheckCircle2, Download, Upload } from "lucide-react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
 import {
   useEngineeringJob,
   useUpdateEngineeringJob,
@@ -34,8 +33,6 @@ export const Route = createFileRoute("/_authenticated/engineering/$id")({
   component: EngineeringDetailPage,
 });
 
-const BUCKET = "engineering-drawings";
-
 function EngineeringDetailPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
@@ -44,14 +41,11 @@ function EngineeringDetailPage() {
   const { data: job, isLoading } = useEngineeringJob(id);
   const { data: engineers = [] } = useEngineers(canWrite);
   const update = useUpdateEngineeringJob();
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const [progress, setProgress] = useState<number>(0);
   const [target, setTarget] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
   const [assigned, setAssigned] = useState<string>("");
-  const [uploading, setUploading] = useState(false);
-  const [drawingSignedUrl, setDrawingSignedUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!job) return;
@@ -60,23 +54,6 @@ function EngineeringDetailPage() {
     setNotes(job.notes ?? "");
     setAssigned(job.assigned_to ?? "");
   }, [job]);
-
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      if (!job?.drawing_url) {
-        setDrawingSignedUrl(null);
-        return;
-      }
-      const { data } = await supabase.storage
-        .from(BUCKET)
-        .createSignedUrl(job.drawing_url, 60 * 10);
-      if (alive) setDrawingSignedUrl(data?.signedUrl ?? null);
-    })();
-    return () => {
-      alive = false;
-    };
-  }, [job?.drawing_url]);
 
   const isApproved = job?.status === "approved";
   const allowedTransitions = useMemo<EngineeringStatus[]>(() => {
@@ -131,29 +108,6 @@ function EngineeringDetailPage() {
       toast.success(`Status diubah ke ${ENG_STATUS_LABEL[next]}`);
     } catch (e) {
       notifyError(e);
-    }
-  }
-
-  async function handleUpload(file: File) {
-    if (!job) return;
-    setUploading(true);
-    try {
-      const path = `${job.id}/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
-      const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
-        upsert: false,
-      });
-      if (upErr) throw new Error(upErr.message);
-      // hapus file lama bila ada
-      if (job.drawing_url) {
-        await supabase.storage.from(BUCKET).remove([job.drawing_url]);
-      }
-      await update.mutateAsync({ id: job.id, values: { drawing_url: path } });
-      toast.success("Gambar diunggah");
-    } catch (e) {
-      notifyError(e);
-    } finally {
-      setUploading(false);
-      if (fileRef.current) fileRef.current.value = "";
     }
   }
 
@@ -260,39 +214,6 @@ function EngineeringDetailPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Drawing</Label>
-            <div className="flex items-center gap-2 flex-wrap">
-              <input
-                ref={fileRef}
-                type="file"
-                accept=".pdf,.dwg,.dxf,.png,.jpg,.jpeg,.step,.stp,.iges,.igs"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handleUpload(f);
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => fileRef.current?.click()}
-                disabled={uploading}
-              >
-                <Upload className="h-4 w-4 mr-1" />
-                {uploading ? "Mengunggah…" : job.drawing_url ? "Ganti drawing" : "Unggah drawing"}
-              </Button>
-              {drawingSignedUrl && (
-                <Button asChild variant="ghost">
-                  <a href={drawingSignedUrl} target="_blank" rel="noreferrer">
-                    <Download className="h-4 w-4 mr-1" />
-                    Buka drawing terbaru
-                  </a>
-                </Button>
-              )}
-            </div>
           </div>
 
           <div className="flex flex-wrap gap-2 pt-2 border-t">
