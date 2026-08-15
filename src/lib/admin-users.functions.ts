@@ -23,12 +23,14 @@ export const listUsersWithRoles = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<UserWithRoles[]> => {
     await assertAdmin(context);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } =
+      await import("@/integrations/supabase/client.server");
 
-    const { data: usersData, error: usersErr } = await supabaseAdmin.auth.admin.listUsers({
-      page: 1,
-      perPage: 200,
-    });
+    const { data: usersData, error: usersErr } =
+      await supabaseAdmin.auth.admin.listUsers({
+        page: 1,
+        perPage: 200,
+      });
     if (usersErr) throw new Error(usersErr.message);
 
     const { data: rolesData, error: rolesErr } = await supabaseAdmin
@@ -49,6 +51,32 @@ export const listUsersWithRoles = createServerFn({ method: "GET" })
       created_at: u.created_at,
       roles: rolesByUser.get(u.id) ?? [],
     }));
+  });
+
+export const createUserManual = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (data: { email: string; password: string; role: AppRole }) => data,
+  )
+  .handler(async ({ data, context }): Promise<{ id: string }> => {
+    await assertAdmin(context);
+    const { supabaseAdmin } =
+      await import("@/integrations/supabase/client.server");
+
+    const { data: created, error: createErr } =
+      await supabaseAdmin.auth.admin.createUser({
+        email: data.email,
+        password: data.password,
+        email_confirm: true,
+      });
+    if (createErr) throw new Error(createErr.message);
+
+    const { error: roleErr } = await supabaseAdmin
+      .from("user_roles")
+      .insert({ user_id: created.user.id, role: data.role });
+    if (roleErr) throw new Error(roleErr.message);
+
+    return { id: created.user.id };
   });
 
 export const assignRole = createServerFn({ method: "POST" })
