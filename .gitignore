@@ -16,3 +16,4 @@ dist-ssr
 # Supabase CLI local runtime state (current branch pointer, version cache)
 supabase/.branches
 supabase/.temp
+supabase/snippets
