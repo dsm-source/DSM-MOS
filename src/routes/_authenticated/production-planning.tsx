@@ -25,10 +25,8 @@ import {
 } from "@/features/production/hooks/use-batches";
 import { CreateBatchDialog } from "@/features/production/components/create-batch-dialog";
 import { EditBatchPlanDialog } from "@/features/production/components/edit-batch-plan-dialog";
-import {
-  PlanningGantt,
-  computeStatus,
-} from "@/features/production/components/planning-gantt";
+import { PlanningGantt } from "@/features/production/components/planning-gantt";
+import { computeStatus } from "@/features/production/lib/planning-status";
 import {
   PROCESS_LABEL,
   STEP_STATUS_LABEL,

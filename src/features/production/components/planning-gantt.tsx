@@ -3,31 +3,13 @@ import { Gantt, Task, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import type { BatchWithContext } from "../hooks/use-batches";
 import { PROCESS_LABEL, STEP_STATUS_LABEL } from "../lib/process";
-
-export type PlanningStatus = "on_track" | "overdue";
+import { activeRunningStep } from "../lib/batch-progress";
+import { computeStatus, type PlanningStatus } from "../lib/planning-status";
 
 function parseDate(d: string | null): Date | null {
   if (!d) return null;
   const dt = new Date(d + "T00:00:00");
   return isNaN(dt.getTime()) ? null : dt;
-}
-
-export function computeStatus(
-  batch: BatchWithContext,
-): PlanningStatus | "unscheduled" {
-  const end = parseDate(batch.planned_completion_date);
-  if (!batch.planned_start_date || !end) return "unscheduled";
-  const allDone = (batch.steps ?? []).every(
-    (s) => s.status === "completed" || s.status === "skipped",
-  );
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  if (end < today && !allDone) return "overdue";
-  return "on_track";
-}
-
-function activeStep(batch: BatchWithContext) {
-  return (batch.steps ?? []).find((s) => s.status === "running") ?? null;
 }
 
 export function PlanningGantt({
@@ -50,7 +32,7 @@ export function PlanningGantt({
 
       const status = computeStatus(b);
       const overdue = status === "overdue";
-      const active = activeStep(b);
+      const active = activeRunningStep(b);
       const item = b.engineering_job?.sales_order_item;
       const so = item?.sales_order;
       const activeLabel = active

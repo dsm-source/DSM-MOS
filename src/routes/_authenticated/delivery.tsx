@@ -17,7 +17,7 @@ import { useMyRoles } from "@/hooks/use-my-roles";
 import { useDeliveries } from "@/features/delivery/hooks/use-deliveries";
 import { DeliveryStatusBadge } from "@/features/delivery/components/delivery-status-badge";
 import { CreateDeliveryDialog } from "@/features/delivery/components/create-delivery-dialog";
-import { isOverdue } from "@/features/delivery/components/delivery-gantt";
+import { isOverdue } from "@/features/delivery/lib/is-overdue";
 import {
   DELIVERY_STATUS_LABEL,
   DELIVERY_STATUS_ORDER,

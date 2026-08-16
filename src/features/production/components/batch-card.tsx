@@ -6,27 +6,10 @@ import {
   STEP_STATUS_CLASS,
   formatDurationSince,
 } from "../lib/process";
+import { activeStep, isBatchDone } from "../lib/batch-progress";
+import { computeStartBlocker } from "../lib/start-blocker";
 import { PRODUCTION_PROCESSES, type ProductionBatchStepRow } from "../types";
 import type { BatchWithContext } from "../hooks/use-batches";
-import { computeStartBlocker } from "./station-step-card";
-
-export function activeStep(
-  steps: ProductionBatchStepRow[],
-): ProductionBatchStepRow | null {
-  // Step aktif: pertama yang bukan completed/skipped, urut sequence_order
-  const sorted = [...steps].sort((a, b) => a.sequence_order - b.sequence_order);
-  return (
-    sorted.find((s) => s.status !== "completed" && s.status !== "skipped") ??
-    null
-  );
-}
-
-export function isBatchDone(steps: ProductionBatchStepRow[]): boolean {
-  return (
-    steps.length > 0 &&
-    steps.every((s) => s.status === "completed" || s.status === "skipped")
-  );
-}
 
 export function BatchCard({
   batch,

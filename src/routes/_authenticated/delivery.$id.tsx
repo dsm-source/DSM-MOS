@@ -39,7 +39,7 @@ import {
   useUpdateDelivery,
 } from "@/features/delivery/hooks/use-deliveries";
 import { DeliveryStatusBadge } from "@/features/delivery/components/delivery-status-badge";
-import { isOverdue } from "@/features/delivery/components/delivery-gantt";
+import { isOverdue } from "@/features/delivery/lib/is-overdue";
 import { DELIVERY_STATUS_LABEL } from "@/features/delivery/lib/status";
 import type { DeliveryStatus } from "@/features/delivery/types";
 

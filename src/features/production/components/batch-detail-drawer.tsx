@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PROCESS_LABEL, formatDurationSince } from "../lib/process";
 import { StepStatusBadge } from "./step-status-badge";
-import { computeStartBlocker } from "./station-step-card";
+import { computeStartBlocker } from "../lib/start-blocker";
 import { BlockerHistory } from "./blocker-history";
 import type { BatchWithContext } from "../hooks/use-batches";
 import { useUpdateBatchStep } from "../hooks/use-batch-steps";

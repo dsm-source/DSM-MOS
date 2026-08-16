@@ -24,14 +24,12 @@ import {
 } from "@/features/production/types";
 import { PROCESS_LABEL } from "@/features/production/lib/process";
 import {
-  BatchCard,
   activeStep,
   isBatchDone,
-} from "@/features/production/components/batch-card";
-import {
-  StationStepCard,
-  computeStartBlocker,
-} from "@/features/production/components/station-step-card";
+} from "@/features/production/lib/batch-progress";
+import { computeStartBlocker } from "@/features/production/lib/start-blocker";
+import { BatchCard } from "@/features/production/components/batch-card";
+import { StationStepCard } from "@/features/production/components/station-step-card";
 import { BatchDetailDrawer } from "@/features/production/components/batch-detail-drawer";
 
 export const Route = createFileRoute("/_authenticated/production")({

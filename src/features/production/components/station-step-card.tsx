@@ -3,46 +3,13 @@ import { notifyError } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PROCESS_LABEL, formatDurationSince } from "../lib/process";
+import {
+  computeStartBlocker,
+  type StationBlockReason,
+} from "../lib/start-blocker";
 import type { ProductionBatchStepRow } from "../types";
 import type { BatchWithContext } from "../hooks/use-batches";
-import { activeStep } from "./batch-card";
 import { useUpdateBatchStep } from "../hooks/use-batch-steps";
-
-export type StationBlockReason = null | {
-  message: string;
-  kind: "engineering" | "material" | "previous_step";
-};
-
-/** Cek prasyarat di client (UX). DB tetap penjaga terakhir. */
-export function computeStartBlocker(
-  step: ProductionBatchStepRow,
-  batch: BatchWithContext,
-): StationBlockReason {
-  if (step.status !== "waiting") return null;
-  const prev = [...batch.steps]
-    .sort((a, b) => a.sequence_order - b.sequence_order)
-    .filter(
-      (s) => s.sequence_order < step.sequence_order && s.status !== "skipped",
-    )
-    .pop();
-
-  if (!prev) {
-    const eng = batch.engineering_job?.status;
-    const mat = batch.engineering_job?.material_status?.status;
-    if (eng !== "approved")
-      return { message: "Menunggu approval engineering", kind: "engineering" };
-    if (mat !== "material_ready")
-      return { message: "Menunggu material ready", kind: "material" };
-    return null;
-  }
-  if (prev.status !== "completed") {
-    return {
-      message: `Menunggu ${PROCESS_LABEL[prev.process]} selesai`,
-      kind: "previous_step",
-    };
-  }
-  return null;
-}
 
 export function StationStepCard({
   step,
