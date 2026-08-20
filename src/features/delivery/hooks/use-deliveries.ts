@@ -196,17 +196,62 @@ export function useEligibleQcInspections(salesOrderId: string | undefined) {
       const { data, error } = await supabase
         .from("qc_inspections")
         .select(
-          `id, qty_ok, production_batch:production_batches!inner(
-             batch_number,
-             engineering_job:engineering_jobs!inner(
-               sales_order_item:sales_order_items!inner(
-                 item_name, sales_order_id
+          `id, qty_ok, production_batch_step:production_batch_steps!inner(
+             sequence_order, production_batch_id,
+             production_batch:production_batches!inner(
+               batch_number,
+               engineering_job:engineering_jobs!inner(
+                 sales_order_item:sales_order_items!inner(
+                   item_name, sales_order_id
+                 )
                )
              )
            )`,
         )
         .eq("status", "pass");
       if (error) throw new Error(mapPgError(error));
+
+      type Row = {
+        id: string;
+        qty_ok: number;
+        production_batch_step: {
+          sequence_order: number;
+          production_batch_id: string;
+          production_batch: {
+            batch_number: string;
+            engineering_job: {
+              sales_order_item: { item_name: string; sales_order_id: string };
+            };
+          };
+        };
+      };
+      const rows = (data as unknown as Row[]).filter(
+        (r) =>
+          r.production_batch_step?.production_batch?.engineering_job
+            ?.sales_order_item?.sales_order_id === salesOrderId,
+      );
+      if (rows.length === 0) return [];
+
+      // PRD §7 rule #4 / delivery_items_validate(): hanya QC pass pada
+      // tahapan TERAKHIR (max sequence_order, exclude 'skipped') per batch
+      // yang boleh ditawarkan sebagai kandidat pengiriman.
+      const batchIds = [
+        ...new Set(
+          rows.map((r) => r.production_batch_step.production_batch_id),
+        ),
+      ];
+      const { data: steps, error: sErr } = await supabase
+        .from("production_batch_steps")
+        .select("production_batch_id, sequence_order")
+        .in("production_batch_id", batchIds)
+        .neq("status", "skipped");
+      if (sErr) throw new Error(mapPgError(sErr));
+      const maxSeqByBatch = new Map<string, number>();
+      for (const s of steps ?? []) {
+        const prev = maxSeqByBatch.get(s.production_batch_id) ?? -1;
+        if (s.sequence_order > prev)
+          maxSeqByBatch.set(s.production_batch_id, s.sequence_order);
+      }
 
       // Fetch used QC inspection ids for this SO
       const { data: used, error: uErr } = await supabase
@@ -220,27 +265,18 @@ export function useEligibleQcInspections(salesOrderId: string | undefined) {
         ),
       );
 
-      type Row = {
-        id: string;
-        qty_ok: number;
-        production_batch: {
-          batch_number: string;
-          engineering_job: {
-            sales_order_item: { item_name: string; sales_order_id: string };
-          };
-        };
-      };
-      return (data as unknown as Row[])
+      return rows
         .filter(
           (r) =>
-            r.production_batch?.engineering_job?.sales_order_item
-              ?.sales_order_id === salesOrderId,
+            r.production_batch_step.sequence_order ===
+            maxSeqByBatch.get(r.production_batch_step.production_batch_id),
         )
         .map((r) => ({
           id: r.id,
-          batch_number: r.production_batch.batch_number,
+          batch_number: r.production_batch_step.production_batch.batch_number,
           item_name:
-            r.production_batch.engineering_job.sales_order_item.item_name,
+            r.production_batch_step.production_batch.engineering_job
+              .sales_order_item.item_name,
           qty_ok: Number(r.qty_ok),
           already_used: usedSet.has(r.id),
         }));
