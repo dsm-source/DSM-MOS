@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
-import { Loader2, Upload, ImageIcon, X } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { RotateCcw } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -16,13 +15,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { PROCESS_LABEL } from "@/features/production/lib/process";
 import { QcStatusBadge } from "./qc-status-badge";
 import { QC_STATUS_LABEL } from "../lib/status";
-import { useUpdateInspection } from "../hooks/use-inspections";
+import {
+  useUpdateInspection,
+  useTriggerRework,
+} from "../hooks/use-inspections";
 import { InspectionTimeline } from "./inspection-timeline";
+import { enqueue, isOffline, isOfflineLikeError } from "../lib/offline-queue";
 import type { QcInspectionWithContext, QcStatus } from "../types";
 
-const BUCKET = "qc-photos";
+const OFFLINE_QUEUED_MESSAGE = "Tersimpan lokal, menunggu sinkronisasi";
+const OFFLINE_QUEUE_FAILED_MESSAGE =
+  "Gagal menyimpan data lokal. Coba kosongkan storage browser atau ulangi lagi.";
 
 export function InspectionDialog({
   inspection,
@@ -36,15 +42,11 @@ export function InspectionDialog({
   canWrite: boolean;
 }) {
   const update = useUpdateInspection();
+  const rework = useTriggerRework();
   const [qtyTotal, setQtyTotal] = useState("0");
   const [qtyOk, setQtyOk] = useState("0");
   const [qtyReject, setQtyReject] = useState("0");
   const [notes, setNotes] = useState("");
-  const [signedUrls, setSignedUrls] = useState<{ path: string; url: string }[]>(
-    [],
-  );
-  const [uploading, setUploading] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!inspection) return;
@@ -54,31 +56,9 @@ export function InspectionDialog({
     setNotes(inspection.defect_notes ?? "");
   }, [inspection]);
 
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      const paths = inspection?.photo_urls ?? [];
-      if (paths.length === 0) {
-        setSignedUrls([]);
-        return;
-      }
-      const resolved = await Promise.all(
-        paths.map(async (p) => {
-          const { data } = await supabase.storage
-            .from(BUCKET)
-            .createSignedUrl(p, 60 * 10);
-          return { path: p, url: data?.signedUrl ?? "" };
-        }),
-      );
-      if (alive) setSignedUrls(resolved.filter((r) => r.url));
-    })();
-    return () => {
-      alive = false;
-    };
-  }, [inspection?.id, inspection?.photo_urls]);
-
   if (!inspection) return null;
-  const batch = inspection.production_batch;
+  const step = inspection.production_batch_step;
+  const batch = step?.production_batch;
   const so = batch?.engineering_job?.sales_order_item?.sales_order;
   const item = batch?.engineering_job?.sales_order_item;
 
@@ -89,9 +69,7 @@ export function InspectionDialog({
       case "inspection":
         return ["pass", "reject"];
       case "reject":
-        return ["rework"];
       case "rework":
-        return ["inspection"];
       case "pass":
         return [];
     }
@@ -102,6 +80,20 @@ export function InspectionDialog({
   const rejNum = Number(qtyReject) || 0;
   const overCap = okNum + rejNum > totalNum;
 
+  function queueOrNotify(
+    item: Parameters<typeof enqueue>[0],
+    onQueued?: () => void,
+  ): boolean {
+    const queued = enqueue(item);
+    if (!queued) {
+      toast.error(OFFLINE_QUEUE_FAILED_MESSAGE);
+      return false;
+    }
+    toast.info(OFFLINE_QUEUED_MESSAGE);
+    onQueued?.();
+    return true;
+  }
+
   async function saveDraft() {
     if (overCap) {
       toast.error("Data belum valid", {
@@ -109,17 +101,33 @@ export function InspectionDialog({
       });
       return;
     }
-    try {
-      await update.mutateAsync({
-        id: inspection!.id,
-        qty_total: totalNum,
-        qty_ok: okNum,
-        qty_reject: rejNum,
-        defect_notes: notes.trim() || null,
+    const payload = {
+      qty_total: totalNum,
+      qty_ok: okNum,
+      qty_reject: rejNum,
+      defect_notes: notes.trim() || null,
+    };
+    if (isOffline()) {
+      queueOrNotify({
+        kind: "update-inspection",
+        inspectionId: inspection!.id,
+        payload,
       });
+      return;
+    }
+    try {
+      await update.mutateAsync({ id: inspection!.id, ...payload });
       toast.success("Data disimpan");
     } catch (e) {
-      notifyError(e);
+      if (isOfflineLikeError(e)) {
+        queueOrNotify({
+          kind: "update-inspection",
+          inspectionId: inspection!.id,
+          payload,
+        });
+      } else {
+        notifyError(e);
+      }
     }
   }
 
@@ -130,55 +138,69 @@ export function InspectionDialog({
       });
       return;
     }
+    const payload = {
+      status: next,
+      qty_total: totalNum,
+      qty_ok: okNum,
+      qty_reject: rejNum,
+      defect_notes: notes.trim() || null,
+    };
+    if (isOffline()) {
+      queueOrNotify(
+        {
+          kind: "update-inspection",
+          inspectionId: inspection!.id,
+          payload,
+        },
+        () => {
+          if (next === "pass" || next === "reject") onOpenChange(false);
+        },
+      );
+      return;
+    }
     try {
-      await update.mutateAsync({
-        id: inspection!.id,
-        status: next,
-        qty_total: totalNum,
-        qty_ok: okNum,
-        qty_reject: rejNum,
-        defect_notes: notes.trim() || null,
-      });
+      await update.mutateAsync({ id: inspection!.id, ...payload });
       toast.success(`Status → ${QC_STATUS_LABEL[next]}`);
       if (next === "pass" || next === "reject") onOpenChange(false);
     } catch (e) {
-      notifyError(e);
-    }
-  }
-
-  async function handleUpload(files: FileList) {
-    setUploading(true);
-    try {
-      const uploaded: string[] = [];
-      for (const file of Array.from(files)) {
-        const safe = file.name.replace(/[^\w.-]/g, "_");
-        const path = `${inspection!.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safe}`;
-        const { error: upErr } = await supabase.storage
-          .from(BUCKET)
-          .upload(path, file, {
-            upsert: false,
-          });
-        if (upErr) throw new Error(upErr.message);
-        uploaded.push(path);
+      if (isOfflineLikeError(e)) {
+        queueOrNotify(
+          {
+            kind: "update-inspection",
+            inspectionId: inspection!.id,
+            payload,
+          },
+          () => {
+            if (next === "pass" || next === "reject") onOpenChange(false);
+          },
+        );
+      } else {
+        notifyError(e);
       }
-      const next = [...(inspection!.photo_urls ?? []), ...uploaded];
-      await update.mutateAsync({ id: inspection!.id, photo_urls: next });
-      toast.success(`${uploaded.length} foto diunggah`);
-    } catch (e) {
-      notifyError(e);
-    } finally {
-      setUploading(false);
-      if (fileRef.current) fileRef.current.value = "";
     }
   }
 
-  async function removePhoto(path: string) {
+  async function handleTriggerRework() {
+    if (isOffline()) {
+      queueOrNotify(
+        { kind: "trigger-rework", inspectionId: inspection!.id },
+        () => onOpenChange(false),
+      );
+      return;
+    }
     try {
-      await supabase.storage.from(BUCKET).remove([path]);
-      const next = (inspection!.photo_urls ?? []).filter((p) => p !== path);
-      await update.mutateAsync({ id: inspection!.id, photo_urls: next });
+      await rework.mutateAsync(inspection!.id);
+      toast.success("Rework dipicu");
+      onOpenChange(false);
     } catch (e) {
-      notifyError(e);
+      if (isOfflineLikeError(e)) {
+        queueOrNotify(
+          { kind: "trigger-rework", inspectionId: inspection!.id },
+          () => onOpenChange(false),
+        );
+      } else {
+        notifyError(e);
+      }
     }
   }
 
@@ -193,14 +215,17 @@ export function InspectionDialog({
             <QcStatusBadge status={inspection.status} />
           </DialogTitle>
           <DialogDescription>
-            SO {so?.so_number ?? "?"} · {so?.customer?.name ?? "-"} ·{" "}
+            {step
+              ? `Tahap ${step.sequence_order} • ${PROCESS_LABEL[step.process]}`
+              : "-"}
+            {" · "}SO {so?.so_number ?? "?"} · {so?.customer?.name ?? "-"} ·{" "}
             {item?.item_name ?? "-"} · Qty batch: {batch?.quantity}{" "}
             {item?.unit ?? ""}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="qty-total">Total Diinspeksi</Label>
               <Input
@@ -211,6 +236,7 @@ export function InspectionDialog({
                 value={qtyTotal}
                 disabled={readOnly}
                 onChange={(e) => setQtyTotal(e.target.value)}
+                className="h-11 text-base"
               />
             </div>
             <div className="space-y-1.5">
@@ -223,6 +249,7 @@ export function InspectionDialog({
                 value={qtyOk}
                 disabled={readOnly}
                 onChange={(e) => setQtyOk(e.target.value)}
+                className="h-11 text-base"
               />
             </div>
             <div className="space-y-1.5">
@@ -235,6 +262,7 @@ export function InspectionDialog({
                 value={qtyReject}
                 disabled={readOnly}
                 onChange={(e) => setQtyReject(e.target.value)}
+                className="h-11 text-base"
               />
             </div>
           </div>
@@ -256,84 +284,13 @@ export function InspectionDialog({
             />
           </div>
 
-          <div className="space-y-2">
-            <Label>Foto bukti</Label>
-            {signedUrls.length > 0 ? (
-              <div className="grid grid-cols-3 gap-2">
-                {signedUrls.map((p) => (
-                  <div
-                    key={p.path}
-                    className="relative group overflow-hidden rounded-lg border"
-                  >
-                    <a
-                      href={p.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="block"
-                    >
-                      <img
-                        src={p.url}
-                        alt="Bukti QC"
-                        className="w-full h-32 object-cover"
-                      />
-                    </a>
-                    {canWrite && inspection.status !== "pass" && (
-                      <button
-                        type="button"
-                        onClick={() => removePhoto(p.path)}
-                        className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                        aria-label="Hapus foto"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex h-24 items-center justify-center rounded-lg border border-dashed text-muted-foreground text-sm">
-                <ImageIcon className="h-4 w-4 mr-2" />
-                Belum ada foto
-              </div>
-            )}
-            {canWrite && inspection.status !== "pass" && (
-              <div>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 0)
-                      handleUpload(e.target.files);
-                  }}
-                />
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  disabled={uploading}
-                  onClick={() => fileRef.current?.click()}
-                >
-                  {uploading ? (
-                    <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
-                  ) : (
-                    <Upload className="h-4 w-4 mr-1.5" />
-                  )}
-                  Tambah foto
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {batch?.id && (
+          {step?.id && (
             <>
               <Separator />
               <div className="space-y-2">
-                <Label>Riwayat inspeksi batch</Label>
+                <Label>Riwayat inspeksi tahapan</Label>
                 <InspectionTimeline
-                  batchId={batch.id}
+                  stepId={step.id}
                   currentId={inspection.id}
                 />
               </div>
@@ -344,37 +301,59 @@ export function InspectionDialog({
         <Separator />
 
         <DialogFooter className="gap-2 flex-wrap sm:justify-between">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="min-h-11"
+          >
             Tutup
           </Button>
           {canWrite && !readOnly && (
             <div className="flex gap-2 flex-wrap">
-              <Button
-                variant="outline"
-                onClick={saveDraft}
-                disabled={update.isPending}
-              >
-                Simpan
-              </Button>
-              {allowed.map((next) => {
-                const isDanger = next === "reject";
-                const isSuccess = next === "pass";
-                return (
-                  <Button
-                    key={next}
-                    onClick={() => transition(next)}
-                    disabled={update.isPending}
-                    variant={isDanger ? "destructive" : "default"}
-                    className={
-                      isSuccess
-                        ? "bg-emerald-600 hover:bg-emerald-700"
-                        : undefined
-                    }
-                  >
-                    {QC_STATUS_LABEL[next]}
-                  </Button>
-                );
-              })}
+              {inspection.status !== "reject" && (
+                <Button
+                  variant="outline"
+                  onClick={saveDraft}
+                  disabled={update.isPending}
+                  className="min-h-11"
+                >
+                  Simpan
+                </Button>
+              )}
+              {inspection.status === "reject" ? (
+                <Button
+                  onClick={handleTriggerRework}
+                  disabled={rework.isPending}
+                  variant="destructive"
+                  className="min-h-11"
+                >
+                  <RotateCcw className="h-4 w-4 mr-1.5" />
+                  Trigger Rework
+                </Button>
+              ) : (
+                allowed.map((next) => {
+                  const isDanger = next === "reject";
+                  const isSuccess = next === "pass";
+                  const label =
+                    next === "inspection"
+                      ? "Mulai Inspeksi"
+                      : QC_STATUS_LABEL[next];
+                  return (
+                    <Button
+                      key={next}
+                      onClick={() => transition(next)}
+                      disabled={update.isPending}
+                      variant={isDanger ? "destructive" : "default"}
+                      className={
+                        "min-h-11 " +
+                        (isSuccess ? "bg-emerald-600 hover:bg-emerald-700" : "")
+                      }
+                    >
+                      {label}
+                    </Button>
+                  );
+                })
+              )}
             </div>
           )}
         </DialogFooter>

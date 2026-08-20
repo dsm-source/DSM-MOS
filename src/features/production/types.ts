@@ -23,4 +23,5 @@ export const STEP_STATUSES: ProductionStepStatus[] = [
   "paused",
   "completed",
   "skipped",
+  "rework",
 ];

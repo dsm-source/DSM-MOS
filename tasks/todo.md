@@ -52,24 +52,29 @@
 - [x] **Checkpoint M4**: batch dengan routing custom → steps yang dibuat sesuai; pgTAP lulus (verifikasi local stack)
 
 ## M5 — Production Execution
-- [ ] M5.1 Migration: tambah `rework` ke `production_step_status`
-- [ ] M5.2 Migration: trigger gate (§7 rule #1) dengan pesan error spesifik
-- [ ] M5.3 UI satu Kanban Per-Batch, drag-and-drop
-- [ ] M5.4 Form pilih `operator_id` saat pindah kartu
-- [ ] M5.5 Realtime Kanban
-- [ ] M5.6 pgTAP + manual: percobaan lewati gate via SQL/RPC ditolak
-- [ ] **Checkpoint M5**: batch jalan step-by-step sesuai gate; bypass gate ditolak; `get_advisors` bersih
+- [x] M5.1 Migration: tambah `rework` ke `production_step_status` (file: `20260816000007_m5_add_rework_enum.sql`)
+- [x] M5.2 Migration: trigger gate (§7 rule #1) dengan pesan error spesifik (file: `20260816000008_m5_validate_transition_rework.sql`)
+- [x] M5.3 UI satu Kanban Per-Batch, drag-and-drop (`@dnd-kit/core`); hapus `station-step-card.tsx` + tab "Per Stasiun"
+- [x] M5.4 Form pilih `operator_id` saat pindah kartu (`StepOperatorDialog`)
+- [x] M5.5 Realtime Kanban (channel `operators-realtime` di `useProductionBatches`)
+- [x] M5.6 pgTAP + manual: percobaan lewati gate via SQL/RPC ditolak (file: `production_execution.test.sql`, 43 assertions)
+- [x] **Checkpoint M5**: batch jalan step-by-step sesuai gate; bypass gate ditolak; `get_advisors` bersih
 
 ## M6 — Quality Control
-- [ ] M6.1 Migration: `qc_inspections` relasi ke step, hapus foto, tambah `rework_triggered_at`
-- [ ] M6.2 Migration: RPC `trigger_rework` (security definer, role qc/admin)
-- [ ] M6.3 UI mobile-responsive antrian + form (tanpa foto)
-- [ ] M6.4 Tombol "Trigger Rework"
-- [ ] M6.5 Timeline riwayat multi-cycle
-- [ ] M6.6 Offline queue (localStorage) + indikator + auto-sync
-- [ ] M6.7 pgTAP: gate completed-only, RLS insert/RPC
-- [ ] M6.8 Manual test offline→online sync
-- [ ] **Checkpoint M6**: pass/reject/rework cycle penuh; offline submit terverifikasi; `get_advisors` bersih
+- [x] M6.1 Migration: `qc_inspections` relasi ke step, hapus foto, tambah `rework_triggered_at` (file: `20260817000003_m6_qc_step_level.sql`)
+- [x] M6.2 Migration: RPC `trigger_rework` (security definer, role qc/admin) + gate GUC di trigger transisi step (file: `20260817000004_m6_trigger_rework_rpc.sql`)
+- [x] M6.3 UI mobile-responsive antrian + form (tanpa foto) (`src/features/qc/*`, `src/routes/_authenticated/qc.tsx`, `tsc/lint/build` hijau)
+- [x] M6.4 Tombol "Trigger Rework" (RPC `trigger_rework` via `useTriggerRework()`, no direct rework mutation)
+- [x] M6.5 Timeline riwayat multi-cycle (per `production_batch_step_id`, bukan per-batch)
+- [x] M6.6 Offline queue (localStorage) + indikator + auto-sync (`src/features/qc/lib/offline-queue.ts`, `src/features/qc/hooks/use-offline-qc-queue.ts`, integrasi di `inspection-dialog.tsx` + `qc.tsx`; tsc/lint/build hijau)
+- [x] M6.7 pgTAP: gate completed-only, RLS insert/RPC (file: `supabase/tests/qc_rework.test.sql`, suite pass 215/215)
+- [x] M6.8 Manual test offline→online sync — **dieksekusi & PASS** (2026-08-20) di browser real (`/qc`, item `ENG-2026-000046-B1`). `navigator.onLine` disimulasikan via `Object.defineProperty` + dispatch event `offline`/`online` (setara DevTools Network throttling). Hasil: (1) simpan draft offline → toast "Tersimpan lokal, menunggu sinkronisasi" ✅; (2) transisi `waiting→inspection` offline → toast queued lagi, dialog tetap terbuka ✅; (3) indikator "2 data tersimpan lokal, menunggu sinkronisasi" ✅; (4) online → auto-sync via event `online`, toast "2 data lokal berhasil disinkronkan", indikator hilang, badge kartu update ke "Inspeksi" ✅; (5) hard reload → status & qty (OK:8, Tolak:2) tetap tersimpan di server (bukan cuma client state) ✅; (6) opsional reject→rework offline/online: Tolak (online) → offline, klik Trigger Rework → toast queued, dialog tertutup ✅ → online → toast "1 data lokal berhasil disinkronkan", badge "Rework" ✅, diverifikasi server-side: `qc_inspections.status='rework'` + `rework_triggered_at` terisi, `production_batch_steps` step 1 ikut `rework` ✅. Detail lengkap di `tasks/route-outlet-audit.md`.
+- [x] **Checkpoint M6**: pass/reject/rework cycle penuh ✅ (lihat M6.8); `get_advisors` dijalankan (2026-08-20) terhadap project remote `jtzwawtfymljfqfrplib` — security: 1 WARN `auth_leaked_password_protection` (toggle Auth dashboard, bukan gap RLS/schema; owner keputusan: accepted risk, non-blocking), performance: 0 temuan. Detail di `tasks/route-outlet-audit.md`.
+
+### Bugfix — anti-pattern parent route tanpa `<Outlet />` (2026-08-20)
+- [x] `/sales-orders/new` — diverifikasi end-to-end di browser (klik link, hard reload, submit → redirect ke detail). Fix sebelumnya (`sales-orders.tsx` jadi layout + `sales-orders.index.tsx`) terbukti benar.
+- [x] `/sales-orders/$id/edit` — bug sama ditemukan & diperbaiki: `sales-orders.$id.tsx` (parent route untuk child `/edit`) tidak render `<Outlet />`. Fix: rename ke `sales-orders.$id.index.tsx` (route path `/sales-orders/$id/`), TanStack Router plugin auto-regenerate `routeTree.gen.ts` dan auto-fix path string di file. Diverifikasi browser: title+DOM edit page benar, submit tetap jalan, detail page tidak regresi. `tsc`/`lint`/`build` PASS.
+- [x] `/delivery/schedule`, `/delivery/$id`, `/engineering/workload`, `/engineering/$id` — **difix** (2026-08-20, sesi lanjutan): pola sama seperti `sales-orders` — `delivery.tsx`/`engineering.tsx` di-rename ke `delivery.index.tsx`/`engineering.index.tsx` (auto-fix route path oleh plugin), file `delivery.tsx`/`engineering.tsx` baru dibuat sebagai layout `<Outlet/>`. Diverifikasi browser hard-reload untuk keempat route (termasuk `/delivery/$id` pakai 1 delivery row test yang langsung dihapus lagi setelah verifikasi) — semua render benar sekarang, tidak ada regresi di `/delivery` dan `/engineering` list/board. `tsc`/`lint`/`build` PASS. Detail di `tasks/route-outlet-audit.md`.
 
 ## M7 — Delivery
 - [ ] M7.1 Verifikasi migration deliveries/delivery_items

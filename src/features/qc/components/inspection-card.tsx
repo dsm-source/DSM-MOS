@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { PROCESS_LABEL } from "@/features/production/lib/process";
 import { QcStatusBadge } from "./qc-status-badge";
 import type { QcInspectionWithContext } from "../types";
 
@@ -12,7 +13,8 @@ export function InspectionCard({
   inspection: QcInspectionWithContext;
   onOpen: () => void;
 }) {
-  const batch = inspection.production_batch;
+  const step = inspection.production_batch_step;
+  const batch = step?.production_batch;
   const so = batch?.engineering_job?.sales_order_item?.sales_order;
   const item = batch?.engineering_job?.sales_order_item;
 
@@ -22,6 +24,11 @@ export function InspectionCard({
         <div className="space-y-0.5">
           <div className="font-medium text-sm">
             {batch?.batch_number ?? "?"}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {step
+              ? `Tahap ${step.sequence_order} • ${PROCESS_LABEL[step.process]}`
+              : "-"}
           </div>
           <div className="text-xs text-muted-foreground">
             SO {so?.so_number ?? "?"} · {so?.customer?.name ?? "-"}
@@ -48,13 +55,18 @@ export function InspectionCard({
         </div>
       )}
 
-      <div className="flex items-center justify-between pt-1">
+      <div className="flex items-center justify-between pt-1 gap-2">
         <div className="text-xs text-muted-foreground">
           {format(new Date(inspection.updated_at), "d MMM yyyy HH:mm", {
             locale: idLocale,
           })}
         </div>
-        <Button size="sm" variant="outline" onClick={onOpen}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={onOpen}
+          className="min-h-9 min-w-16"
+        >
           Buka
         </Button>
       </div>

@@ -7,10 +7,30 @@ export type Json =
   | Json[];
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.5";
+  graphql_public: {
+    Tables: {
+      [_ in never]: never;
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
+        Returns: Json;
+      };
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
   };
   public: {
     Tables: {
@@ -566,11 +586,11 @@ export type Database = {
           id: string;
           inspected_at: string | null;
           inspector_id: string | null;
-          photo_urls: string[];
-          production_batch_id: string;
+          production_batch_step_id: string;
           qty_ok: number;
           qty_reject: number;
           qty_total: number;
+          rework_triggered_at: string | null;
           status: Database["public"]["Enums"]["qc_status"];
           updated_at: string;
         };
@@ -581,11 +601,11 @@ export type Database = {
           id?: string;
           inspected_at?: string | null;
           inspector_id?: string | null;
-          photo_urls?: string[];
-          production_batch_id: string;
+          production_batch_step_id: string;
           qty_ok?: number;
           qty_reject?: number;
           qty_total?: number;
+          rework_triggered_at?: string | null;
           status?: Database["public"]["Enums"]["qc_status"];
           updated_at?: string;
         };
@@ -596,20 +616,20 @@ export type Database = {
           id?: string;
           inspected_at?: string | null;
           inspector_id?: string | null;
-          photo_urls?: string[];
-          production_batch_id?: string;
+          production_batch_step_id?: string;
           qty_ok?: number;
           qty_reject?: number;
           qty_total?: number;
+          rework_triggered_at?: string | null;
           status?: Database["public"]["Enums"]["qc_status"];
           updated_at?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "qc_inspections_production_batch_id_fkey";
-            columns: ["production_batch_id"];
+            foreignKeyName: "qc_inspections_production_batch_step_id_fkey";
+            columns: ["production_batch_step_id"];
             isOneToOne: false;
-            referencedRelation: "production_batches";
+            referencedRelation: "production_batch_steps";
             referencedColumns: ["id"];
           },
         ];
@@ -830,6 +850,20 @@ export type Database = {
         };
         Relationships: [];
       };
+      v_engineering_workload: {
+        Row: {
+          approved_count: number | null;
+          assigned_to: string | null;
+          assignee_email: string | null;
+          avg_progress: number | null;
+          draft_count: number | null;
+          in_progress_count: number | null;
+          overdue_count: number | null;
+          review_count: number | null;
+          total_jobs: number | null;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
       claim_first_admin: { Args: never; Returns: boolean };
@@ -864,6 +898,10 @@ export type Database = {
           total_jobs: number;
         }[];
       };
+      hard_delete_operator: {
+        Args: { p_operator_id: string };
+        Returns: boolean;
+      };
       has_any_role: {
         Args: {
           _roles: Database["public"]["Enums"]["app_role"][];
@@ -877,6 +915,10 @@ export type Database = {
           _user_id: string;
         };
         Returns: boolean;
+      };
+      trigger_rework: {
+        Args: { _qc_inspection_id: string };
+        Returns: undefined;
       };
     };
     Enums: {
@@ -908,7 +950,8 @@ export type Database = {
         | "running"
         | "paused"
         | "completed"
-        | "skipped";
+        | "skipped"
+        | "rework";
       qc_status: "waiting" | "inspection" | "pass" | "reject" | "rework";
       sales_order_status:
         | "draft"
@@ -1047,6 +1090,9 @@ export type CompositeTypes<
     : never;
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       app_role: [
@@ -1081,6 +1127,7 @@ export const Constants = {
         "paused",
         "completed",
         "skipped",
+        "rework",
       ],
       qc_status: ["waiting", "inspection", "pass", "reject", "rework"],
       sales_order_status: [

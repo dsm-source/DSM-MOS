@@ -1,4 +1,11 @@
-import { CheckCircle2, Pause, Play, Clock, MinusCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  Pause,
+  Play,
+  Clock,
+  MinusCircle,
+  RotateCcw,
+} from "lucide-react";
 import type { ProductionProcess, ProductionStepStatus } from "../types";
 
 export const PROCESS_LABEL: Record<ProductionProcess, string> = {
@@ -15,6 +22,7 @@ export const STEP_STATUS_LABEL: Record<ProductionStepStatus, string> = {
   paused: "Dijeda",
   completed: "Selesai",
   skipped: "Dilewati",
+  rework: "Rework",
 };
 
 export const STEP_STATUS_CLASS: Record<ProductionStepStatus, string> = {
@@ -28,6 +36,8 @@ export const STEP_STATUS_CLASS: Record<ProductionStepStatus, string> = {
     "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-200 dark:border-emerald-800",
   skipped:
     "bg-zinc-200 text-zinc-600 border-zinc-300 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700",
+  rework:
+    "bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/40 dark:text-orange-200 dark:border-orange-800",
 };
 
 export const STEP_STATUS_ICON: Record<ProductionStepStatus, typeof Play> = {
@@ -36,6 +46,7 @@ export const STEP_STATUS_ICON: Record<ProductionStepStatus, typeof Play> = {
   paused: Pause,
   completed: CheckCircle2,
   skipped: MinusCircle,
+  rework: RotateCcw,
 };
 
 /** Format durasi sejak timestamp (mis. "2j 15m", "45m", "12d"). */

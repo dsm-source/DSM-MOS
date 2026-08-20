@@ -1,11 +1,5 @@
-import {
-  Play,
-  Pause,
-  CheckCircle2,
-  MinusCircle,
-  Lock,
-  CheckCircle,
-} from "lucide-react";
+import { useState } from "react";
+import { Lock, CheckCircle } from "lucide-react";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
 import {
@@ -19,11 +13,17 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PROCESS_LABEL, formatDurationSince } from "../lib/process";
 import { StepStatusBadge } from "./step-status-badge";
+import { StepOperatorDialog } from "./step-operator-dialog";
 import { computeStartBlocker } from "../lib/start-blocker";
+import {
+  actionsFor,
+  isActionDisabled,
+  type StepAction,
+} from "../lib/step-actions";
 import { BlockerHistory } from "./blocker-history";
 import type { BatchWithContext } from "../hooks/use-batches";
 import { useUpdateBatchStep } from "../hooks/use-batch-steps";
-import type { ProductionStepStatus } from "../types";
+import type { ProductionBatchStepRow, ProductionStepStatus } from "../types";
 
 export function BatchDetailDrawer({
   batch,
@@ -37,14 +37,43 @@ export function BatchDetailDrawer({
   const update = useUpdateBatchStep();
   const item = batch?.engineering_job?.sales_order_item;
   const so = item?.sales_order;
+  const [pendingDialog, setPendingDialog] = useState<{
+    step: ProductionBatchStepRow;
+    action: StepAction;
+  } | null>(null);
 
-  const act = async (id: string, status: ProductionStepStatus) => {
+  const act = async (
+    id: string,
+    status: ProductionStepStatus,
+    operatorId?: string,
+  ) => {
     try {
-      await update.mutateAsync({ id, status });
+      await update.mutateAsync({
+        id,
+        status,
+        ...(operatorId !== undefined ? { operator_id: operatorId } : {}),
+      });
       toast.success("Status diperbarui");
     } catch (e) {
       notifyError(e, { title: "Gagal" });
+    } finally {
+      setPendingDialog(null);
     }
+  };
+
+  const handleAction = (step: ProductionBatchStepRow, action: StepAction) => {
+    if (update.isPending) return;
+    if (action.key === "skip") {
+      if (confirm(`Lewati tahapan ${PROCESS_LABEL[step.process]}?`)) {
+        void act(step.id, action.toStatus);
+      }
+      return;
+    }
+    if (action.needsOperator) {
+      setPendingDialog({ step, action });
+      return;
+    }
+    void act(step.id, action.toStatus);
   };
 
   return (
@@ -159,6 +188,7 @@ export function BatchDetailDrawer({
                 <ol className="space-y-3">
                   {batch.steps.map((step) => {
                     const blocker = computeStartBlocker(step, batch);
+                    const actions = actionsFor(step.status);
                     return (
                       <li
                         key={step.id}
@@ -202,76 +232,28 @@ export function BatchDetailDrawer({
                           </div>
                         )}
 
-                        {canWrite && (
+                        {canWrite && actions.length > 0 && (
                           <div className="flex flex-wrap gap-2 pl-6">
-                            {step.status === "waiting" && (
-                              <>
+                            {actions.map((action) => {
+                              const Icon = action.icon;
+                              return (
                                 <Button
+                                  key={action.key}
                                   size="sm"
-                                  disabled={!!blocker || update.isPending}
-                                  onClick={() => act(step.id, "running")}
+                                  variant={action.variant ?? "default"}
+                                  disabled={isActionDisabled(
+                                    step,
+                                    batch,
+                                    action,
+                                    update.isPending,
+                                  )}
+                                  onClick={() => handleAction(step, action)}
                                 >
-                                  <Play className="h-3.5 w-3.5 mr-1" /> Start
+                                  <Icon className="h-3.5 w-3.5 mr-1" />{" "}
+                                  {action.label}
                                 </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  disabled={update.isPending}
-                                  onClick={() => {
-                                    if (
-                                      confirm(
-                                        `Lewati tahapan ${PROCESS_LABEL[step.process]}?`,
-                                      )
-                                    ) {
-                                      act(step.id, "skipped");
-                                    }
-                                  }}
-                                >
-                                  <MinusCircle className="h-3.5 w-3.5 mr-1" />{" "}
-                                  Skip
-                                </Button>
-                              </>
-                            )}
-                            {step.status === "running" && (
-                              <>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  disabled={update.isPending}
-                                  onClick={() => act(step.id, "paused")}
-                                >
-                                  <Pause className="h-3.5 w-3.5 mr-1" /> Pause
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  disabled={update.isPending}
-                                  onClick={() => act(step.id, "completed")}
-                                >
-                                  <CheckCircle2 className="h-3.5 w-3.5 mr-1" />{" "}
-                                  Complete
-                                </Button>
-                              </>
-                            )}
-                            {step.status === "paused" && (
-                              <>
-                                <Button
-                                  size="sm"
-                                  disabled={update.isPending}
-                                  onClick={() => act(step.id, "running")}
-                                >
-                                  <Play className="h-3.5 w-3.5 mr-1" /> Resume
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  disabled={update.isPending}
-                                  onClick={() => act(step.id, "completed")}
-                                >
-                                  <CheckCircle2 className="h-3.5 w-3.5 mr-1" />{" "}
-                                  Complete
-                                </Button>
-                              </>
-                            )}
+                              );
+                            })}
                           </div>
                         )}
                       </li>
@@ -282,6 +264,24 @@ export function BatchDetailDrawer({
             );
           })()}
       </SheetContent>
+
+      {batch && pendingDialog && (
+        <StepOperatorDialog
+          open
+          onOpenChange={(o) => !o && setPendingDialog(null)}
+          title={pendingDialog.action.label}
+          confirmLabel={pendingDialog.action.confirmLabel}
+          defaultOperatorId={pendingDialog.step.operator_id}
+          isPending={update.isPending}
+          onConfirm={(operatorId) =>
+            void act(
+              pendingDialog.step.id,
+              pendingDialog.action.toStatus,
+              operatorId,
+            )
+          }
+        />
+      )}
     </Sheet>
   );
 }

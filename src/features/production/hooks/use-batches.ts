@@ -117,8 +117,19 @@ export function useProductionBatches() {
         () => qc.invalidateQueries({ queryKey: BATCHES_KEY }),
       )
       .subscribe();
+
+    const operatorsChannel = supabase
+      .channel("operators-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "operators" },
+        () => qc.invalidateQueries({ queryKey: ["operators"] }),
+      )
+      .subscribe();
+
     return () => {
       supabase.removeChannel(channel);
+      supabase.removeChannel(operatorsChannel);
     };
   }, [qc]);
 

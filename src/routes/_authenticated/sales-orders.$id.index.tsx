@@ -46,7 +46,7 @@ import { useMyRoles } from "@/hooks/use-my-roles";
 import { AssignmentsEditor } from "@/features/sales-orders/components/assignments-editor";
 import { StatusHistory } from "@/features/sales-orders/components/status-history";
 
-export const Route = createFileRoute("/_authenticated/sales-orders/$id")({
+export const Route = createFileRoute("/_authenticated/sales-orders/$id/")({
   head: () => ({ meta: [{ title: "Detail SO — DSM MOS" }] }),
   component: SalesOrderDetailPage,
 });

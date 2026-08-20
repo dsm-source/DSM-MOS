@@ -21,6 +21,7 @@ function normalizeOperatorInput(input: OperatorFormInput): OperatorFormInput {
   };
 }
 
+/** Query murni — realtime untuk tabel `operators` dipasang di useProductionBatches. */
 export function useOperators() {
   return useQuery({
     queryKey: LIST_KEY,

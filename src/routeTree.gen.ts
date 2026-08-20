@@ -23,12 +23,15 @@ import { Route as AuthenticatedDeliveryRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedSalesOrdersIndexRouteImport } from './routes/_authenticated/sales-orders.index'
+import { Route as AuthenticatedEngineeringIndexRouteImport } from './routes/_authenticated/engineering.index'
+import { Route as AuthenticatedDeliveryIndexRouteImport } from './routes/_authenticated/delivery.index'
 import { Route as AuthenticatedSalesOrdersNewRouteImport } from './routes/_authenticated/sales-orders.new'
-import { Route as AuthenticatedSalesOrdersIdRouteImport } from './routes/_authenticated/sales-orders.$id'
 import { Route as AuthenticatedEngineeringWorkloadRouteImport } from './routes/_authenticated/engineering.workload'
 import { Route as AuthenticatedEngineeringIdRouteImport } from './routes/_authenticated/engineering.$id'
 import { Route as AuthenticatedDeliveryScheduleRouteImport } from './routes/_authenticated/delivery.schedule'
 import { Route as AuthenticatedDeliveryIdRouteImport } from './routes/_authenticated/delivery.$id'
+import { Route as AuthenticatedSalesOrdersIdIndexRouteImport } from './routes/_authenticated/sales-orders.$id.index'
 import { Route as AuthenticatedSalesOrdersIdEditRouteImport } from './routes/_authenticated/sales-orders.$id.edit'
 
 const AuthRoute = AuthRouteImport.update({
@@ -103,16 +106,28 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSalesOrdersIndexRoute =
+  AuthenticatedSalesOrdersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSalesOrdersRoute,
+  } as any)
+const AuthenticatedEngineeringIndexRoute =
+  AuthenticatedEngineeringIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedEngineeringRoute,
+  } as any)
+const AuthenticatedDeliveryIndexRoute =
+  AuthenticatedDeliveryIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDeliveryRoute,
+  } as any)
 const AuthenticatedSalesOrdersNewRoute =
   AuthenticatedSalesOrdersNewRouteImport.update({
     id: '/new',
     path: '/new',
-    getParentRoute: () => AuthenticatedSalesOrdersRoute,
-  } as any)
-const AuthenticatedSalesOrdersIdRoute =
-  AuthenticatedSalesOrdersIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
     getParentRoute: () => AuthenticatedSalesOrdersRoute,
   } as any)
 const AuthenticatedEngineeringWorkloadRoute =
@@ -138,11 +153,17 @@ const AuthenticatedDeliveryIdRoute = AuthenticatedDeliveryIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AuthenticatedDeliveryRoute,
 } as any)
+const AuthenticatedSalesOrdersIdIndexRoute =
+  AuthenticatedSalesOrdersIdIndexRouteImport.update({
+    id: '/$id/',
+    path: '/$id/',
+    getParentRoute: () => AuthenticatedSalesOrdersRoute,
+  } as any)
 const AuthenticatedSalesOrdersIdEditRoute =
   AuthenticatedSalesOrdersIdEditRouteImport.update({
-    id: '/edit',
-    path: '/edit',
-    getParentRoute: () => AuthenticatedSalesOrdersIdRoute,
+    id: '/$id/edit',
+    path: '/$id/edit',
+    getParentRoute: () => AuthenticatedSalesOrdersRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -163,9 +184,12 @@ export interface FileRoutesByFullPath {
   '/delivery/schedule': typeof AuthenticatedDeliveryScheduleRoute
   '/engineering/$id': typeof AuthenticatedEngineeringIdRoute
   '/engineering/workload': typeof AuthenticatedEngineeringWorkloadRoute
-  '/sales-orders/$id': typeof AuthenticatedSalesOrdersIdRouteWithChildren
   '/sales-orders/new': typeof AuthenticatedSalesOrdersNewRoute
+  '/delivery/': typeof AuthenticatedDeliveryIndexRoute
+  '/engineering/': typeof AuthenticatedEngineeringIndexRoute
+  '/sales-orders/': typeof AuthenticatedSalesOrdersIndexRoute
   '/sales-orders/$id/edit': typeof AuthenticatedSalesOrdersIdEditRoute
+  '/sales-orders/$id/': typeof AuthenticatedSalesOrdersIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -173,21 +197,21 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/delivery': typeof AuthenticatedDeliveryRouteWithChildren
-  '/engineering': typeof AuthenticatedEngineeringRouteWithChildren
   '/material': typeof AuthenticatedMaterialRoute
   '/operators': typeof AuthenticatedOperatorsRoute
   '/production': typeof AuthenticatedProductionRoute
   '/production-planning': typeof AuthenticatedProductionPlanningRoute
   '/qc': typeof AuthenticatedQcRoute
-  '/sales-orders': typeof AuthenticatedSalesOrdersRouteWithChildren
   '/delivery/$id': typeof AuthenticatedDeliveryIdRoute
   '/delivery/schedule': typeof AuthenticatedDeliveryScheduleRoute
   '/engineering/$id': typeof AuthenticatedEngineeringIdRoute
   '/engineering/workload': typeof AuthenticatedEngineeringWorkloadRoute
-  '/sales-orders/$id': typeof AuthenticatedSalesOrdersIdRouteWithChildren
   '/sales-orders/new': typeof AuthenticatedSalesOrdersNewRoute
+  '/delivery': typeof AuthenticatedDeliveryIndexRoute
+  '/engineering': typeof AuthenticatedEngineeringIndexRoute
+  '/sales-orders': typeof AuthenticatedSalesOrdersIndexRoute
   '/sales-orders/$id/edit': typeof AuthenticatedSalesOrdersIdEditRoute
+  '/sales-orders/$id': typeof AuthenticatedSalesOrdersIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -209,9 +233,12 @@ export interface FileRoutesById {
   '/_authenticated/delivery/schedule': typeof AuthenticatedDeliveryScheduleRoute
   '/_authenticated/engineering/$id': typeof AuthenticatedEngineeringIdRoute
   '/_authenticated/engineering/workload': typeof AuthenticatedEngineeringWorkloadRoute
-  '/_authenticated/sales-orders/$id': typeof AuthenticatedSalesOrdersIdRouteWithChildren
   '/_authenticated/sales-orders/new': typeof AuthenticatedSalesOrdersNewRoute
+  '/_authenticated/delivery/': typeof AuthenticatedDeliveryIndexRoute
+  '/_authenticated/engineering/': typeof AuthenticatedEngineeringIndexRoute
+  '/_authenticated/sales-orders/': typeof AuthenticatedSalesOrdersIndexRoute
   '/_authenticated/sales-orders/$id/edit': typeof AuthenticatedSalesOrdersIdEditRoute
+  '/_authenticated/sales-orders/$id/': typeof AuthenticatedSalesOrdersIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -233,9 +260,12 @@ export interface FileRouteTypes {
     | '/delivery/schedule'
     | '/engineering/$id'
     | '/engineering/workload'
-    | '/sales-orders/$id'
     | '/sales-orders/new'
+    | '/delivery/'
+    | '/engineering/'
+    | '/sales-orders/'
     | '/sales-orders/$id/edit'
+    | '/sales-orders/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,21 +273,21 @@ export interface FileRouteTypes {
     | '/admin'
     | '/customers'
     | '/dashboard'
-    | '/delivery'
-    | '/engineering'
     | '/material'
     | '/operators'
     | '/production'
     | '/production-planning'
     | '/qc'
-    | '/sales-orders'
     | '/delivery/$id'
     | '/delivery/schedule'
     | '/engineering/$id'
     | '/engineering/workload'
-    | '/sales-orders/$id'
     | '/sales-orders/new'
+    | '/delivery'
+    | '/engineering'
+    | '/sales-orders'
     | '/sales-orders/$id/edit'
+    | '/sales-orders/$id'
   id:
     | '__root__'
     | '/'
@@ -278,9 +308,12 @@ export interface FileRouteTypes {
     | '/_authenticated/delivery/schedule'
     | '/_authenticated/engineering/$id'
     | '/_authenticated/engineering/workload'
-    | '/_authenticated/sales-orders/$id'
     | '/_authenticated/sales-orders/new'
+    | '/_authenticated/delivery/'
+    | '/_authenticated/engineering/'
+    | '/_authenticated/sales-orders/'
     | '/_authenticated/sales-orders/$id/edit'
+    | '/_authenticated/sales-orders/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -389,18 +422,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sales-orders/': {
+      id: '/_authenticated/sales-orders/'
+      path: '/'
+      fullPath: '/sales-orders/'
+      preLoaderRoute: typeof AuthenticatedSalesOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedSalesOrdersRoute
+    }
+    '/_authenticated/engineering/': {
+      id: '/_authenticated/engineering/'
+      path: '/'
+      fullPath: '/engineering/'
+      preLoaderRoute: typeof AuthenticatedEngineeringIndexRouteImport
+      parentRoute: typeof AuthenticatedEngineeringRoute
+    }
+    '/_authenticated/delivery/': {
+      id: '/_authenticated/delivery/'
+      path: '/'
+      fullPath: '/delivery/'
+      preLoaderRoute: typeof AuthenticatedDeliveryIndexRouteImport
+      parentRoute: typeof AuthenticatedDeliveryRoute
+    }
     '/_authenticated/sales-orders/new': {
       id: '/_authenticated/sales-orders/new'
       path: '/new'
       fullPath: '/sales-orders/new'
       preLoaderRoute: typeof AuthenticatedSalesOrdersNewRouteImport
-      parentRoute: typeof AuthenticatedSalesOrdersRoute
-    }
-    '/_authenticated/sales-orders/$id': {
-      id: '/_authenticated/sales-orders/$id'
-      path: '/$id'
-      fullPath: '/sales-orders/$id'
-      preLoaderRoute: typeof AuthenticatedSalesOrdersIdRouteImport
       parentRoute: typeof AuthenticatedSalesOrdersRoute
     }
     '/_authenticated/engineering/workload': {
@@ -431,12 +478,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDeliveryIdRouteImport
       parentRoute: typeof AuthenticatedDeliveryRoute
     }
+    '/_authenticated/sales-orders/$id/': {
+      id: '/_authenticated/sales-orders/$id/'
+      path: '/$id'
+      fullPath: '/sales-orders/$id/'
+      preLoaderRoute: typeof AuthenticatedSalesOrdersIdIndexRouteImport
+      parentRoute: typeof AuthenticatedSalesOrdersRoute
+    }
     '/_authenticated/sales-orders/$id/edit': {
       id: '/_authenticated/sales-orders/$id/edit'
-      path: '/edit'
+      path: '/$id/edit'
       fullPath: '/sales-orders/$id/edit'
       preLoaderRoute: typeof AuthenticatedSalesOrdersIdEditRouteImport
-      parentRoute: typeof AuthenticatedSalesOrdersIdRoute
+      parentRoute: typeof AuthenticatedSalesOrdersRoute
     }
   }
 }
@@ -444,11 +498,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedDeliveryRouteChildren {
   AuthenticatedDeliveryIdRoute: typeof AuthenticatedDeliveryIdRoute
   AuthenticatedDeliveryScheduleRoute: typeof AuthenticatedDeliveryScheduleRoute
+  AuthenticatedDeliveryIndexRoute: typeof AuthenticatedDeliveryIndexRoute
 }
 
 const AuthenticatedDeliveryRouteChildren: AuthenticatedDeliveryRouteChildren = {
   AuthenticatedDeliveryIdRoute: AuthenticatedDeliveryIdRoute,
   AuthenticatedDeliveryScheduleRoute: AuthenticatedDeliveryScheduleRoute,
+  AuthenticatedDeliveryIndexRoute: AuthenticatedDeliveryIndexRoute,
 }
 
 const AuthenticatedDeliveryRouteWithChildren =
@@ -459,6 +515,7 @@ const AuthenticatedDeliveryRouteWithChildren =
 interface AuthenticatedEngineeringRouteChildren {
   AuthenticatedEngineeringIdRoute: typeof AuthenticatedEngineeringIdRoute
   AuthenticatedEngineeringWorkloadRoute: typeof AuthenticatedEngineeringWorkloadRoute
+  AuthenticatedEngineeringIndexRoute: typeof AuthenticatedEngineeringIndexRoute
 }
 
 const AuthenticatedEngineeringRouteChildren: AuthenticatedEngineeringRouteChildren =
@@ -466,6 +523,7 @@ const AuthenticatedEngineeringRouteChildren: AuthenticatedEngineeringRouteChildr
     AuthenticatedEngineeringIdRoute: AuthenticatedEngineeringIdRoute,
     AuthenticatedEngineeringWorkloadRoute:
       AuthenticatedEngineeringWorkloadRoute,
+    AuthenticatedEngineeringIndexRoute: AuthenticatedEngineeringIndexRoute,
   }
 
 const AuthenticatedEngineeringRouteWithChildren =
@@ -473,30 +531,19 @@ const AuthenticatedEngineeringRouteWithChildren =
     AuthenticatedEngineeringRouteChildren,
   )
 
-interface AuthenticatedSalesOrdersIdRouteChildren {
-  AuthenticatedSalesOrdersIdEditRoute: typeof AuthenticatedSalesOrdersIdEditRoute
-}
-
-const AuthenticatedSalesOrdersIdRouteChildren: AuthenticatedSalesOrdersIdRouteChildren =
-  {
-    AuthenticatedSalesOrdersIdEditRoute: AuthenticatedSalesOrdersIdEditRoute,
-  }
-
-const AuthenticatedSalesOrdersIdRouteWithChildren =
-  AuthenticatedSalesOrdersIdRoute._addFileChildren(
-    AuthenticatedSalesOrdersIdRouteChildren,
-  )
-
 interface AuthenticatedSalesOrdersRouteChildren {
-  AuthenticatedSalesOrdersIdRoute: typeof AuthenticatedSalesOrdersIdRouteWithChildren
   AuthenticatedSalesOrdersNewRoute: typeof AuthenticatedSalesOrdersNewRoute
+  AuthenticatedSalesOrdersIndexRoute: typeof AuthenticatedSalesOrdersIndexRoute
+  AuthenticatedSalesOrdersIdEditRoute: typeof AuthenticatedSalesOrdersIdEditRoute
+  AuthenticatedSalesOrdersIdIndexRoute: typeof AuthenticatedSalesOrdersIdIndexRoute
 }
 
 const AuthenticatedSalesOrdersRouteChildren: AuthenticatedSalesOrdersRouteChildren =
   {
-    AuthenticatedSalesOrdersIdRoute:
-      AuthenticatedSalesOrdersIdRouteWithChildren,
     AuthenticatedSalesOrdersNewRoute: AuthenticatedSalesOrdersNewRoute,
+    AuthenticatedSalesOrdersIndexRoute: AuthenticatedSalesOrdersIndexRoute,
+    AuthenticatedSalesOrdersIdEditRoute: AuthenticatedSalesOrdersIdEditRoute,
+    AuthenticatedSalesOrdersIdIndexRoute: AuthenticatedSalesOrdersIdIndexRoute,
   }
 
 const AuthenticatedSalesOrdersRouteWithChildren =
