@@ -7,6 +7,7 @@ import {
   listUsersWithRoles,
   assignRole,
   unassignRole,
+  listAuditLogs,
 } from "@/lib/admin-users.functions";
 import type { AppRole } from "@/lib/roles.functions";
 import { myRolesQueryOptions } from "@/hooks/use-my-roles";
@@ -21,6 +22,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const ALL_ROLES: AppRole[] = [
   "admin",
@@ -59,10 +62,21 @@ function AdminPage() {
   const listFn = useServerFn(listUsersWithRoles);
   const assignFn = useServerFn(assignRole);
   const unassignFn = useServerFn(unassignRole);
+  const auditLogsFn = useServerFn(listAuditLogs);
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin", "users-with-roles"],
     queryFn: () => listFn(),
+  });
+
+  const {
+    data: auditLogs,
+    isLoading: isLoadingAuditLogs,
+    isError: isAuditLogsError,
+    error: auditLogsError,
+  } = useQuery({
+    queryKey: ["admin", "audit-logs"],
+    queryFn: () => auditLogsFn(),
   });
 
   const mutation = useMutation({
@@ -154,6 +168,78 @@ function AdminPage() {
                   className="text-center text-muted-foreground"
                 >
                   Belum ada user.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold">Audit Log</h2>
+        <p className="text-sm text-muted-foreground">
+          100 perubahan terbaru pada data sistem.
+        </p>
+      </div>
+
+      {isAuditLogsError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Gagal memuat audit log</AlertTitle>
+          <AlertDescription>
+            {auditLogsError instanceof Error
+              ? auditLogsError.message
+              : "Coba muat ulang halaman untuk mengambil data terbaru."}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <div className="rounded-xl border bg-card overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Waktu</TableHead>
+              <TableHead>Tabel</TableHead>
+              <TableHead>Aksi</TableHead>
+              <TableHead>Status Lama</TableHead>
+              <TableHead>Status Baru</TableHead>
+              <TableHead>Diubah Oleh</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoadingAuditLogs &&
+              Array.from({ length: 3 }).map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell colSpan={6}>
+                    <Skeleton className="h-8 w-full" />
+                  </TableCell>
+                </TableRow>
+              ))}
+            {auditLogs?.map((log) => (
+              <TableRow key={log.id}>
+                <TableCell className="text-sm">
+                  {new Date(log.changed_at).toLocaleString("id-ID")}
+                </TableCell>
+                <TableCell className="text-sm">{log.table_name}</TableCell>
+                <TableCell className="text-sm">{log.action}</TableCell>
+                <TableCell className="text-sm">
+                  {log.old_status ?? "-"}
+                </TableCell>
+                <TableCell className="text-sm">
+                  {log.new_status ?? "-"}
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground font-mono">
+                  {log.changed_by ? `${log.changed_by.slice(0, 8)}…` : "sistem"}
+                </TableCell>
+              </TableRow>
+            ))}
+            {auditLogs && auditLogs.length === 0 && (
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  className="text-center text-muted-foreground"
+                >
+                  Belum ada log.
                 </TableCell>
               </TableRow>
             )}

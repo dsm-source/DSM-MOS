@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { notifyError } from "@/lib/error-message";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { FileText, Boxes, Factory } from "lucide-react";
+import { FileText, Boxes, Factory, AlertCircle } from "lucide-react";
 import { useMyRoles } from "@/hooks/use-my-roles";
 import { claimFirstAdmin, isRolesTableEmpty } from "@/lib/roles.functions";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
@@ -40,12 +41,14 @@ function StatCard({
   icon: Icon,
   description,
   loading,
+  error,
 }: {
   title: string;
   value: number | string;
   icon: typeof FileText;
   description?: string;
   loading?: boolean;
+  error?: boolean;
 }) {
   return (
     <Card>
@@ -57,7 +60,7 @@ function StatCard({
       </CardHeader>
       <CardContent>
         <div className="text-3xl font-semibold tracking-tight">
-          {loading ? "…" : value}
+          {loading ? "…" : error ? "—" : value}
         </div>
         {description && (
           <p className="text-xs text-muted-foreground mt-1">{description}</p>
@@ -99,6 +102,11 @@ function DashboardPage() {
   const soStatus = useSoStatusCounts();
   const materialWaiting = useMaterialWaitingCount();
   const productionRunning = useProductionRunningCount();
+
+  const dashboardError =
+    soStatus.error ?? materialWaiting.error ?? productionRunning.error;
+  const hasDashboardError =
+    soStatus.isError || materialWaiting.isError || productionRunning.isError;
 
   const soByStatus = new Map<string, number>();
   for (const row of soStatus.data ?? []) soByStatus.set(row.status, row.count);
@@ -174,28 +182,55 @@ function DashboardPage() {
         </div>
       )}
 
+      {hasDashboardError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Gagal memuat ringkasan dashboard</AlertTitle>
+          <AlertDescription>
+            {dashboardError instanceof Error
+              ? dashboardError.message
+              : "Coba muat ulang halaman untuk mengambil data terbaru."}
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <StatCard
           title="Sales Order Aktif"
           value={soActive}
           icon={FileText}
-          description={`${soTotal} total (termasuk selesai & dibatalkan)`}
+          description={
+            soStatus.isError
+              ? "Gagal memuat data"
+              : `${soTotal} total (termasuk selesai & dibatalkan)`
+          }
           loading={soStatus.isLoading}
+          error={soStatus.isError}
         />
         <StatCard
           title="Job Menunggu Material"
           value={materialWaiting.data ?? 0}
           icon={Boxes}
-          description="Engineering job dengan status material 'Waiting Material'"
+          description={
+            materialWaiting.isError
+              ? "Gagal memuat data"
+              : "Engineering job dengan status material 'Waiting Material'"
+          }
           loading={materialWaiting.isLoading}
+          error={materialWaiting.isError}
         />
         <StatCard
           title="Produksi Berjalan"
           value={productionRunning.data ?? 0}
           icon={Factory}
-          description="Tahapan produksi yang sedang running"
+          description={
+            productionRunning.isError
+              ? "Gagal memuat data"
+              : "Tahapan produksi yang sedang running"
+          }
           loading={productionRunning.isLoading}
+          error={productionRunning.isError}
         />
       </div>
 
@@ -210,6 +245,10 @@ function DashboardPage() {
         <CardContent>
           {soStatus.isLoading ? (
             <p className="text-sm text-muted-foreground">Memuat…</p>
+          ) : soStatus.isError ? (
+            <p className="text-sm text-destructive">
+              Gagal memuat distribusi Sales Order.
+            </p>
           ) : soTotal === 0 ? (
             <p className="text-sm text-muted-foreground">
               Belum ada Sales Order.

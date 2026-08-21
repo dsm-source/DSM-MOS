@@ -53,6 +53,31 @@ export const listUsersWithRoles = createServerFn({ method: "GET" })
     }));
   });
 
+export type AuditLogEntry = {
+  id: string;
+  changed_at: string;
+  table_name: string;
+  action: string;
+  old_status: string | null;
+  new_status: string | null;
+  changed_by: string | null;
+};
+
+export const listAuditLogs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<AuditLogEntry[]> => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("audit_logs")
+      .select(
+        "id, changed_at, table_name, action, old_status, new_status, changed_by",
+      )
+      .order("changed_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
 export const createUserManual = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(
