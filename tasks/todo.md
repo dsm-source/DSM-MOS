@@ -92,4 +92,6 @@
 
 ---
 
-**Open question yang masih menggantung** (jangan diimplementasikan tanpa tanya dulu): PRD §11 poin #10 — auto-fill `estimated_delivery_date` → `planned_delivery_date`.
+## Follow-up M7 — Prefill `planned_delivery_date` (PRD §11 poin #10, resolved 2026-08-21)
+- [ ] Keputusan sudah final (lihat PRD.md §11 #10 dan §9 M7): `deliveries.planned_delivery_date` di-prefill dari `MAX(estimated_delivery_date)` seluruh `production_batches` milik SO, editable, one-time saat create. `planned_ship_date` tetap manual.
+- [ ] Cek `create-delivery-dialog.tsx` / `useCreateDelivery` — fitur ini dibangun sebelum keputusan ini dikonfirmasi (checkpoint M7 FINAL: 2026-08-20), kemungkinan belum ada logic prefill. Implementasikan + pgTAP/manual test kalau belum ada.

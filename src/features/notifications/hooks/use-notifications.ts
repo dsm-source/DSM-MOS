@@ -58,8 +58,10 @@ export function useMarkAllRead() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async () => {
-      const { data: userData } = await supabase.auth.getUser();
-      const uid = userData.user?.id;
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+      if (sessionError) throw new Error(sessionError.message);
+      const uid = sessionData.session?.user.id;
       if (!uid) return;
       const { error } = await supabase
         .from("notifications")
@@ -82,8 +84,9 @@ export function useNotificationsRealtime() {
     let channel: ReturnType<typeof supabase.channel> | null = null;
 
     (async () => {
-      const { data } = await supabase.auth.getUser();
-      const uid = data.user?.id;
+      const { data, error } = await supabase.auth.getSession();
+      if (error || cancelled) return;
+      const uid = data.session?.user.id;
       if (!uid || cancelled) return;
 
       channel = supabase
