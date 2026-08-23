@@ -19,6 +19,9 @@ export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ context }) => {
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) throw redirect({ to: "/auth" });
+    if (data.user.app_metadata?.must_change_password === true) {
+      throw redirect({ to: "/change-password" });
+    }
     // Prime roles cache so sidebar renders instantly
     await context.queryClient.ensureQueryData(myRolesQueryOptions);
     return { user: data.user };

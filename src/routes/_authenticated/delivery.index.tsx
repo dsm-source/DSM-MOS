@@ -41,15 +41,16 @@ export const Route = createFileRoute("/_authenticated/delivery/")({
 function DeliveryPage() {
   const { hasAnyRole } = useMyRoles();
   const canWrite = hasAnyRole(["delivery", "admin"]);
-  const { data = [], isLoading } = useDeliveries();
+  const [status, setStatus] = useState<DeliveryStatus | "active" | "all">(
+    "active",
+  );
+  const { data = [], isLoading } = useDeliveries(status);
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<DeliveryStatus | "all">("all");
   const [createOpen, setCreateOpen] = useState(false);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return data.filter((d) => {
-      if (status !== "all" && d.status !== status) return false;
       if (!q) return true;
       return (
         d.do_number.toLowerCase().includes(q) ||
@@ -59,7 +60,7 @@ function DeliveryPage() {
         (d.vehicle_number ?? "").toLowerCase().includes(q)
       );
     });
-  }, [data, search, status]);
+  }, [data, search]);
 
   return (
     <div className="p-6 space-y-4">
@@ -97,13 +98,16 @@ function DeliveryPage() {
         </div>
         <Select
           value={status}
-          onValueChange={(v) => setStatus(v as DeliveryStatus | "all")}
+          onValueChange={(v) =>
+            setStatus(v as DeliveryStatus | "active" | "all")
+          }
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Semua status</SelectItem>
+            <SelectItem value="active">Aktif (belum selesai)</SelectItem>
+            <SelectItem value="all">Semua status (termasuk histori)</SelectItem>
             {DELIVERY_STATUS_ORDER.map((s) => (
               <SelectItem key={s} value={s}>
                 {DELIVERY_STATUS_LABEL[s]}

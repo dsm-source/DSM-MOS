@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import {
   useCreateDelivery,
+  useMaxEstimatedDeliveryDate,
   useSalesOrdersForDelivery,
 } from "../hooks/use-deliveries";
 
@@ -41,14 +42,28 @@ export function CreateDeliveryDialog({
   const [soId, setSoId] = useState<string>("");
   const [shipDate, setShipDate] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
+  const [deliveryDateTouched, setDeliveryDateTouched] = useState(false);
   const [driver, setDriver] = useState("");
   const [vehicle, setVehicle] = useState("");
   const [notes, setNotes] = useState("");
+
+  const { data: maxEstimatedDeliveryDate } = useMaxEstimatedDeliveryDate(
+    soId || undefined,
+  );
+
+  // PRD §11 poin #10: prefill sekali dari MAX(estimated_delivery_date) batch SO ini,
+  // tetap editable — berhenti prefill begitu user mengubah field ini secara manual.
+  useEffect(() => {
+    if (!deliveryDateTouched && maxEstimatedDeliveryDate) {
+      setDeliveryDate(maxEstimatedDeliveryDate);
+    }
+  }, [maxEstimatedDeliveryDate, deliveryDateTouched]);
 
   function reset() {
     setSoId("");
     setShipDate("");
     setDeliveryDate("");
+    setDeliveryDateTouched(false);
     setDriver("");
     setVehicle("");
     setNotes("");
@@ -102,7 +117,14 @@ export function CreateDeliveryDialog({
         <div className="space-y-4">
           <div className="space-y-1.5">
             <Label>Sales Order</Label>
-            <Select value={soId} onValueChange={setSoId}>
+            <Select
+              value={soId}
+              onValueChange={(v) => {
+                setSoId(v);
+                setDeliveryDate("");
+                setDeliveryDateTouched(false);
+              }}
+            >
               <SelectTrigger>
                 <SelectValue placeholder={isLoading ? "Memuat…" : "Pilih SO"} />
               </SelectTrigger>
@@ -138,7 +160,10 @@ export function CreateDeliveryDialog({
                 type="date"
                 value={deliveryDate}
                 min={shipDate || undefined}
-                onChange={(e) => setDeliveryDate(e.target.value)}
+                onChange={(e) => {
+                  setDeliveryDate(e.target.value);
+                  setDeliveryDateTouched(true);
+                }}
               />
             </div>
           </div>

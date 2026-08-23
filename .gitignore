@@ -17,3 +17,6 @@ dist-ssr
 supabase/.branches
 supabase/.temp
 supabase/snippets
+
+# Playwright MCP debug logs/snapshots — ephemeral, regenerated per session
+.playwright-mcp/

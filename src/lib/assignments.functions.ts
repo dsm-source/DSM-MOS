@@ -21,7 +21,7 @@ async function assertSalesOrAdmin(context: { supabase: any; userId: string }) {
 
 export const listUsersByRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { role: AppRole }) => data)
+  .validator((data: { role: AppRole }) => data)
   .handler(async ({ data, context }): Promise<UserOption[]> => {
     await assertSalesOrAdmin(context);
     const { supabaseAdmin } =

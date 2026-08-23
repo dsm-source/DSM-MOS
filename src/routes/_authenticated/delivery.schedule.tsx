@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDeliveries } from "@/features/delivery/hooks/use-deliveries";
+import { useDeliveriesForSchedule } from "@/features/delivery/hooks/use-deliveries";
 import { DeliveryGantt } from "@/features/delivery/components/delivery-gantt";
 import {
   DELIVERY_STATUS_COLOR,
@@ -34,14 +34,30 @@ export const Route = createFileRoute("/_authenticated/delivery/schedule")({
   component: SchedulePage,
 });
 
+// Jendela default Gantt: 90 hari ke belakang s/d 180 hari ke depan, supaya
+// query tidak fetch seluruh histori pengiriman selamanya. User bisa
+// perlebar lewat input Dari/Sampai — itu langsung jadi rentang fetch baru.
+function defaultWindow() {
+  const fmt = (d: Date) => d.toISOString().slice(0, 10);
+  const from = new Date();
+  from.setDate(from.getDate() - 90);
+  const to = new Date();
+  to.setDate(to.getDate() + 180);
+  return { from: fmt(from), to: fmt(to) };
+}
+
 function SchedulePage() {
   const navigate = useNavigate();
-  const { data = [], isLoading } = useDeliveries();
   const [view, setView] = useState<ViewMode>(ViewMode.Week);
   const [customer, setCustomer] = useState<string>("all");
   const [status, setStatus] = useState<DeliveryStatus | "all">("all");
-  const [from, setFrom] = useState<string>("");
-  const [to, setTo] = useState<string>("");
+  const [{ from: defaultFrom, to: defaultTo }] = useState(defaultWindow);
+  const [from, setFrom] = useState<string>(defaultFrom);
+  const [to, setTo] = useState<string>(defaultTo);
+  const { data = [], isLoading } = useDeliveriesForSchedule({
+    from: from || defaultFrom,
+    to: to || defaultTo,
+  });
 
   const customers = useMemo(() => {
     const map = new Map<string, string>();
@@ -57,12 +73,9 @@ function SchedulePage() {
       if (customer !== "all" && d.sales_order?.customer?.id !== customer)
         return false;
       if (status !== "all" && d.status !== status) return false;
-      if (from && d.planned_delivery_date && d.planned_delivery_date < from)
-        return false;
-      if (to && d.planned_ship_date && d.planned_ship_date > to) return false;
       return true;
     });
-  }, [data, customer, status, from, to]);
+  }, [data, customer, status]);
 
   return (
     <div className="p-6 space-y-4">

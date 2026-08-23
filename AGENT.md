@@ -51,6 +51,7 @@ Hermes menggunakan kriteria ini sebagai standar tunggal saat memutuskan apakah s
 - **Always use Context7 when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.**
 - Perubahan harus surgical — hanya menyentuh apa yang diminta task dari Hermes.
 - Melaporkan hasil ke Hermes dalam bentuk yang mudah direview (ringkasan perubahan + file yang tersentuh).
+- **Server function yang mengubah state keamanan (mis. flag auth, role, permission) tidak boleh bisa dipanggil terpisah dari aksi yang seharusnya men-triggernya.** Pelajaran dari insiden nyata (2026-08-22, `must_change_password`): desain awal punya server fn `clearMustChangePassword` yang dipanggil client setelah ganti password client-side — celahnya, siapa pun yang tahu password lama bisa panggil fungsi clear-flag itu langsung (lewat devtools/fetch) tanpa pernah benar-benar ganti password, karena tidak ada bukti server-side bahwa password sudah berubah. Fix: gabungkan jadi satu server fn yang melakukan aksi + perubahan state keamanan dalam satu handler yang sama, supaya state hanya berubah sebagai efek samping aksi yang sah — bukan endpoint yang berdiri sendiri.
 
 ### Codex (Review/Audit)
 - Wajib membaca file ini sebelum mulai review.
