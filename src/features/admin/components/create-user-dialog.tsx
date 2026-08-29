@@ -99,7 +99,7 @@ export function CreateUserDialog({ roles }: { roles: AppRole[] }) {
                 akan ditampilkan lagi setelah jendela ini ditutup.
               </DialogDescription>
             </DialogHeader>
-            <div className="rounded-lg border bg-muted/40 p-3 space-y-1.5 font-mono text-sm">
+            <div className="rounded-xl border bg-muted/40 p-3 space-y-1.5 font-mono text-sm">
               <div>
                 <span className="text-muted-foreground">Email </span>
                 {created.email}

@@ -101,7 +101,7 @@ export function BatchDetailDrawer({
 
                 <div
                   className={
-                    "mt-4 rounded-lg border p-3 flex items-start gap-2 text-sm " +
+                    "mt-4 rounded-xl border p-3 flex items-start gap-2 text-sm " +
                     (gateOk
                       ? "border-emerald-300 bg-emerald-50 text-emerald-900 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-100"
                       : "border-amber-300 bg-amber-50 text-amber-900 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-100")
@@ -192,7 +192,7 @@ export function BatchDetailDrawer({
                     return (
                       <li
                         key={step.id}
-                        className="rounded-lg border p-3 space-y-2"
+                        className="rounded-xl border p-3 space-y-2"
                       >
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">

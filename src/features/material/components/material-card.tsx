@@ -134,7 +134,7 @@ export function MaterialCard({
         type="button"
         disabled={!canEdit}
         onClick={() => canEdit && setOpen(true)}
-        className="w-full text-left rounded-lg border bg-card p-3 hover:bg-accent/40 transition disabled:cursor-default disabled:hover:bg-card"
+        className="w-full text-left rounded-xl border bg-card p-3 hover:bg-accent/40 transition disabled:cursor-default disabled:hover:bg-card"
       >
         <div className="flex items-center justify-between gap-2">
           <div className="text-sm font-semibold truncate">

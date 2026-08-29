@@ -298,7 +298,7 @@ function PlanningPage() {
                   setSelectedBatch(b);
                   setEditOpen(true);
                 }}
-                className="text-left rounded-lg border p-3 hover:bg-muted/50 transition"
+                className="text-left rounded-xl border p-3 hover:bg-muted/50 transition"
               >
                 <div className="font-mono text-sm">{b.batch_number}</div>
                 <div className="text-sm">

@@ -136,7 +136,7 @@ function OperatorsPage() {
       ) : isLoading ? (
         <Skeleton className="h-64" />
       ) : (
-        <div className="rounded-lg border">
+        <div className="rounded-xl border">
           <Table>
             <TableHeader>
               <TableRow>
