@@ -3,8 +3,9 @@ import {
   Outlet,
   redirect,
   useNavigate,
+  useRouterState,
 } from "@tanstack/react-router";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -34,6 +35,14 @@ function AuthenticatedLayout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
+
+  // Move focus to the main region on route change so keyboard/screen-reader
+  // users start from the new page's content, not a stale control.
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const mainRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    mainRef.current?.focus();
+  }, [pathname]);
 
   async function handleSignOut() {
     setSigningOut(true);
@@ -70,7 +79,12 @@ function AuthenticatedLayout() {
               </Button>
             </div>
           </header>
-          <main className="flex-1">
+          <main
+            ref={mainRef}
+            id="main-content"
+            tabIndex={-1}
+            className="flex-1 outline-none"
+          >
             <Suspense
               fallback={
                 <div className="p-6 text-sm text-muted-foreground">
