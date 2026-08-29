@@ -170,7 +170,7 @@ function SalesOrdersPage() {
                     {canWrite && (
                       <Button asChild size="sm">
                         <Link to="/sales-orders/new">
-                          <Plus className="h-4 w-4 mr-1" /> Buat SO Baru
+                          <Plus className="h-4 w-4 mr-1" /> SO Baru
                         </Link>
                       </Button>
                     )}

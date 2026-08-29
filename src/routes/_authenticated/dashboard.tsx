@@ -276,10 +276,6 @@ function DashboardPage() {
               })}
             </div>
           )}
-          <p className="text-xs text-muted-foreground mt-4">
-            Kartu Antrian QC dan Siap Kirim akan muncul setelah modul QC &
-            Delivery dibangun.
-          </p>
         </CardContent>
       </Card>
     </div>
