@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { FileText, Boxes, Factory, AlertCircle } from "lucide-react";
 import { useMyRoles } from "@/hooks/use-my-roles";
 import { claimFirstAdmin, isRolesTableEmpty } from "@/lib/roles.functions";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -129,12 +130,10 @@ function DashboardPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Ringkasan operasional lintas modul.
-        </p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        description="Ringkasan operasional lintas modul."
+      />
 
       {/* Peran & bootstrap admin */}
       {roles.length === 0 ? (

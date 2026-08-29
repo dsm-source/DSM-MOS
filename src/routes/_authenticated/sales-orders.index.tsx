@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus, Search, AlertCircle } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -72,21 +73,19 @@ function SalesOrdersPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold">Sales Order</h1>
-          <p className="text-sm text-muted-foreground">
-            Kelola pesanan pelanggan.
-          </p>
-        </div>
-        {canWrite && (
-          <Button asChild>
-            <Link to="/sales-orders/new">
-              <Plus className="h-4 w-4 mr-1" /> SO Baru
-            </Link>
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Sales Order"
+        description="Kelola pesanan pelanggan."
+        actions={
+          canWrite && (
+            <Button asChild>
+              <Link to="/sales-orders/new">
+                <Plus className="h-4 w-4 mr-1" /> SO Baru
+              </Link>
+            </Button>
+          )
+        }
+      />
 
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[240px]">

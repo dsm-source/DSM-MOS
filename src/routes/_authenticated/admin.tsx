@@ -12,6 +12,7 @@ import {
 import type { AppRole } from "@/lib/roles.functions";
 import { myRolesQueryOptions } from "@/hooks/use-my-roles";
 import { CreateUserDialog } from "@/features/admin/components/create-user-dialog";
+import { PageHeader } from "@/components/page-header";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -99,15 +100,11 @@ function AdminPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Kelola Peran User</h1>
-          <p className="text-sm text-muted-foreground">
-            Centang untuk menugaskan peran. Hanya admin yang dapat mengubah.
-          </p>
-        </div>
-        <CreateUserDialog roles={ALL_ROLES} />
-      </div>
+      <PageHeader
+        title="Kelola Peran User"
+        description="Centang untuk menugaskan peran. Hanya admin yang dapat mengubah."
+        actions={<CreateUserDialog roles={ALL_ROLES} />}
+      />
 
       <div className="rounded-xl border bg-card overflow-x-auto">
         <Table>

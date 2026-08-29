@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ViewMode } from "gantt-task-react";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,35 +80,29 @@ function SchedulePage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center gap-3 flex-wrap">
-        <Button variant="ghost" size="sm" asChild>
-          <Link to="/delivery">
-            <ArrowLeft className="h-4 w-4 mr-1" /> Kembali
-          </Link>
-        </Button>
-        <div className="flex-1">
-          <h1 className="text-xl font-semibold">Jadwal Pengiriman</h1>
-          <p className="text-sm text-muted-foreground">
-            Tampilan Gantt rencana kirim → sampai. Bukan dokumen resmi.
-          </p>
-        </div>
-        <div className="flex gap-1 rounded-lg border p-0.5">
-          <Button
-            size="sm"
-            variant={view === ViewMode.Week ? "default" : "ghost"}
-            onClick={() => setView(ViewMode.Week)}
-          >
-            Mingguan
-          </Button>
-          <Button
-            size="sm"
-            variant={view === ViewMode.Month ? "default" : "ghost"}
-            onClick={() => setView(ViewMode.Month)}
-          >
-            Bulanan
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        backTo="/delivery"
+        title="Jadwal Pengiriman"
+        description="Tampilan Gantt rencana kirim → sampai. Bukan dokumen resmi."
+        actions={
+          <div className="flex gap-1 rounded-lg border p-0.5">
+            <Button
+              size="sm"
+              variant={view === ViewMode.Week ? "default" : "ghost"}
+              onClick={() => setView(ViewMode.Week)}
+            >
+              Mingguan
+            </Button>
+            <Button
+              size="sm"
+              variant={view === ViewMode.Month ? "default" : "ghost"}
+              onClick={() => setView(ViewMode.Month)}
+            >
+              Bulanan
+            </Button>
+          </div>
+        }
+      />
 
       <div className="flex gap-2 flex-wrap items-end">
         <div className="min-w-[180px]">

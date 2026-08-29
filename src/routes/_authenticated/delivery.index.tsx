@@ -3,6 +3,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Loader2, Plus, Search, CalendarRange } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
+import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,27 +65,25 @@ function DeliveryPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-xl font-semibold">Rencana Pengiriman</h1>
-          <p className="text-sm text-muted-foreground">
-            Tracking internal — bukan dokumen surat jalan resmi.
-          </p>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          <Button variant="outline" asChild>
-            <Link to="/delivery/schedule">
-              <CalendarRange className="h-4 w-4 mr-1.5" />
-              Jadwal (Gantt)
-            </Link>
-          </Button>
-          {canWrite && (
-            <Button onClick={() => setCreateOpen(true)}>
-              <Plus className="h-4 w-4 mr-1.5" /> Rencana Baru
+      <PageHeader
+        title="Rencana Pengiriman"
+        description="Tracking internal — bukan dokumen surat jalan resmi."
+        actions={
+          <>
+            <Button variant="outline" asChild>
+              <Link to="/delivery/schedule">
+                <CalendarRange className="h-4 w-4 mr-1.5" />
+                Jadwal (Gantt)
+              </Link>
             </Button>
-          )}
-        </div>
-      </div>
+            {canWrite && (
+              <Button onClick={() => setCreateOpen(true)}>
+                <Plus className="h-4 w-4 mr-1.5" /> Rencana Baru
+              </Button>
+            )}
+          </>
+        }
+      />
 
       <div className="flex gap-2 flex-wrap">
         <div className="relative flex-1 min-w-[240px]">
