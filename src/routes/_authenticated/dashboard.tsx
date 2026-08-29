@@ -6,6 +6,7 @@ import { FileText, Boxes, Factory, AlertCircle } from "lucide-react";
 import { useMyRoles } from "@/hooks/use-my-roles";
 import { claimFirstAdmin, isRolesTableEmpty } from "@/lib/roles.functions";
 import { PageHeader } from "@/components/page-header";
+import { EmptyState } from "@/components/empty-state";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -249,9 +250,11 @@ function DashboardPage() {
               Gagal memuat distribusi Sales Order.
             </p>
           ) : soTotal === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Belum ada Sales Order.
-            </p>
+            <EmptyState
+              icon={FileText}
+              title="Belum ada Sales Order"
+              description="Distribusi status akan muncul di sini setelah SO pertama dibuat."
+            />
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {orderedStatuses.map((status) => {

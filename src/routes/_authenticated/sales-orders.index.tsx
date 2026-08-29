@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Plus, Search, AlertCircle } from "lucide-react";
+import { Plus, Search, AlertCircle, FileText } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
+import { EmptyState } from "@/components/empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -160,20 +161,25 @@ function SalesOrdersPage() {
               ))}
             {!isLoading && data?.rows.length === 0 && (
               <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="text-center text-muted-foreground py-8"
-                >
-                  <div className="flex flex-col items-center gap-3">
-                    <span>Tidak ada data.</span>
-                    {canWrite && (
-                      <Button asChild size="sm">
-                        <Link to="/sales-orders/new">
-                          <Plus className="h-4 w-4 mr-1" /> SO Baru
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
+                <TableCell colSpan={7} className="p-0">
+                  <EmptyState
+                    icon={FileText}
+                    title="Belum ada sales order"
+                    description={
+                      debounced || status !== "all"
+                        ? "Tidak ada SO yang cocok dengan filter."
+                        : "Buat sales order pertama untuk memulai."
+                    }
+                    action={
+                      canWrite && (
+                        <Button asChild size="sm">
+                          <Link to="/sales-orders/new">
+                            <Plus className="h-4 w-4 mr-1" /> SO Baru
+                          </Link>
+                        </Button>
+                      )
+                    }
+                  />
                 </TableCell>
               </TableRow>
             )}

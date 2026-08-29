@@ -12,6 +12,7 @@ import { GripVertical, Lock, AlertCircle, Package } from "lucide-react";
 import { toast } from "sonner";
 import { notifyError } from "@/lib/error-message";
 import { cn } from "@/lib/utils";
+import { EmptyState } from "@/components/empty-state";
 import {
   Select,
   SelectContent,
@@ -67,8 +68,12 @@ export function KanbanBoard({
 
   if (!batch) {
     return (
-      <div className="rounded-xl border p-8 text-center text-sm text-muted-foreground">
-        Belum ada batch produksi.
+      <div className="rounded-xl border">
+        <EmptyState
+          icon={Package}
+          title="Belum ada batch produksi"
+          description="Batch muncul di sini setelah dibuat oleh Production Planning."
+        />
       </div>
     );
   }
