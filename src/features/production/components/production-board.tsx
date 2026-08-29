@@ -1,5 +1,5 @@
 // src/features/production/components/production-board.tsx
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   DndContext,
   PointerSensor,
@@ -89,6 +89,17 @@ export function ProductionBoard({
     action: StepAction;
   } | null>(null);
 
+  // Local input mirror, debounced into the `q` filter (see sales-orders.index.tsx).
+  const [searchInput, setSearchInput] = useState(filters.q);
+  useEffect(() => setSearchInput(filters.q), [filters.q]);
+  useEffect(() => {
+    if (searchInput === filters.q) return;
+    const t = setTimeout(() => {
+      onFiltersChange({ q: searchInput });
+    }, 300);
+    return () => clearTimeout(t);
+  }, [searchInput, filters.q, onFiltersChange]);
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(TouchSensor, {
@@ -146,6 +157,12 @@ export function ProductionBoard({
   }, [filtered]);
 
   async function runComplete(stepId: string) {
+    const batch = filtered.find((b) => b.id === pending?.batchId);
+    if (!batch || activeStep(batch.steps)?.id !== stepId) {
+      toast.error("Tahapan sudah berubah, coba lagi");
+      setPending(null);
+      return;
+    }
     try {
       await update.mutateAsync({ id: stepId, status: "completed" });
       toast.success("Tahapan selesai");
@@ -216,14 +233,14 @@ export function ProductionBoard({
           <Input
             className="pl-8 pr-8"
             placeholder="Cari batch, item, SO, customer..."
-            value={filters.q}
-            onChange={(e) => onFiltersChange({ q: e.target.value })}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
-          {filters.q && (
+          {searchInput && (
             <button
               type="button"
               aria-label="Bersihkan pencarian"
-              onClick={() => onFiltersChange({ q: "" })}
+              onClick={() => setSearchInput("")}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -322,7 +339,9 @@ export function ProductionBoard({
                       canWrite={canWrite}
                       operatorName={opName}
                       isPending={update.isPending}
-                      pendingComplete={pending?.batchId === b.id}
+                      pendingComplete={
+                        pending?.batchId === b.id ? pending.stepId : null
+                      }
                       onOpen={() => onOpenDetail(b)}
                       onAction={handleAction}
                       onConfirmComplete={runComplete}

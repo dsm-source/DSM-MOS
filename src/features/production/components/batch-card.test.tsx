@@ -102,7 +102,7 @@ function renderCard(props: Partial<Parameters<typeof BatchCard>[0]> = {}) {
     batch: makeBatch([step("bending", 1, "running")]),
     canWrite: true,
     isPending: false,
-    pendingComplete: false,
+    pendingComplete: null as string | null,
     onOpen: vi.fn(),
     onAction: vi.fn(),
     onConfirmComplete: vi.fn(),
@@ -198,7 +198,7 @@ describe("BatchCard", () => {
   it("pendingComplete shows the inline confirm; Ya calls onConfirmComplete with the active step id", async () => {
     const props = renderCard({
       batch: makeBatch([step("bending", 1, "running")]),
-      pendingComplete: true,
+      pendingComplete: "s-1",
     });
     expect(screen.getByText(/Selesaikan Bending\?/)).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Ya" }));
@@ -208,11 +208,31 @@ describe("BatchCard", () => {
   it("pendingComplete: Batal calls onCancelComplete and not onConfirmComplete", async () => {
     const props = renderCard({
       batch: makeBatch([step("bending", 1, "running")]),
-      pendingComplete: true,
+      pendingComplete: "s-1",
     });
     await userEvent.click(screen.getByRole("button", { name: "Batal" }));
     expect(props.onCancelComplete).toHaveBeenCalled();
     expect(props.onConfirmComplete).not.toHaveBeenCalled();
+  });
+
+  it("Enter on an inner control runs its action but does not open the drawer", async () => {
+    const props = renderCard({
+      batch: makeBatch([step("bending", 1, "running")]),
+    });
+    screen.getByRole("button", { name: "Complete" }).focus();
+    await userEvent.keyboard("{Enter}");
+    expect(props.onAction).toHaveBeenCalled();
+    expect(props.onOpen).not.toHaveBeenCalled();
+  });
+
+  it("Enter on the card container opens the drawer", async () => {
+    const props = renderCard();
+    const card = screen
+      .getByText("Panel Pintu Kabinet")
+      .closest('[role="button"]') as HTMLElement;
+    card.focus();
+    await userEvent.keyboard("{Enter}");
+    expect(props.onOpen).toHaveBeenCalled();
   });
 
   it("action button click calls onAction with step and action", async () => {

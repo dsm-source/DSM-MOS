@@ -76,7 +76,10 @@ function ProductionPage() {
           canWrite={canWrite}
           filters={search}
           onFiltersChange={(patch) =>
-            navigate({ search: (prev) => ({ ...prev, ...patch }) })
+            navigate({
+              replace: true,
+              search: (prev) => ({ ...prev, ...patch }),
+            })
           }
           onOpenDetail={setOpenBatch}
         />

@@ -38,6 +38,7 @@ Tidak termasuk dan JANGAN dibangun kecuali diminta eksplisit: CRM, Purchasing, I
 `admin`, `sales`, `engineering`, `material`, `production_planning`, `production`, `qc`, `delivery`, `viewer`.
 
 Empat pasangan ini **masing-masing dua peran terpisah**, jangan digabung:
+
 - Engineering (desain teknik) vs Material (kesiapan bahan)
 - Production Planning (buat batch & jadwal) vs Production (eksekusi Kanban harian)
 
@@ -52,7 +53,7 @@ Empat pasangan ini **masing-masing dua peran terpisah**, jangan digabung:
 
 Gaya Linear/Notion/Stripe Dashboard. Prioritas: kecepatan operator shop floor (≤3 klik, tombol besar untuk sarung tangan, status warna + label teks, dark mode ready).
 
-Kanban dan Gantt (dipakai di Production & Delivery) **TIDAK BOLEH pakai drag-and-drop** — pindah status lewat tombol. Drag tidak reliable di layar sentuh pabrik dengan sarung tangan.
+Kanban dan Gantt (dipakai di Production & Delivery) **TIDAK BOLEH pakai drag-and-drop** — pindah status lewat tombol. Drag tidak reliable di layar sentuh pabrik dengan sarung tangan. **Pengecualian: Kanban Production (M5) — drag-and-drop diizinkan** (dioperasikan satu admin dengan mouse di laptop, bukan touchscreen sarung tangan; lihat SPEC.md §Divergensi dari CLAUDE.md dan PRD.md §M5). Gantt & Kanban lain tetap tombol saja.
 
 ## Cara Kerja
 

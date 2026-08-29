@@ -22,7 +22,7 @@ type BatchCardProps = {
   canWrite: boolean;
   operatorName?: string;
   isPending: boolean;
-  pendingComplete: boolean;
+  pendingComplete: string | null;
   onOpen: () => void;
   onAction: (step: ProductionBatchStepRow, action: StepAction) => void;
   onConfirmComplete: (stepId: string) => void;
@@ -84,6 +84,7 @@ export function BatchCard({
       tabIndex={0}
       onClick={onOpen}
       onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onOpen();
@@ -225,7 +226,7 @@ export function BatchCard({
               size="sm"
               className="h-7 bg-[#D81E1C] hover:bg-[#b91816] text-white"
               disabled={isPending}
-              onClick={() => onConfirmComplete(active.id)}
+              onClick={() => onConfirmComplete(pendingComplete)}
             >
               Ya
             </Button>

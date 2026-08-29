@@ -44,6 +44,8 @@ export function BoardColumn({
 
   return (
     <div
+      ref={setNodeRef}
+      data-testid={`board-column-${id}`}
       className={cn(
         "flex flex-col rounded-xl border bg-card",
         collapsible && collapsed ? "w-11 shrink-0" : "w-[220px] shrink-0",
@@ -76,10 +78,7 @@ export function BoardColumn({
         </span>
       </button>
       {!(collapsible && collapsed) && (
-        <div
-          ref={setNodeRef}
-          className="flex-1 min-h-[120px] max-h-[calc(100vh-16rem)] overflow-y-auto p-2 space-y-2"
-        >
+        <div className="flex-1 min-h-[120px] max-h-[calc(100vh-16rem)] overflow-y-auto p-2 space-y-2">
           {count === 0 ? (
             <div className="text-center text-xs text-muted-foreground/60 py-4">
               —
