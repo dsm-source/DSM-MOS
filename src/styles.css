@@ -142,3 +142,17 @@
     color: var(--color-foreground);
   }
 }
+
+/*
+ * gantt-task-react ships a light-only stylesheet (hashed CSS-module classes that
+ * resist theming). In dark mode, render it as a self-consistent light "island"
+ * — common for embedded data-viz — rather than a half-dark widget.
+ */
+.gantt-light-island {
+  color-scheme: light;
+  background: #ffffff;
+  color: #333333;
+}
+.gantt-light-island :is(h1, h2, h3, h4, h5, h6, span, div, td, th) {
+  color: inherit;
+}

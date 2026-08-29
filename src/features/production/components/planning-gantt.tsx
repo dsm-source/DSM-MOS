@@ -100,7 +100,7 @@ export function PlanningGantt({
   const columnWidth = viewMode === ViewMode.Month ? 220 : 90;
 
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
+    <div className="gantt-light-island rounded-xl border overflow-hidden">
       <Gantt
         tasks={tasks}
         viewMode={viewMode}
