@@ -4,6 +4,8 @@ import {
   useDraggable,
   useDroppable,
   PointerSensor,
+  KeyboardSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -64,6 +66,10 @@ export function KanbanBoard({
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 6 },
+    }),
+    useSensor(KeyboardSensor),
   );
 
   if (!batch) {
@@ -106,6 +112,13 @@ export function KanbanBoard({
     void runAction(step, action);
   };
 
+  const stepLabel = (id: string | number) => {
+    const s = batch?.steps.find((x) => x.id === id);
+    return s
+      ? `tahapan ${s.sequence_order}. ${PROCESS_LABEL[s.process]}`
+      : "tahapan";
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || !batch) return;
@@ -143,7 +156,26 @@ export function KanbanBoard({
         </Button>
       </div>
 
-      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragEnd={handleDragEnd}
+        accessibility={{
+          announcements: {
+            onDragStart: ({ active }) =>
+              `Mengangkat ${stepLabel(active.id)}. Pakai panah untuk memilih zona aksi, spasi untuk menjatuhkan.`,
+            onDragOver: ({ over }) =>
+              over?.data.current?.actionLabel
+                ? `Di atas zona "${over.data.current.actionLabel}".`
+                : "Belum di atas zona aksi.",
+            onDragEnd: ({ over }) =>
+              over?.data.current?.actionLabel
+                ? `Menjalankan aksi "${over.data.current.actionLabel}".`
+                : "Dilepas tanpa aksi.",
+            onDragCancel: ({ active }) =>
+              `Membatalkan pemindahan ${stepLabel(active.id)}.`,
+          },
+        }}
+      >
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
           {batch.steps.map((step) => (
             <KanbanCell
@@ -279,7 +311,7 @@ function ActionDropButton({
 }) {
   const { setNodeRef, isOver } = useDroppable({
     id: `${stepId}:${action.key}`,
-    data: { actionKey: action.key },
+    data: { actionKey: action.key, actionLabel: action.label },
     disabled,
   });
   const Icon = action.icon;
