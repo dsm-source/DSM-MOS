@@ -34,6 +34,7 @@ import {
 import { LogOut, UserRound } from "lucide-react";
 import { myRolesQueryOptions } from "@/hooks/use-my-roles";
 import { NotificationsBell } from "@/components/notifications-bell";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -103,6 +104,7 @@ function AuthenticatedLayout() {
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
+              <ThemeToggle />
               <NotificationsBell />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
