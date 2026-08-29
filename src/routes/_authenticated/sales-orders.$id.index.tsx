@@ -83,7 +83,12 @@ function SalesOrderDetailPage() {
   return (
     <div className="p-6 space-y-6 max-w-5xl">
       <PageHeader
-        onBack={() => navigate({ to: "/sales-orders" })}
+        onBack={() =>
+          navigate({
+            to: "/sales-orders",
+            search: { page: 1, status: "all", q: "" },
+          })
+        }
         titleClassName="font-mono"
         title={data.so_number}
         titleSuffix={<StatusBadge status={data.status} />}
@@ -122,7 +127,10 @@ function SalesOrderDetailPage() {
                         try {
                           await del.mutateAsync(data.id);
                           toast.success("SO dihapus");
-                          navigate({ to: "/sales-orders" });
+                          navigate({
+                            to: "/sales-orders",
+                            search: { page: 1, status: "all", q: "" },
+                          });
                         } catch (e) {
                           notifyError(e);
                         }

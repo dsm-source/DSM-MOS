@@ -29,7 +29,12 @@ function NewSalesOrderPage() {
   return (
     <div className="p-6 space-y-6 max-w-5xl">
       <PageHeader
-        backTo="/sales-orders"
+        onBack={() =>
+          navigate({
+            to: "/sales-orders",
+            search: { page: 1, status: "all", q: "" },
+          })
+        }
         title="SO Baru"
         description="Nomor SO akan dibuat otomatis saat disimpan."
       />
