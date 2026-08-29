@@ -78,7 +78,7 @@ function SchedulePage() {
   }, [data, customer, status]);
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-6 space-y-6">
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="ghost" size="sm" asChild>
           <Link to="/delivery">

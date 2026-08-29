@@ -184,7 +184,7 @@ function DeliveryDetail() {
   }
 
   return (
-    <div className="p-6 space-y-4 max-w-4xl">
+    <div className="p-6 space-y-6 max-w-4xl">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" asChild>

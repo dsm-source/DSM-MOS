@@ -70,10 +70,12 @@ function AuthenticatedLayout() {
               </Button>
             </div>
           </header>
-          <main className="flex-1 p-6">
+          <main className="flex-1">
             <Suspense
               fallback={
-                <div className="text-sm text-muted-foreground">Memuat...</div>
+                <div className="p-6 text-sm text-muted-foreground">
+                  Memuat...
+                </div>
               }
             >
               <Outlet />

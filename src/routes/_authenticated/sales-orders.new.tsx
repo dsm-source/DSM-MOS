@@ -28,7 +28,7 @@ function NewSalesOrderPage() {
   }
 
   return (
-    <div className="p-6 space-y-4 max-w-5xl">
+    <div className="p-6 space-y-6 max-w-5xl">
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
