@@ -152,7 +152,7 @@ sedikit beda. Satukan.
 
 ## Phase 3 — Navigation State & Polish
 
-### Task 11: Filter/pagination Sales Order → search params
+### ✅ Task 11: Filter/pagination Sales Order → search params
 **Acceptance criteria:**
 - [ ] `page`, `status`, `search` dibaca/ditulis via `Route` search params (validasi schema)
 - [ ] Refresh & share URL mempertahankan state
@@ -163,7 +163,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/_authenticated/sales-orders.index.tsx` (+ route def)
 **Scope:** M
 
-### Task 12: Pagination sungguhan
+### ✅ Task 12: Pagination sungguhan
 **Acceptance criteria:**
 - [ ] Prev/Next benar-benar disabled (bukan cuma `aria-disabled`) di batas
 - [ ] Tampilkan "Halaman X dari Y · N data"
@@ -174,7 +174,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/_authenticated/sales-orders.index.tsx`
 **Scope:** S
 
-### Task 13: Debounce search + tombol clear
+### ✅ Task 13: Debounce search + tombol clear
 **Acceptance criteria:**
 - [ ] Search live dengan debounce ~300ms (hapus pola onBlur/Enter-only)
 - [ ] Tombol clear (×) muncul saat ada teks, reset search + `page=1`
@@ -185,7 +185,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/_authenticated/sales-orders.index.tsx`
 **Scope:** S
 
-### Task 14: Konfirmasi sign-out
+### ✅ Task 14: Konfirmasi sign-out
 **Acceptance criteria:**
 - [ ] Tombol "Keluar" pindah ke `DropdownMenu` di bawah email user
 - [ ] Aksi keluar minta konfirmasi (`AlertDialog`) sebelum clear cache + signOut
@@ -196,7 +196,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/_authenticated/route.tsx`
 **Scope:** S
 
-### Task 15: Skeleton transisi route + `StatCard` konsisten
+### ✅ Task 15: Skeleton transisi route + `StatCard` konsisten
 **Acceptance criteria:**
 - [ ] Fallback `<Suspense>` Outlet bukan teks "Memuat..." polos — skeleton generik selaras layout
 - [ ] `StatCard` loading pakai `<Skeleton>`, bukan string `"…"`
@@ -206,7 +206,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/_authenticated/route.tsx`, `src/routes/_authenticated/dashboard.tsx`
 **Scope:** S
 
-### Task 16: Wire dark mode
+### ✅ Task 16: Wire dark mode
 **Acceptance criteria:**
 - [ ] Default ikut `prefers-color-scheme`; toggle manual di header (atau menu user) meng-override
 - [ ] Pilihan persist di `localStorage`, diterapkan sebelum first paint (no flash)
@@ -217,7 +217,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/__root.tsx` atau `route.tsx`, komponen toggle kecil, mungkin inline script di `RootShell`
 **Scope:** M
 
-### Task 17: Aksesibilitas Kanban drag
+### ✅ Task 17: Aksesibilitas Kanban drag
 **Acceptance criteria:**
 - [ ] Tambah `KeyboardSensor` + `TouchSensor` ke `useSensors`
 - [ ] Drag bisa diselesaikan via keyboard (space untuk angkat, arrow, space untuk jatuhkan)
@@ -229,7 +229,7 @@ sedikit beda. Satukan.
 **Files:** `src/features/production/components/kanban-board.tsx`
 **Scope:** M
 
-### Task 18: Responsif tabel Sales Order di mobile
+### ✅ Task 18: Responsif tabel Sales Order di mobile
 **Acceptance criteria:**
 - [ ] Di bawah `sm`: baris tampil sebagai kartu bertumpuk (No. SO + Status menonjol), bukan scroll horizontal 7 kolom
 - [ ] `sm` ke atas: tabel seperti sekarang
@@ -240,7 +240,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/_authenticated/sales-orders.index.tsx` (mungkin sub-komponen `SalesOrderRow`)
 **Scope:** M
 
-### Task 19: Header sempit + posisi Toaster
+### ✅ Task 19: Header sempit + posisi Toaster
 **Acceptance criteria:**
 - [ ] Email user disembunyikan `< sm`, tetap tersedia di menu user (Task 14)
 - [ ] `SidebarTrigger` + breadcrumb + aksi muat di 320px tanpa overflow

@@ -56,15 +56,15 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 
 ### Phase 3: Navigation State & Polish
 
-- [ ] Task 11: Pindah filter/pagination Sales Order ke search params
-- [ ] Task 12: Pagination sungguhan (prev/next disabled nyata + info halaman)
-- [ ] Task 13: Debounce search + tombol clear
-- [ ] Task 14: Konfirmasi sign-out (dropdown di bawah email)
-- [ ] Task 15: Skeleton transisi route + samakan loading `StatCard` pakai `Skeleton`
-- [ ] Task 16: Wire dark mode (toggle + persist + `prefers-color-scheme`)
-- [ ] Task 17: Aksesibilitas Kanban — `KeyboardSensor` + `TouchSensor` + announcements
-- [ ] Task 18: Responsif tabel Sales Order di mobile (stacked card < sm)
-- [ ] Task 19: Header sempit — sembunyikan email < sm, pindah ke menu; Toaster `top-center`
+- [x] Task 11: Pindah filter/pagination Sales Order ke search params
+- [x] Task 12: Pagination sungguhan (prev/next disabled nyata + info halaman)
+- [x] Task 13: Debounce search + tombol clear
+- [x] Task 14: Konfirmasi sign-out (dropdown di bawah email)
+- [x] Task 15: Skeleton transisi route + samakan loading `StatCard` pakai `Skeleton`
+- [x] Task 16: Wire dark mode (toggle + persist + `prefers-color-scheme`)
+- [x] Task 17: Aksesibilitas Kanban — `KeyboardSensor` + `TouchSensor` + announcements
+- [x] Task 18: Responsif tabel Sales Order di mobile (stacked card < sm)
+- [x] Task 19: Header sempit — sembunyikan email < sm, pindah ke menu; Toaster `top-center`
 
 ### Checkpoint: Complete
 - [ ] Refresh di `/sales-orders?status=production&page=2` mempertahankan state
