@@ -263,7 +263,8 @@ sedikit beda. Satukan.
 
 ## Phase 4 — Backlog (tidak dikerjakan siklus ini)
 
-- [ ] Redesign Kanban → board kolom-per-proses, semua batch terlihat (scope L)
+- [x] Redesign Kanban → board kolom-per-proses, semua batch terlihat (scope L)
+  - ✅ Selesai — lihat spec & plan di `docs/superpowers/specs/2026-08-29-production-board-redesign-design.md` dan `docs/superpowers/plans/2026-08-29-production-board-redesign.md`. Implementasi di branch `production-board-redesign`.
 - [ ] Sistem warna status: fill tegas + ikon/bentuk per status (WCAG 1.4.1), pindah dari raw Tailwind palette ke token semantik
 - [ ] Aksen brand DSM + audit palet chart default (`--chart-1..5`)
 - [ ] Konsolidasi skala radius container (pilih satu: `rounded-lg` atau `rounded-xl`)
