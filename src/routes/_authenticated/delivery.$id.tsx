@@ -400,6 +400,7 @@ function DeliveryDetail() {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label="Hapus item"
                       onClick={async () => {
                         try {
                           await removeItem.mutateAsync({

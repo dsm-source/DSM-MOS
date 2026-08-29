@@ -45,7 +45,9 @@ export function NotificationsBell() {
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Notifikasi"
+          aria-label={
+            unread > 0 ? `Notifikasi, ${unread} belum dibaca` : "Notifikasi"
+          }
           className="relative"
         >
           <Bell className="h-4 w-4" />
