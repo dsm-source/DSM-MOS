@@ -144,6 +144,13 @@ export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const visible = items.filter((i) => hasAnyRole(i.roles));
 
+  // Highlight the deepest matching item so /sales-orders/123 keeps "Sales Order"
+  // lit, while /engineering/workload lights "Engineering Workload" (not also
+  // "Engineering"). Longest matching url wins.
+  const activeUrl = visible
+    .filter((i) => pathname === i.url || pathname.startsWith(i.url + "/"))
+    .sort((a, b) => b.url.length - a.url.length)[0]?.url;
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -163,7 +170,7 @@ export function AppSidebar() {
                 </div>
               )}
               {visible.map((item) => {
-                const active = pathname === item.url;
+                const active = item.url === activeUrl;
                 return (
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton
