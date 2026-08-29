@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { myRolesQueryOptions } from "@/hooks/use-my-roles";
@@ -60,13 +61,16 @@ function AuthenticatedLayout() {
         </Suspense>
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-12 flex items-center justify-between border-b bg-background px-2 gap-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0">
               <SidebarTrigger />
-              <span className="text-sm text-muted-foreground truncate">
+              <div className="min-w-0 overflow-x-auto">
+                <AppBreadcrumb />
+              </div>
+            </div>
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <span className="hidden lg:inline text-sm text-muted-foreground truncate max-w-[16rem]">
                 {user.email}
               </span>
-            </div>
-            <div className="flex items-center gap-1">
               <NotificationsBell />
               <Button
                 variant="ghost"
