@@ -12,7 +12,25 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { LogOut, UserRound } from "lucide-react";
 import { myRolesQueryOptions } from "@/hooks/use-my-roles";
 import { NotificationsBell } from "@/components/notifications-bell";
 
@@ -36,6 +54,7 @@ function AuthenticatedLayout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
 
   // Move focus to the main region on route change so keyboard/screen-reader
   // users start from the new page's content, not a stale control.
@@ -68,21 +87,59 @@ function AuthenticatedLayout() {
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
-              <span className="hidden lg:inline text-sm text-muted-foreground truncate max-w-[16rem]">
-                {user.email}
-              </span>
               <NotificationsBell />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleSignOut}
-                disabled={signingOut}
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Keluar
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2"
+                    aria-label="Menu akun"
+                  >
+                    <UserRound className="h-4 w-4" />
+                    <span className="hidden lg:inline truncate max-w-[12rem]">
+                      {user.email}
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel className="max-w-[16rem] truncate text-xs font-normal text-muted-foreground lg:hidden">
+                    {user.email}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="lg:hidden" />
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      setConfirmSignOut(true);
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Keluar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </header>
+
+          <AlertDialog open={confirmSignOut} onOpenChange={setConfirmSignOut}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Keluar dari DSM MOS?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Sesi Anda akan diakhiri dan Anda perlu masuk kembali.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Batal</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleSignOut}
+                  disabled={signingOut}
+                >
+                  Keluar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <main
             ref={mainRef}
             id="main-content"
