@@ -7,6 +7,7 @@ import { useMyRoles } from "@/hooks/use-my-roles";
 import { claimFirstAdmin, isRolesTableEmpty } from "@/lib/roles.functions";
 import { PageHeader } from "@/components/page-header";
 import { EmptyState } from "@/components/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -61,9 +62,13 @@ function StatCard({
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-3xl font-semibold tracking-tight">
-          {loading ? "…" : error ? "—" : value}
-        </div>
+        {loading ? (
+          <Skeleton className="h-9 w-16" />
+        ) : (
+          <div className="text-3xl font-semibold tracking-tight">
+            {error ? "—" : value}
+          </div>
+        )}
         {description && (
           <p className="text-xs text-muted-foreground mt-1">{description}</p>
         )}
