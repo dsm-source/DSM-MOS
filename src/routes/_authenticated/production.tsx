@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Factory } from "lucide-react";
 
+import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMyRoles } from "@/hooks/use-my-roles";
 import {
@@ -38,16 +38,10 @@ function ProductionPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center gap-2">
-        <Factory className="h-5 w-5" />
-        <div>
-          <h1 className="text-2xl font-semibold">Production</h1>
-          <p className="text-sm text-muted-foreground">
-            Kelola eksekusi batch di shop floor. Batch dibuat oleh Production
-            Planning.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Production"
+        description="Kelola eksekusi batch di shop floor. Batch dibuat oleh Production Planning."
+      />
 
       {isLoading ? (
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">

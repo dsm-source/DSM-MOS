@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -81,70 +82,69 @@ function SalesOrderDetailPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-5xl">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate({ to: "/sales-orders" })}
-            aria-label="Kembali"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-semibold font-mono">
-                {data.so_number}
-              </h1>
-              <StatusBadge status={data.status} />
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {data.customer?.name}{" "}
-              <span className="text-xs">({data.customer?.code})</span>
-            </p>
-          </div>
-        </div>
-        {canWrite && !isTerminal && (
-          <div className="flex items-center gap-2">
-            <Button variant="outline" asChild>
-              <Link to="/sales-orders/$id/edit" params={{ id: data.id }}>
-                <Pencil className="h-4 w-4 mr-1" /> Edit
-              </Link>
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline">
-                  <Trash2 className="h-4 w-4 mr-1" /> Hapus
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Hapus Sales Order?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    SO {data.so_number} akan disembunyikan.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Batal</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={async () => {
-                      try {
-                        await del.mutateAsync(data.id);
-                        toast.success("SO dihapus");
-                        navigate({ to: "/sales-orders" });
-                      } catch (e) {
-                        notifyError(e);
-                      }
-                    }}
-                  >
-                    Hapus
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        )}
-      </div>
+      <PageHeader
+        onBack={() =>
+          navigate({
+            to: "/sales-orders",
+            search: { page: 1, status: "all", q: "" },
+          })
+        }
+        titleClassName="font-mono"
+        title={data.so_number}
+        titleSuffix={<StatusBadge status={data.status} />}
+        description={
+          <>
+            {data.customer?.name}{" "}
+            <span className="text-xs">({data.customer?.code})</span>
+          </>
+        }
+        actions={
+          canWrite &&
+          !isTerminal && (
+            <>
+              <Button variant="outline" asChild>
+                <Link to="/sales-orders/$id/edit" params={{ id: data.id }}>
+                  <Pencil className="h-4 w-4 mr-1" /> Edit
+                </Link>
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline">
+                    <Trash2 className="h-4 w-4 mr-1" /> Hapus
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Hapus Sales Order?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      SO {data.so_number} akan disembunyikan.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={async () => {
+                        try {
+                          await del.mutateAsync(data.id);
+                          toast.success("SO dihapus");
+                          navigate({
+                            to: "/sales-orders",
+                            search: { page: 1, status: "all", q: "" },
+                          });
+                        } catch (e) {
+                          notifyError(e);
+                        }
+                      }}
+                    >
+                      Hapus
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+          )
+        }
+      />
 
       <Tabs defaultValue="detail">
         <TabsList>

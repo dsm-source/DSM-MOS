@@ -52,11 +52,19 @@ export function useSalesOrders(params: SalesOrderListParams) {
 
       const s = params.search?.trim();
       if (s) {
-        // Cari di so_number ATAU nama/kode customer (via inner join filter)
+        // Match the SO number, or any customer whose name/code matches.
+        // PostgREST can't OR across base and embedded columns in one filter,
+        // so resolve matching customers first, then OR on customer_id.
         const like = `%${s}%`;
-        q = q.or(
-          `so_number.ilike.${like},customer.name.ilike.${like},customer.code.ilike.${like}`,
-        );
+        const { data: custs, error: custErr } = await supabase
+          .from("customers")
+          .select("id")
+          .or(`name.ilike.${like},code.ilike.${like}`);
+        if (custErr) throw new Error(mapPgError(custErr));
+        const ors = [`so_number.ilike.${like}`];
+        const custIds = (custs ?? []).map((c) => c.id);
+        if (custIds.length) ors.push(`customer_id.in.(${custIds.join(",")})`);
+        q = q.or(ors.join(","));
       }
 
       const { data, error, count } = await q;

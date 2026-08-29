@@ -55,7 +55,7 @@ export const listEngineers = createServerFn({ method: "GET" })
 
 export const getEngineerEmails = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z.object({ userIds: z.array(z.string().uuid()) }).parse(data),
   )
   .handler(async ({ data, context }): Promise<UserEmail[]> => {

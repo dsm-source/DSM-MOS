@@ -87,11 +87,11 @@ function normalize(row: unknown): QcInspectionWithContext {
   return r;
 }
 
-export function useQcInspections() {
+function useQcRealtimeInvalidate(channelName: string) {
   const qc = useQueryClient();
   useEffect(() => {
     const channel = supabase
-      .channel("qc-inspections-realtime")
+      .channel(channelName)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "qc_inspections" },
@@ -101,15 +101,53 @@ export function useQcInspections() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [qc]);
+  }, [qc, channelName]);
+}
 
+// Status yang masih perlu ditindaklanjuti QC — dibatasi status, bukan
+// tanggal, karena antrian ini memang selalu kecil (item keluar begitu lulus).
+const ACTIVE_QC_STATUSES: QcStatus[] = [
+  "waiting",
+  "inspection",
+  "reject",
+  "rework",
+];
+
+export function useQcActiveQueue() {
+  useQcRealtimeInvalidate("qc-inspections-realtime-active");
   return useQuery({
-    queryKey: QC_KEY,
+    queryKey: [...QC_KEY, "active"],
     queryFn: async (): Promise<QcInspectionWithContext[]> => {
       const { data, error } = await supabase
         .from("qc_inspections")
         .select(SELECT)
+        .in("status", ACTIVE_QC_STATUSES)
         .order("created_at", { ascending: false });
+      if (error) throw new Error(mapPgError(error));
+      return (data ?? []).map(normalize);
+    },
+  });
+}
+
+// Riwayat lulus: dibatasi rentang tanggal (default 90 hari, lihat qc.tsx)
+// supaya tidak fetch seluruh histori QC selamanya seiring waktu.
+// `toExclusive` harus sudah dihitung 1 hari setelah tanggal "sampai" yang
+// dipilih user (batas atas eksklusif), supaya data hari itu sendiri ikut.
+const HISTORY_LIMIT = 300;
+
+export function useQcHistory(range: { from: string; toExclusive: string }) {
+  useQcRealtimeInvalidate("qc-inspections-realtime-history");
+  return useQuery({
+    queryKey: [...QC_KEY, "history", range.from, range.toExclusive],
+    queryFn: async (): Promise<QcInspectionWithContext[]> => {
+      const { data, error } = await supabase
+        .from("qc_inspections")
+        .select(SELECT)
+        .eq("status", "pass")
+        .gte("created_at", range.from)
+        .lt("created_at", range.toExclusive)
+        .order("created_at", { ascending: false })
+        .limit(HISTORY_LIMIT);
       if (error) throw new Error(mapPgError(error));
       return (data ?? []).map(normalize);
     },

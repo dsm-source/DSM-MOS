@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { CalendarRange, Plus, AlertTriangle } from "lucide-react";
+import { Plus, AlertTriangle } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { ViewMode } from "gantt-task-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -142,55 +143,49 @@ function PlanningPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <CalendarRange className="h-5 w-5" />
-          <div>
-            <h1 className="text-2xl font-semibold">Production Planning</h1>
-            <p className="text-sm text-muted-foreground">
-              Forward planning batch produksi. Bar = rencana mulai → selesai.
-              Berlian ungu = estimasi kirim.
-            </p>
-          </div>
-        </div>
-        {canPlan && (
-          <div className="flex items-center gap-2">
-            <Select
-              value={selectedJob?.id ?? ""}
-              onValueChange={(v) => {
-                const j = plannableJobs.find((x) => x.id === v) ?? null;
-                setSelectedJob(j);
-                if (j) setCreateOpen(true);
-              }}
-            >
-              <SelectTrigger className="w-[280px]">
-                <SelectValue placeholder="Pilih Engineering Job (approved & material ready)..." />
-              </SelectTrigger>
-              <SelectContent>
-                {plannableJobs.length === 0 ? (
-                  <div className="px-2 py-3 text-xs text-muted-foreground">
-                    Belum ada job yang siap di-release.
-                  </div>
-                ) : (
-                  plannableJobs.map((j) => (
-                    <SelectItem key={j.id} value={j.id}>
-                      {j.job_number} · {j.sales_order_item?.item_name}
-                    </SelectItem>
-                  ))
-                )}
-              </SelectContent>
-            </Select>
-            <Button
-              onClick={() => {
-                if (selectedJob) setCreateOpen(true);
-              }}
-              disabled={!selectedJob}
-            >
-              <Plus className="h-4 w-4 mr-1" /> Buat Batch
-            </Button>
-          </div>
-        )}
-      </div>
+      <PageHeader
+        title="Production Planning"
+        description="Forward planning batch produksi. Bar = rencana mulai → selesai. Berlian ungu = estimasi kirim."
+        actions={
+          canPlan && (
+            <>
+              <Select
+                value={selectedJob?.id ?? ""}
+                onValueChange={(v) => {
+                  const j = plannableJobs.find((x) => x.id === v) ?? null;
+                  setSelectedJob(j);
+                  if (j) setCreateOpen(true);
+                }}
+              >
+                <SelectTrigger className="w-[280px]">
+                  <SelectValue placeholder="Pilih Engineering Job (approved & material ready)..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {plannableJobs.length === 0 ? (
+                    <div className="px-2 py-3 text-xs text-muted-foreground">
+                      Belum ada job yang siap di-release.
+                    </div>
+                  ) : (
+                    plannableJobs.map((j) => (
+                      <SelectItem key={j.id} value={j.id}>
+                        {j.job_number} · {j.sales_order_item?.item_name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              <Button
+                onClick={() => {
+                  if (selectedJob) setCreateOpen(true);
+                }}
+                disabled={!selectedJob}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Buat Batch
+              </Button>
+            </>
+          )
+        }
+      />
 
       <div className="grid gap-3 md:grid-cols-5">
         <Input

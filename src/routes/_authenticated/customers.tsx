@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,25 +69,23 @@ function CustomersPage() {
   const [openCreate, setOpenCreate] = useState(false);
 
   return (
-    <div className="p-6 space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold">Customers</h1>
-          <p className="text-sm text-muted-foreground">
-            Master data pelanggan.
-          </p>
-        </div>
-        {canWrite && (
-          <Dialog open={openCreate} onOpenChange={setOpenCreate}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4 mr-1" /> Customer Baru
-              </Button>
-            </DialogTrigger>
-            <CustomerFormDialog onClose={() => setOpenCreate(false)} />
-          </Dialog>
-        )}
-      </div>
+    <div className="p-6 space-y-6">
+      <PageHeader
+        title="Customers"
+        description="Master data pelanggan."
+        actions={
+          canWrite && (
+            <Dialog open={openCreate} onOpenChange={setOpenCreate}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="h-4 w-4 mr-1" /> Customer Baru
+                </Button>
+              </DialogTrigger>
+              <CustomerFormDialog onClose={() => setOpenCreate(false)} />
+            </Dialog>
+          )
+        }
+      />
 
       <div className="relative max-w-md">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

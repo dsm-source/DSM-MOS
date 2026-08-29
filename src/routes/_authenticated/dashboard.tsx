@@ -5,6 +5,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { FileText, Boxes, Factory, AlertCircle } from "lucide-react";
 import { useMyRoles } from "@/hooks/use-my-roles";
 import { claimFirstAdmin, isRolesTableEmpty } from "@/lib/roles.functions";
+import { PageHeader } from "@/components/page-header";
+import { EmptyState } from "@/components/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -59,9 +62,13 @@ function StatCard({
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-3xl font-semibold tracking-tight">
-          {loading ? "…" : error ? "—" : value}
-        </div>
+        {loading ? (
+          <Skeleton className="h-9 w-16" />
+        ) : (
+          <div className="text-3xl font-semibold tracking-tight">
+            {error ? "—" : value}
+          </div>
+        )}
         {description && (
           <p className="text-xs text-muted-foreground mt-1">{description}</p>
         )}
@@ -128,13 +135,11 @@ function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Ringkasan operasional lintas modul.
-        </p>
-      </div>
+    <div className="p-6 space-y-6">
+      <PageHeader
+        title="Dashboard"
+        description="Ringkasan operasional lintas modul."
+      />
 
       {/* Peran & bootstrap admin */}
       {roles.length === 0 ? (
@@ -250,9 +255,11 @@ function DashboardPage() {
               Gagal memuat distribusi Sales Order.
             </p>
           ) : soTotal === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Belum ada Sales Order.
-            </p>
+            <EmptyState
+              icon={FileText}
+              title="Belum ada Sales Order"
+              description="Distribusi status akan muncul di sini setelah SO pertama dibuat."
+            />
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {orderedStatuses.map((status) => {
@@ -276,10 +283,6 @@ function DashboardPage() {
               })}
             </div>
           )}
-          <p className="text-xs text-muted-foreground mt-4">
-            Kartu Antrian QC dan Siap Kirim akan muncul setelah modul QC &
-            Delivery dibangun.
-          </p>
         </CardContent>
       </Card>
     </div>

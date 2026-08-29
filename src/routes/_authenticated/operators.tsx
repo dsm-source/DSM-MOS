@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { UserCog, Plus, Pencil, Power } from "lucide-react";
+import { Plus, Pencil, Power } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { toast } from "sonner";
 import { z } from "zod";
 import { myRolesQueryOptions, useMyRoles } from "@/hooks/use-my-roles";
@@ -114,26 +115,21 @@ function OperatorsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <UserCog className="h-5 w-5" />
-          <div>
-            <h1 className="text-2xl font-semibold">Operators</h1>
-            <p className="text-sm text-muted-foreground">
-              Master data operator produksi. Kelola nama, NPK, dan status aktif.
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Cari nama atau NPK..."
-            className="w-full sm:w-64"
-          />
-          {canEdit && <CreateOperatorDialog />}
-        </div>
-      </div>
+      <PageHeader
+        title="Operators"
+        description="Master data operator produksi. Kelola nama, NPK, dan status aktif."
+        actions={
+          <>
+            <Input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Cari nama atau NPK..."
+              className="w-full sm:w-64"
+            />
+            {canEdit && <CreateOperatorDialog />}
+          </>
+        }
+      />
 
       {error ? (
         <ErrorNotice error={error} />

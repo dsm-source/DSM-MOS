@@ -28,7 +28,7 @@ function normalize(row: unknown): DeliveryWithContext {
   return r;
 }
 
-export function useDeliveries() {
+function useDeliveriesRealtimeInvalidate() {
   const qc = useQueryClient();
   useEffect(() => {
     const channel = supabase
@@ -48,13 +48,55 @@ export function useDeliveries() {
       supabase.removeChannel(channel);
     };
   }, [qc]);
+}
 
+// Status yang masih "berjalan" — belum delivered. Ini default list supaya
+// query tidak unbounded seiring histori pengiriman bertambah terus.
+const ACTIVE_DELIVERY_STATUSES: DeliveryStatus[] = [
+  "draft",
+  "prepared",
+  "shipped",
+];
+const LIST_LIMIT = 200;
+
+export function useDeliveries(
+  status: DeliveryStatus | "active" | "all" = "active",
+) {
+  useDeliveriesRealtimeInvalidate();
   return useQuery({
-    queryKey: KEY,
+    queryKey: [...KEY, "list", status],
+    queryFn: async (): Promise<DeliveryWithContext[]> => {
+      let query = supabase
+        .from("deliveries")
+        .select(SELECT)
+        .order("created_at", { ascending: false })
+        .limit(LIST_LIMIT);
+      if (status === "active")
+        query = query.in("status", ACTIVE_DELIVERY_STATUSES);
+      else if (status !== "all") query = query.eq("status", status);
+      const { data, error } = await query;
+      if (error) throw new Error(mapPgError(error));
+      return (data ?? []).map(normalize);
+    },
+  });
+}
+
+// Untuk Gantt: fetch dibatasi rentang tanggal (bukan status), supaya volume
+// terkendali seiring waktu tapi tetap tampilkan semua status untuk konteks.
+// Overlap-check null-safe: baris tanpa salah satu tanggal tetap ikut lolos
+// (semantik sama seperti filter client-side sebelumnya).
+export function useDeliveriesForSchedule(range: { from: string; to: string }) {
+  useDeliveriesRealtimeInvalidate();
+  return useQuery({
+    queryKey: [...KEY, "schedule", range.from, range.to],
     queryFn: async (): Promise<DeliveryWithContext[]> => {
       const { data, error } = await supabase
         .from("deliveries")
         .select(SELECT)
+        .or(
+          `planned_delivery_date.is.null,planned_delivery_date.gte.${range.from}`,
+        )
+        .or(`planned_ship_date.is.null,planned_ship_date.lte.${range.to}`)
         .order("created_at", { ascending: false });
       if (error) throw new Error(mapPgError(error));
       return (data ?? []).map(normalize);
@@ -280,6 +322,32 @@ export function useEligibleQcInspections(salesOrderId: string | undefined) {
           qty_ok: Number(r.qty_ok),
           already_used: usedSet.has(r.id),
         }));
+    },
+  });
+}
+
+// PRD §11 poin #10 / §9 M7: prefill planned_delivery_date dari MAX(estimated_delivery_date)
+// seluruh production_batches milik SO — one-time saat create, tetap editable.
+export function useMaxEstimatedDeliveryDate(salesOrderId: string | undefined) {
+  return useQuery({
+    enabled: !!salesOrderId,
+    queryKey: ["deliveries", "max-estimated-delivery-date", salesOrderId],
+    queryFn: async (): Promise<string | null> => {
+      const { data, error } = await supabase
+        .from("production_batches")
+        .select(
+          `estimated_delivery_date,
+           engineering_job:engineering_jobs!inner(
+             sales_order_item:sales_order_items!inner(sales_order_id)
+           )`,
+        )
+        .eq("engineering_job.sales_order_item.sales_order_id", salesOrderId!);
+      if (error) throw new Error(mapPgError(error));
+      const dates = (data ?? [])
+        .map((r) => r.estimated_delivery_date as string | null)
+        .filter((d): d is string => !!d);
+      if (dates.length === 0) return null;
+      return dates.reduce((max, d) => (d > max ? d : max));
     },
   });
 }

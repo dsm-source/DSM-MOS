@@ -91,8 +91,12 @@ SELECT is((SELECT array_agg(s.sequence_order::int ORDER BY s.sequence_order) FRO
            WHERE ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9'),
           ARRAY[1,2,3,4,5], 'default routing sequence_order 1-5');
 
-DELETE FROM production_batch_steps;
-DELETE FROM production_batches;
+DELETE FROM production_batch_steps s USING production_batches b, engineering_jobs ej
+ WHERE s.production_batch_id = b.id AND b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
+DELETE FROM production_batches b USING engineering_jobs ej
+ WHERE b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
 
 -- ============================================================
 -- 2. Custom routing: subset, custom order
@@ -116,8 +120,12 @@ SELECT is((SELECT array_agg(s.process::text ORDER BY s.sequence_order) FROM prod
           ARRAY['assembly','welding_grinding'],
           'custom routing preserves selected processes + order');
 
-DELETE FROM production_batch_steps;
-DELETE FROM production_batches;
+DELETE FROM production_batch_steps s USING production_batches b, engineering_jobs ej
+ WHERE s.production_batch_id = b.id AND b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
+DELETE FROM production_batches b USING engineering_jobs ej
+ WHERE b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
 
 -- ============================================================
 -- 3. Empty routing [] → fallback 5 default steps
@@ -134,8 +142,12 @@ SELECT is((SELECT count(*)::int FROM production_batch_steps s
            WHERE ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9'),
           5, 'empty routing [] falls back to 5 default steps');
 
-DELETE FROM production_batch_steps;
-DELETE FROM production_batches;
+DELETE FROM production_batch_steps s USING production_batches b, engineering_jobs ej
+ WHERE s.production_batch_id = b.id AND b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
+DELETE FROM production_batches b USING engineering_jobs ej
+ WHERE b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
 
 -- ============================================================
 -- 4. operator_id FK → operators(id), not auth.users
@@ -185,8 +197,12 @@ SELECT is(val, true, 'auth.users id rejected by FK to operators')
 SELECT is(val, true, 'non-existent operator_id rejected by FK to operators')
   FROM _m4_results WHERE key = 'fk_reject_random';
 
-DELETE FROM production_batch_steps;
-DELETE FROM production_batches;
+DELETE FROM production_batch_steps s USING production_batches b, engineering_jobs ej
+ WHERE s.production_batch_id = b.id AND b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
+DELETE FROM production_batches b USING engineering_jobs ej
+ WHERE b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
 
 -- ============================================================
 -- 5. RLS: planning/admin allowed, sales denied
@@ -230,8 +246,12 @@ SELECT set_config('request.jwt.claim.sub', '', true);
 
 SELECT is((SELECT val FROM _m4_results WHERE key = 'sales_denied'), true, 'sales denied INSERT on production_batches (RLS)');
 
-DELETE FROM production_batch_steps;
-DELETE FROM production_batches;
+DELETE FROM production_batch_steps s USING production_batches b, engineering_jobs ej
+ WHERE s.production_batch_id = b.id AND b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
+DELETE FROM production_batches b USING engineering_jobs ej
+ WHERE b.engineering_job_id = ej.id
+   AND ej.sales_order_item_id = '00000000-0000-0000-0000-0000000000d9';
 
 SELECT * FROM finish();
 ROLLBACK;

@@ -80,9 +80,7 @@ export const listAuditLogs = createServerFn({ method: "GET" })
 
 export const createUserManual = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (data: { email: string; password: string; role: AppRole }) => data,
-  )
+  .validator((data: { email: string; password: string; role: AppRole }) => data)
   .handler(async ({ data, context }): Promise<{ id: string }> => {
     await assertAdmin(context);
     const { supabaseAdmin } =
@@ -93,20 +91,31 @@ export const createUserManual = createServerFn({ method: "POST" })
         email: data.email,
         password: data.password,
         email_confirm: true,
+        app_metadata: { must_change_password: true },
       });
     if (createErr) throw new Error(createErr.message);
 
     const { error: roleErr } = await supabaseAdmin
       .from("user_roles")
       .insert({ user_id: created.user.id, role: data.role });
-    if (roleErr) throw new Error(roleErr.message);
+    if (roleErr) {
+      const { error: cleanupErr } = await supabaseAdmin.auth.admin.deleteUser(
+        created.user.id,
+      );
+      if (cleanupErr) {
+        throw new Error(
+          `Gagal assign role (${roleErr.message}), dan gagal rollback user Auth yang baru dibuat (${cleanupErr.message}). User ${data.email} (id: ${created.user.id}) perlu dihapus manual.`,
+        );
+      }
+      throw new Error(`Gagal assign role: ${roleErr.message}`);
+    }
 
     return { id: created.user.id };
   });
 
 export const assignRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { userId: string; role: AppRole }) => data)
+  .validator((data: { userId: string; role: AppRole }) => data)
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { error } = await context.supabase
@@ -118,7 +127,7 @@ export const assignRole = createServerFn({ method: "POST" })
 
 export const unassignRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { userId: string; role: AppRole }) => data)
+  .validator((data: { userId: string; role: AppRole }) => data)
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     if (data.userId === context.userId && data.role === "admin") {

@@ -1,8 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { SalesOrderForm } from "@/features/sales-orders/components/sales-order-form";
 import { useCreateSalesOrder } from "@/features/sales-orders/hooks/use-sales-orders";
 import { useMyRoles } from "@/hooks/use-my-roles";
@@ -28,23 +27,17 @@ function NewSalesOrderPage() {
   }
 
   return (
-    <div className="p-6 space-y-4 max-w-5xl">
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate({ to: "/sales-orders" })}
-          aria-label="Kembali"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-semibold">SO Baru</h1>
-          <p className="text-sm text-muted-foreground">
-            Nomor SO akan dibuat otomatis saat disimpan.
-          </p>
-        </div>
-      </div>
+    <div className="p-6 space-y-6 max-w-5xl">
+      <PageHeader
+        onBack={() =>
+          navigate({
+            to: "/sales-orders",
+            search: { page: 1, status: "all", q: "" },
+          })
+        }
+        title="SO Baru"
+        description="Nomor SO akan dibuat otomatis saat disimpan."
+      />
 
       <SalesOrderForm
         submitLabel="Simpan sebagai Draft"

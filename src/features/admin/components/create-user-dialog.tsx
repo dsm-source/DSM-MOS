@@ -137,7 +137,8 @@ export function CreateUserDialog({ roles }: { roles: AppRole[] }) {
               <DialogTitle>Buat User Baru</DialogTitle>
               <DialogDescription>
                 Akun dibuat langsung aktif dengan kata sandi sementara. User
-                mengganti kata sandi ini sendiri setelah masuk pertama kali.
+                akan dipaksa menggantinya sebelum bisa mengakses halaman lain
+                setelah masuk pertama kali.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-3">

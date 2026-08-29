@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { notifyError } from "@/lib/error-message";
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
-import { ArrowLeft, Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2 } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -184,86 +185,83 @@ function DeliveryDetail() {
   }
 
   return (
-    <div className="p-6 space-y-4 max-w-4xl">
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/delivery">
-              <ArrowLeft className="h-4 w-4 mr-1" /> Kembali
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-xl font-semibold flex items-center gap-2 flex-wrap">
-              {d.do_number}
-              <DeliveryStatusBadge status={d.status} overdue={overdue} />
-            </h1>
-            <p className="text-xs text-muted-foreground">
-              SO {d.sales_order?.so_number} ·{" "}
-              {d.sales_order?.customer?.name ?? "-"} · Dibuat{" "}
-              {format(new Date(d.created_at), "d MMM yyyy HH:mm", {
-                locale: idLocale,
-              })}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Kode referensi internal — bukan dokumen surat jalan resmi.
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          {canWrite &&
-            !readOnly &&
-            nextOpts.map((n) => (
-              <Button
-                key={n}
-                variant={n === "draft" ? "outline" : "default"}
-                className={
-                  n === "delivered"
-                    ? "bg-emerald-600 hover:bg-emerald-700"
-                    : undefined
-                }
-                onClick={() => transition(n)}
-                disabled={update.isPending}
-              >
-                {n === "draft"
-                  ? "Kembalikan ke Draft"
-                  : `→ ${DELIVERY_STATUS_LABEL[n]}`}
-              </Button>
-            ))}
-          {canDelete && d.status === "draft" && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive">
-                  <Trash2 className="h-4 w-4 mr-1.5" /> Hapus
+    <div className="p-6 space-y-6 max-w-4xl">
+      <PageHeader
+        backTo="/delivery"
+        title={d.do_number}
+        titleSuffix={
+          <DeliveryStatusBadge status={d.status} overdue={overdue} />
+        }
+        description={
+          <>
+            SO {d.sales_order?.so_number} ·{" "}
+            {d.sales_order?.customer?.name ?? "-"} · Dibuat{" "}
+            {format(new Date(d.created_at), "d MMM yyyy HH:mm", {
+              locale: idLocale,
+            })}
+            <br />
+            Kode referensi internal — bukan dokumen surat jalan resmi.
+          </>
+        }
+        actions={
+          <>
+            {canWrite &&
+              !readOnly &&
+              nextOpts.map((n) => (
+                <Button
+                  key={n}
+                  variant={n === "draft" ? "outline" : "default"}
+                  className={
+                    n === "delivered"
+                      ? "bg-emerald-600 hover:bg-emerald-700"
+                      : undefined
+                  }
+                  onClick={() => transition(n)}
+                  disabled={update.isPending}
+                >
+                  {n === "draft"
+                    ? "Kembalikan ke Draft"
+                    : `→ ${DELIVERY_STATUS_LABEL[n]}`}
                 </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Hapus rencana pengiriman?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Tindakan ini tidak bisa dibatalkan.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Batal</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={async () => {
-                      try {
-                        await del.mutateAsync(d.id);
-                        toast.success("Dihapus");
-                        navigate({ to: "/delivery" });
-                      } catch (e) {
-                        notifyError(e);
-                      }
-                    }}
-                  >
-                    Hapus
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
-        </div>
-      </div>
+              ))}
+            {canDelete && d.status === "draft" && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">
+                    <Trash2 className="h-4 w-4 mr-1.5" /> Hapus
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Hapus rencana pengiriman?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Tindakan ini tidak bisa dibatalkan.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={async () => {
+                        try {
+                          await del.mutateAsync(d.id);
+                          toast.success("Dihapus");
+                          navigate({ to: "/delivery" });
+                        } catch (e) {
+                          notifyError(e);
+                        }
+                      }}
+                    >
+                      Hapus
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+          </>
+        }
+      />
 
       <Card className="p-4 space-y-4">
         <div className="grid grid-cols-2 gap-3">
@@ -400,6 +398,7 @@ function DeliveryDetail() {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label="Hapus item"
                       onClick={async () => {
                         try {
                           await removeItem.mutateAsync({

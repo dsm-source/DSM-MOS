@@ -3,6 +3,7 @@ import { Bell } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/empty-state";
 import {
   Popover,
   PopoverContent,
@@ -45,7 +46,9 @@ export function NotificationsBell() {
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Notifikasi"
+          aria-label={
+            unread > 0 ? `Notifikasi, ${unread} belum dibaca` : "Notifikasi"
+          }
           className="relative"
         >
           <Bell className="h-4 w-4" />
@@ -74,9 +77,11 @@ export function NotificationsBell() {
             <div className="p-4 text-sm text-muted-foreground">Memuat...</div>
           )}
           {!isLoading && items.length === 0 && (
-            <div className="p-6 text-center text-sm text-muted-foreground">
-              Belum ada notifikasi.
-            </div>
+            <EmptyState
+              icon={Bell}
+              title="Belum ada notifikasi"
+              className="py-8"
+            />
           )}
           <ul className="divide-y">
             {items.map((n) => (

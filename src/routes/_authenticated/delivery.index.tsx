@@ -3,6 +3,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Loader2, Plus, Search, CalendarRange } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
+import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,15 +42,16 @@ export const Route = createFileRoute("/_authenticated/delivery/")({
 function DeliveryPage() {
   const { hasAnyRole } = useMyRoles();
   const canWrite = hasAnyRole(["delivery", "admin"]);
-  const { data = [], isLoading } = useDeliveries();
+  const [status, setStatus] = useState<DeliveryStatus | "active" | "all">(
+    "active",
+  );
+  const { data = [], isLoading } = useDeliveries(status);
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<DeliveryStatus | "all">("all");
   const [createOpen, setCreateOpen] = useState(false);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return data.filter((d) => {
-      if (status !== "all" && d.status !== status) return false;
       if (!q) return true;
       return (
         d.do_number.toLowerCase().includes(q) ||
@@ -59,31 +61,29 @@ function DeliveryPage() {
         (d.vehicle_number ?? "").toLowerCase().includes(q)
       );
     });
-  }, [data, search, status]);
+  }, [data, search]);
 
   return (
-    <div className="p-6 space-y-4">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-xl font-semibold">Rencana Pengiriman</h1>
-          <p className="text-sm text-muted-foreground">
-            Tracking internal — bukan dokumen surat jalan resmi.
-          </p>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          <Button variant="outline" asChild>
-            <Link to="/delivery/schedule">
-              <CalendarRange className="h-4 w-4 mr-1.5" />
-              Jadwal (Gantt)
-            </Link>
-          </Button>
-          {canWrite && (
-            <Button onClick={() => setCreateOpen(true)}>
-              <Plus className="h-4 w-4 mr-1.5" /> Rencana Baru
+    <div className="p-6 space-y-6">
+      <PageHeader
+        title="Rencana Pengiriman"
+        description="Tracking internal — bukan dokumen surat jalan resmi."
+        actions={
+          <>
+            <Button variant="outline" asChild>
+              <Link to="/delivery/schedule">
+                <CalendarRange className="h-4 w-4 mr-1.5" />
+                Jadwal (Gantt)
+              </Link>
             </Button>
-          )}
-        </div>
-      </div>
+            {canWrite && (
+              <Button onClick={() => setCreateOpen(true)}>
+                <Plus className="h-4 w-4 mr-1.5" /> Rencana Baru
+              </Button>
+            )}
+          </>
+        }
+      />
 
       <div className="flex gap-2 flex-wrap">
         <div className="relative flex-1 min-w-[240px]">
@@ -97,13 +97,16 @@ function DeliveryPage() {
         </div>
         <Select
           value={status}
-          onValueChange={(v) => setStatus(v as DeliveryStatus | "all")}
+          onValueChange={(v) =>
+            setStatus(v as DeliveryStatus | "active" | "all")
+          }
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Semua status</SelectItem>
+            <SelectItem value="active">Aktif (belum selesai)</SelectItem>
+            <SelectItem value="all">Semua status (termasuk histori)</SelectItem>
             {DELIVERY_STATUS_ORDER.map((s) => (
               <SelectItem key={s} value={s}>
                 {DELIVERY_STATUS_LABEL[s]}

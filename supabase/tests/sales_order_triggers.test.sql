@@ -58,6 +58,17 @@ VALUES
   ('00000000-0000-0000-0000-0000000000b1', 'material',             '00000000-0000-0000-0000-0000000000a5', '00000000-0000-0000-0000-0000000000a1'),
   ('00000000-0000-0000-0000-0000000000b1', 'production_planning',  '00000000-0000-0000-0000-0000000000a6', '00000000-0000-0000-0000-0000000000a1');
 
+-- Isolate from any pre-existing admin accounts already in this local DB
+-- (e.g. a dev/manual-testing admin created outside this transaction) so the
+-- "all admins" notification fan-out below is deterministic regardless of
+-- what else exists locally. Safe: rolled back with the rest of this test.
+DELETE FROM public.user_roles
+WHERE role = 'admin'::public.app_role
+  AND user_id NOT IN (
+    '00000000-0000-0000-0000-0000000000a2',
+    '00000000-0000-0000-0000-0000000000a3'
+  );
+
 -- ============================================================
 -- Act: admin_actor confirms the SO (draft -> confirmed)
 -- ============================================================
