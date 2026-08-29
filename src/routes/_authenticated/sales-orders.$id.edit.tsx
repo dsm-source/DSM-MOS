@@ -1,8 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SalesOrderForm } from "@/features/sales-orders/components/sales-order-form";
 import {
@@ -43,20 +42,12 @@ function EditSalesOrderPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-5xl">
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate({ to: "/sales-orders/$id", params: { id } })}
-          aria-label="Kembali"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-semibold font-mono">{data.so_number}</h1>
-          <p className="text-sm text-muted-foreground">Edit sales order</p>
-        </div>
-      </div>
+      <PageHeader
+        onBack={() => navigate({ to: "/sales-orders/$id", params: { id } })}
+        titleClassName="font-mono"
+        title={data.so_number}
+        description="Edit sales order"
+      />
 
       <SalesOrderForm
         submitLabel="Simpan perubahan"

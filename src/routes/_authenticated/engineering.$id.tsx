@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { notifyError } from "@/lib/error-message";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -116,34 +117,23 @@ function EngineeringDetailPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-4xl">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate({ to: "/engineering" })}
-            aria-label="Kembali"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-semibold font-mono">
-                {job.job_number}
-              </h1>
-              <EngStatusBadge status={job.status} />
-              <TargetBadge
-                target={job.target_completion_date}
-                status={job.status}
-              />
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {item?.item_name} —{" "}
-              {so ? `${so.so_number} · ${so.customer?.name ?? ""}` : ""}
-            </p>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        onBack={() => navigate({ to: "/engineering" })}
+        titleClassName="font-mono"
+        title={job.job_number}
+        titleSuffix={
+          <>
+            <EngStatusBadge status={job.status} />
+            <TargetBadge
+              target={job.target_completion_date}
+              status={job.status}
+            />
+          </>
+        }
+        description={`${item?.item_name} — ${
+          so ? `${so.so_number} · ${so.customer?.name ?? ""}` : ""
+        }`}
+      />
 
       <div className="grid gap-4 md:grid-cols-3">
         <Info label="No. Gambar" value={item?.drawing_number ?? "—"} />
