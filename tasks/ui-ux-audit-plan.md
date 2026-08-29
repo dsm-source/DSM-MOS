@@ -42,11 +42,11 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 
 ### Phase 2: Shared Shell Components
 
-- [ ] Task 6: Buat `PageHeader` dan pakai di semua route `_authenticated`
-- [ ] Task 7: Buat `EmptyState` dan pakai di dashboard, kanban, list kosong
-- [ ] Task 8: Lokalisasi label navigasi sidebar + grup `SidebarGroup`
-- [ ] Task 9: Breadcrumb di header shell (pakai `breadcrumb.tsx` yang sudah ada)
-- [ ] Task 10: Reset focus ke `<main>` saat perpindahan route
+- [x] Task 6: Buat `PageHeader` dan pakai di semua route `_authenticated`
+- [x] Task 7: Buat `EmptyState` dan pakai di dashboard, kanban, list kosong
+- [x] Task 8: Lokalisasi label navigasi sidebar + grup `SidebarGroup`
+- [x] Task 9: Breadcrumb di header shell (pakai `breadcrumb.tsx` yang sudah ada)
+- [x] Task 10: Reset focus ke `<main>` saat perpindahan route
 
 ### Checkpoint: Shell
 - [ ] Semua route pakai `PageHeader` (grep: tidak ada `<h1 className="text-2xl` lepas)

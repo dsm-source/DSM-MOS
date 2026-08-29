@@ -83,7 +83,7 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 
 ## Phase 2 — Shared Shell Components
 
-### Task 6: Komponen `PageHeader` + migrasi semua route
+### ✅ Task 6: Komponen `PageHeader` + migrasi semua route
 **Deskripsi:** Judul + deskripsi + slot aksi diulang di tiap route dengan style
 sedikit beda. Satukan.
 
@@ -97,7 +97,7 @@ sedikit beda. Satukan.
 **Files:** `src/components/page-header.tsx` + semua route (boleh dipecah per modul)
 **Scope:** L (pecah jadi sub-PR per modul bila perlu; build hijau tiap langkah)
 
-### Task 7: Komponen `EmptyState`
+### ✅ Task 7: Komponen `EmptyState`
 **Acceptance criteria:**
 - [ ] `src/components/empty-state.tsx`: `icon`, `title`, `description?`, `action?`
 - [ ] Dipakai di: dashboard "Belum ada Sales Order", kanban "Belum ada batch produksi", list SO kosong, notifikasi kosong
@@ -108,7 +108,7 @@ sedikit beda. Satukan.
 **Files:** `src/components/empty-state.tsx`, `dashboard.tsx`, `kanban-board.tsx`, `sales-orders.index.tsx`, `notifications-bell.tsx`
 **Scope:** M
 
-### Task 8: Lokalisasi + grup navigasi sidebar
+### ✅ Task 8: Lokalisasi + grup navigasi sidebar
 **Acceptance criteria:**
 - [ ] Label diputuskan konsisten (default: "Pelanggan", "Bahan", "Perencanaan Produksi", "Produksi", "Pengiriman", "Jadwal Pengiriman", "Kelola User"; "Dashboard" & "QC" tetap)
 - [ ] Item dikelompokkan `SidebarGroup`: Penjualan / Engineering / Produksi / Logistik / Admin
@@ -119,7 +119,7 @@ sedikit beda. Satukan.
 **Files:** `src/components/app-sidebar.tsx`
 **Scope:** S
 
-### Task 9: Breadcrumb di header shell
+### ✅ Task 9: Breadcrumb di header shell
 **Acceptance criteria:**
 - [ ] Header menampilkan breadcrumb dari route aktif (mis. Sales Order › SO-2026-0001 › Edit)
 - [ ] Pakai `src/components/ui/breadcrumb.tsx` yang sudah ada
@@ -131,7 +131,7 @@ sedikit beda. Satukan.
 **Files:** `src/routes/_authenticated/route.tsx`, mungkin helper kecil untuk label per route
 **Scope:** M
 
-### Task 10: Reset focus saat perpindahan route
+### ✅ Task 10: Reset focus saat perpindahan route
 **Acceptance criteria:**
 - [ ] Setelah navigasi, focus pindah ke `<main>` (atau `<h1>`) tujuan
 - [ ] Tidak mencuri focus saat interaksi dalam halaman yang sama
