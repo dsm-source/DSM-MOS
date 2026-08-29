@@ -29,11 +29,11 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 
 ### Phase 1: Quick Wins (low risk, no new components)
 
-- [ ] Task 1: Set `lang="id"` + samakan bahasa 404/error pages
-- [ ] Task 2: Hapus double padding & samakan spacing shell halaman
-- [ ] Task 3: Fix sidebar active state (prefix match) + dokumentasi keputusan bahasa
-- [ ] Task 4: Bersihkan copy usang & label tak konsisten
-- [ ] Task 5: `aria-label` dinamis untuk badge notifikasi + audit tombol ikon lain
+- [x] Task 1: Set `lang="id"` + samakan bahasa 404/error pages
+- [x] Task 2: Hapus double padding & samakan spacing shell halaman
+- [x] Task 3: Fix sidebar active state (prefix match) + dokumentasi keputusan bahasa
+- [x] Task 4: Bersihkan copy usang & label tak konsisten
+- [x] Task 5: `aria-label` dinamis untuk badge notifikasi + audit tombol ikon lain
 
 ### Checkpoint: Quick Wins
 - [ ] `bun run build` hijau, `bun run lint` bersih

@@ -8,7 +8,7 @@
 
 ## Phase 1 — Quick Wins
 
-### Task 1: `lang="id"` + lokalisasi 404/error pages
+### ✅ Task 1: `lang="id"` + lokalisasi 404/error pages
 **Deskripsi:** App 100% bahasa Indonesia tapi `<html lang="en">`; halaman 404 & error
 berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `Button`.
 
@@ -22,7 +22,7 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 **Files:** `src/routes/__root.tsx`
 **Scope:** S
 
-### Task 2: Hapus double padding & samakan spacing shell
+### ✅ Task 2: Hapus double padding & samakan spacing shell
 **Deskripsi:** `<main className="p-6">` di layout, tapi beberapa route (mis.
 `sales-orders.index.tsx`) membungkus lagi `p-6` → 48px. Spacing vertikal campur
 (`space-y-6` vs `space-y-4`).
@@ -37,7 +37,7 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 **Files:** semua `src/routes/_authenticated/*.tsx` (edit ringan per file)
 **Scope:** M
 
-### Task 3: Sidebar active state prefix match + dokumentasi bahasa
+### ✅ Task 3: Sidebar active state prefix match + dokumentasi bahasa
 **Deskripsi:** `active = pathname === item.url` → `/sales-orders/123` tidak menyorot
 "Sales Order". Ganti ke prefix match (hati-hati `/engineering` vs `/engineering/workload`).
 
@@ -51,7 +51,7 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 **Files:** `src/components/app-sidebar.tsx`
 **Scope:** S
 
-### Task 4: Bersihkan copy usang & label tak konsisten
+### ✅ Task 4: Bersihkan copy usang & label tak konsisten
 **Acceptance criteria:**
 - [ ] Hapus/ubah catatan dashboard "Kartu Antrian QC dan Siap Kirim akan muncul setelah modul QC & Delivery dibangun" (route sudah ada)
 - [ ] Label aksi buat SO seragam ("SO Baru" vs "Buat SO Baru" → pilih satu)
@@ -62,7 +62,7 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 **Files:** `src/routes/_authenticated/dashboard.tsx`, `src/routes/_authenticated/sales-orders.index.tsx`
 **Scope:** S
 
-### Task 5: `aria-label` dinamis badge notifikasi + audit tombol ikon
+### ✅ Task 5: `aria-label` dinamis badge notifikasi + audit tombol ikon
 **Acceptance criteria:**
 - [ ] `NotificationsBell` trigger `aria-label={`Notifikasi, ${unread} belum dibaca`}` (fallback "Notifikasi" saat 0)
 - [ ] Audit semua `size="icon"` Button di app punya `aria-label` (target ≥ semua icon-only)
