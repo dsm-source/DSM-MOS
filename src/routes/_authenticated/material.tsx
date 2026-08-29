@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Boxes } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { useMyRoles } from "@/hooks/use-my-roles";
@@ -62,24 +62,18 @@ function MaterialBoardPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Boxes className="h-5 w-5" />
-          <div>
-            <h1 className="text-2xl font-semibold">Material Status</h1>
-            <p className="text-sm text-muted-foreground">
-              Kesiapan bahan per engineering job. Salah satu penentu produksi
-              boleh berjalan.
-            </p>
-          </div>
-        </div>
-        <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Cari job, SO, customer, item, spek..."
-          className="w-full sm:w-80"
-        />
-      </div>
+      <PageHeader
+        title="Material Status"
+        description="Kesiapan bahan per engineering job. Salah satu penentu produksi boleh berjalan."
+        actions={
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Cari job, SO, customer, item, spek..."
+            className="w-full sm:w-80"
+          />
+        }
+      />
 
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-3">

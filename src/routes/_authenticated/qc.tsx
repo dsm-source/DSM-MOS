@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Search } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -93,14 +94,16 @@ function QcPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl">
-      <div>
-        <h1 className="text-2xl font-semibold">Quality Control</h1>
-        <p className="text-sm text-muted-foreground">
-          Antrian inspeksi per tahapan produksi — setiap tahapan batch masuk
-          antrian otomatis begitu tahapan tersebut selesai.
-          {!canWrite && " Anda hanya bisa melihat (read-only)."}
-        </p>
-      </div>
+      <PageHeader
+        title="Quality Control"
+        description={
+          <>
+            Antrian inspeksi per tahapan produksi — setiap tahapan batch masuk
+            antrian otomatis begitu tahapan tersebut selesai.
+            {!canWrite && " Anda hanya bisa melihat (read-only)."}
+          </>
+        }
+      />
 
       <div className="relative max-w-sm">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

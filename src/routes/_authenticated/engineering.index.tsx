@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Ruler } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,22 +52,17 @@ function EngineeringBoardPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Ruler className="h-5 w-5" />
-          <div>
-            <h1 className="text-2xl font-semibold">Engineering Job</h1>
-            <p className="text-sm text-muted-foreground">
-              Job dibuat otomatis saat Sales Order dikonfirmasi.
-            </p>
-          </div>
-        </div>
-        {canManage && (
-          <Button variant="outline" asChild>
-            <Link to="/engineering/workload">Lihat Workload</Link>
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Engineering Job"
+        description="Job dibuat otomatis saat Sales Order dikonfirmasi."
+        actions={
+          canManage && (
+            <Button variant="outline" asChild>
+              <Link to="/engineering/workload">Lihat Workload</Link>
+            </Button>
+          )
+        }
+      />
 
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

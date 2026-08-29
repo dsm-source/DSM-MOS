@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { AlertTriangle, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { createFileRoute } from "@tanstack/react-router";
+import { AlertTriangle } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -28,19 +28,11 @@ function WorkloadPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl">
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" asChild aria-label="Kembali">
-          <Link to="/engineering">
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
-        <div>
-          <h1 className="text-2xl font-semibold">Engineering Workload</h1>
-          <p className="text-sm text-muted-foreground">
-            Beban kerja per engineer. Baris dengan job terlambat disorot.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        backTo="/engineering"
+        title="Engineering Workload"
+        description="Beban kerja per engineer. Baris dengan job terlambat disorot."
+      />
 
       <div className="rounded-xl border bg-card overflow-x-auto">
         {isLoading ? (
