@@ -151,3 +151,44 @@
 - [x] E.2 Verifikasi: `bunx tsc --noEmit`, `bun run lint` (0 error setelah `eslint --fix` merapikan format), `bun run build`, `supabase test db` 256/256 — semua PASS.
 - [x] E.3 Manual browser test: dev server tidak lagi menampilkan warning deprecation; server fn write (`assignRole`/`unassignRole` via toggle role di `/admin`, dua kali toggle) tetap 200 OK dan tersimpan benar (diverifikasi lewat REST API ke `user_roles` — kembali ke state semula, tidak ada role nyangkut).
 - [x] **Checkpoint E**: warning deprecation hilang; tidak ada regresi; semua verifikasi wajib PASS.
+
+---
+
+## Follow-up — Full smoke test Codex (2 ronde) + fixes (2026-08-30)
+
+Konteks: owner minta full smoke test end-to-end semua modul/flow via Codex (bukan review kode). Dijalankan 2 ronde di local Supabase stack. Prompt & report: `tasks/codex-full-smoke-test-{prompt,report}.md` (ronde 1), `tasks/codex-full-smoke-retest-{prompt,report}.md` (ronde 2), artefak browser: `tasks/codex-full-smoke-{screenshots,retest-artifacts}/`.
+
+### Ronde 1 (2026-08-30, verdict FAIL — coverage belum lengkap + 1 bug)
+- [x] Quality gate PASS: `supabase test db` 256/256, `tsc`, `lint`, `build`.
+- [x] PASS: Auth/RBAC guard, Sales Order CRUD + trigger `confirmed`→job+material+notifikasi, Customer CRUD, Admin/audit log, Notifikasi mark-as-read, Dashboard (3 view angka cocok cross-check query manual).
+- [x] Temuan:
+  - **BUG-1 (major)** — `/dashboard`: request statistik yang menggantung tidak pernah settle, kartu "Sales Order per Status" stuck `"Memuat…"` >15 dtk tanpa error notice.
+  - **BUG-2 (minor)** — forced password-change first login meninggalkan `403` di `auth/v1/logout?scope=global` + console error merah.
+  - **BUG-3 (minor)** — client chunk `index-*.js` ~519 kB, warning chunk >500 kB, belum ada code-splitting.
+  - PASS_PARTIAL (hanya route render + pgTAP, UI flow tidak dituntaskan manual): Engineering, Material, Production Planning/Operator, Production Kanban, QC, Delivery.
+
+### BUG-1 fix — dashboard error state (commit `2d86698`, 2026-08-30)
+- [x] Root cause: query view dashboard tidak punya timeout; request menggantung tidak reject → React Query tetap `isLoading` selamanya → error UI yang sudah ada tidak pernah kepicu.
+- [x] `src/features/dashboard/hooks/use-dashboard-stats.ts`: helper `withTimeout()` — gabung `AbortSignal` React Query + timeout 10 dtk, diteruskan ke `.abortSignal()` supabase pada 3 query (`v_dashboard_so_status`, `v_dashboard_material_waiting`, `v_dashboard_production_running`); `retry: 1` supaya kegagalan cepat sampai ke error UI.
+- [x] `src/routes/_authenticated/dashboard.tsx`: tombol **"Coba lagi"** di alert error dashboard (refetch 3 query, disabled saat `isFetching`).
+- [x] Verifikasi: `tsc`/`lint`/`test` (44/44)/`build` PASS.
+
+### Ronde 2 retest (2026-08-30, verdict FAIL tapi naik dari ronde 1)
+- [x] **BUG-1 CLOSED** (terverifikasi browser): request `v_dashboard_so_status` diblok → error state muncul dalam **22,17 dtk** (bukan spinner selamanya) + alert merah + tombol "Coba lagi"; unblock + retry → data pulih tanpa reload. Bukti: `tasks/codex-full-smoke-retest-artifacts/bug1-dashboard-*.png` + `bug1-dashboard-result.json`.
+- [x] Naik jadi PASS penuh: Engineering (gate + progress lock 100 + history), Material (waiting→ready), Operator CRUD, QC core (validasi qty, flow reject, **Trigger Rework hanya di status reject via RPC `trigger_rework`**), Delivery detail transition (draft→prepared→shipped→delivered, SO auto-completed).
+- [x] Cross-cutting PASS: dark mode 5 halaman (no white flash), mobile 375px (no overflow), empty-state SO/Production/QC/Delivery, a11y dialog Create User/QC Inspection/Delivery Create (first focus + Esc close).
+- [x] Temuan baru / masih terbuka:
+  - **BUG-4** — Codex label "major LEAK", **dinilai ulang minor**: viewer buka `/sales-orders/new` tidak redirect, tapi form body dirender pesan "tidak punya akses" + RLS backstop. Bukan security leak, cuma harusnya redirect.
+  - **BUG-5 (major, valid)** — list `/sales-orders`, `/material`, `/qc` tidak menampilkan error notice saat request gagal (jadi "0 data" senyap, console `net::ERR_FAILED`). Pola `withTimeout` dashboard belum diterapkan ke list lain.
+  - **BUG-6/7/8** — drag-and-drop Production, create batch UI, create delivery UI "tidak terbukti" — **dinilai limitasi automation Codex, bukan bug app** (`dragAttempt: "not_attempted"`; realtime 2-tab justru PASS `realtimeMs: 1`; delivery detail transition PASS). Perlu retest manual singkat.
+
+### Fixes BUG-5 + BUG-4 + BUG-2 + BUG-3 (commit `07d0572`, 2026-08-30)
+- [x] **BUG-5**: helper `withTimeout` dashboard dipromosikan jadi `src/lib/query-timeout.ts` (`withQueryTimeout`, timeout 10 dtk). Diterapkan + `retry: 1` ke `useSalesOrders` (+ sub-query customers), `useMaterialStatuses`, `useQcActiveQueue`, `useQcHistory`. Route `/material` & `/qc` (queue + history) sekarang render `<ErrorNotice>` (komponen shared existing, sudah ada retry + a11y live region) saat `isError` — sebelumnya tidak ada error UI sama sekali. `/sales-orders` inline `<Alert>` diganti `<ErrorNotice>` + retry.
+- [x] **BUG-4**: `beforeLoad` guard di `src/routes/_authenticated/sales-orders.new.tsx` + `sales-orders.$id.edit.tsx` — non-admin/sales redirect ke `/sales-orders` (pola sama `admin.tsx` `ensureQueryData(myRolesQueryOptions)`). Blok "tidak punya akses" in-component yang redundan dihapus.
+- [x] **BUG-2**: `src/routes/change-password.tsx` — `signOut({ scope: "local" })`. Session sudah mati setelah password diganti server-side (admin API), jadi logout global cuma memanggil endpoint dengan token mati → 403.
+- [x] **BUG-3**: `vite.config.ts` — `build.rollupOptions.output.manualChunks` via passthrough `vite` option: pisah vendor berat (react, tanstack, radix, dnd-kit, supabase, react-hook-form/zod). Main chunk **519 kB → 245 kB**, warning ">500 kB" hilang. jspdf/html2canvas sudah lazy dari sebelumnya (tidak diubah).
+- [x] Verifikasi: `bunx tsc --noEmit`, `bun run lint` (0 error, 37 warning pra-existing), `bun run test` (44/44), `bun run build` (no >500 kB warning) — semua PASS. Dev server boot + `/auth` + `/sales-orders/new` (redirect ke auth saat unauth) — 0 console/server error. Error-state di halaman ter-autentikasi belum diverifikasi browser (butuh login) — pakai mekanisme + komponen persis sama dengan BUG-1 yang sudah terbukti.
+- [ ] **Belum dikerjakan / butuh keputusan owner** (dari kesimpulan retest ronde 2):
+  - Retest manual BUG-6/7/8 (drag-drop Production, create batch UI, create delivery UI) — kemungkinan besar limitasi automation, tapi perlu mata manusia.
+  - Apakah `<ErrorNotice>` pola sama perlu diterapkan ke SEMUA list board lain (engineering, production, delivery, operators) — konsistensi.
+  - BUG-3 lanjutan: `production_batches` list masih unbounded (sudah dievaluasi di Follow-up B, diputuskan OK); code-split jspdf/gantt kalau cold-load terasa berat.
