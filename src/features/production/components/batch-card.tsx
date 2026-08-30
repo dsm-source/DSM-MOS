@@ -216,7 +216,7 @@ export function BatchCard({
       {pendingComplete && active ? (
         <div
           onClick={(e) => e.stopPropagation()}
-          className="rounded-md border border-[#D81E1C] bg-red-50 dark:bg-red-950/40 p-2 text-xs space-y-1.5"
+          className="rounded-md border border-brand bg-brand/10 p-2 text-xs space-y-1.5"
         >
           <div className="font-medium">
             Selesaikan {PROCESS_LABEL[active.process]}?
@@ -224,7 +224,7 @@ export function BatchCard({
           <div className="flex gap-2">
             <Button
               size="sm"
-              className="h-7 bg-[#D81E1C] hover:bg-[#b91816] text-white"
+              className="h-7 bg-brand text-brand-foreground hover:bg-brand/90"
               disabled={isPending}
               onClick={() => onConfirmComplete(pendingComplete)}
             >

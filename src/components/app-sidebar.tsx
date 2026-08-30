@@ -24,6 +24,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useMyRoles } from "@/hooks/use-my-roles";
+import { cn } from "@/lib/utils";
 import type { AppRole } from "@/lib/roles.functions";
 
 type MenuItem = {
@@ -181,7 +182,9 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="px-2 py-1.5">
-          <div className="text-sm font-semibold">DSM MOS</div>
+          <div className="text-sm font-semibold">
+            <span className="text-brand">DSM</span> MOS
+          </div>
           <div className="text-xs text-muted-foreground">Manufacturing OS</div>
         </div>
       </SidebarHeader>
@@ -198,20 +201,28 @@ export function AppSidebar() {
             )}
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={item.url === activeUrl}
-                      tooltip={item.title}
-                    >
-                      <Link to={item.url} className="flex items-center gap-2">
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {group.items.map((item) => {
+                  const active = item.url === activeUrl;
+                  return (
+                    <SidebarMenuItem key={item.url}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        tooltip={item.title}
+                        className={cn(
+                          "relative",
+                          active &&
+                            "before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-[3px] before:rounded-full before:bg-brand",
+                        )}
+                      >
+                        <Link to={item.url} className="flex items-center gap-2">
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

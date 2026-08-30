@@ -880,7 +880,7 @@ export function BlockerHistory({
                           setActorKey(actorKey === k ? null : k);
                         }}
                         className={
-                          "rounded-sm font-medium underline decoration-dotted underline-offset-2 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
+                          "rounded-sm font-medium underline decoration-dotted underline-offset-2 hover:text-brand focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
                           (isActorUnresolved(e)
                             ? "text-muted-foreground italic"
                             : "text-foreground/80")

@@ -49,7 +49,7 @@ export function BoardColumn({
       className={cn(
         "flex flex-col rounded-xl border bg-card",
         collapsible && collapsed ? "w-11 shrink-0" : "w-[220px] shrink-0",
-        isOver && "ring-2 ring-[#D81E1C]",
+        isOver && "ring-2 ring-brand",
       )}
     >
       <button
