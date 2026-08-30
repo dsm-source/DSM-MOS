@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { changePasswordAndClearFlag } from "@/lib/roles.functions";
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/change-password")({
 
 function ChangePasswordPage() {
   const changePassword = useServerFn(changePasswordAndClearFlag);
+  const queryClient = useQueryClient();
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -54,6 +56,13 @@ function ChangePasswordPage() {
       // still hits the logout endpoint with the dead token and logs a 403.
       // Drop the persisted session directly instead, then hard-reload to /auth
       // so the client re-initialises with no session.
+      //
+      // Stop and drop every cached query first: the auth client emits
+      // USER_UPDATED after the password change, and the root listener reacts
+      // with queryClient.invalidateQueries() — refetching against the now-dead
+      // token and logging 401s — before the hard reload lands.
+      await queryClient.cancelQueries();
+      queryClient.clear();
       for (const key of Object.keys(localStorage)) {
         if (key.startsWith("sb-") && key.endsWith("-auth-token")) {
           localStorage.removeItem(key);
@@ -62,7 +71,9 @@ function ChangePasswordPage() {
       toast.success("Kata sandi berhasil diganti", {
         description: "Silakan masuk lagi dengan kata sandi baru.",
       });
-      window.location.assign("/auth");
+      // Give the success toast a beat to paint before the hard reload wipes it.
+      setTimeout(() => window.location.assign("/auth"), 800);
+      return;
     } catch (e) {
       notifyError(e, { title: "Gagal mengganti kata sandi" });
     } finally {

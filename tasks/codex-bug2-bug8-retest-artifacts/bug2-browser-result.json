@@ -1,0 +1,43 @@
+{
+  "adminEmail": "codex-bug28-admin-bug2-1788098617597@dsm-mos.local",
+  "viewerEmail": "codex-bug28-viewer-bug2-1788098617597@dsm-mos.local",
+  "firstLoginUrl": "http://127.0.0.1:8080/change-password",
+  "afterChangeUrl": "http://127.0.0.1:8080/auth",
+  "sawToast": false,
+  "logoutRequests": [],
+  "forbiddenResponses": [],
+  "consoleErrors": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "location": {
+        "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "location": {
+        "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    }
+  ],
+  "authTokenKeysAfterChange": 0,
+  "loginNewPasswordUrl": "http://127.0.0.1:8080/dashboard",
+  "reloadDashboardUrl": "http://127.0.0.1:8080/dashboard",
+  "loopedToChangePassword": false,
+  "screenshots": {
+    "admin": "tasks/codex-bug2-bug8-retest-artifacts/bug2-admin-page.png",
+    "created": "tasks/codex-bug2-bug8-retest-artifacts/bug2-created-viewer.png",
+    "auth": "tasks/codex-bug2-bug8-retest-artifacts/bug2-auth-after-change.png",
+    "dashboardReload": "tasks/codex-bug2-bug8-retest-artifacts/bug2-dashboard-after-reload.png"
+  }
+}

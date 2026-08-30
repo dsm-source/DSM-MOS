@@ -1,0 +1,36 @@
+[
+  {
+    "role": "material",
+    "routes": {
+      "/delivery": {
+        "url": "http://127.0.0.1:8080/delivery",
+        "heading": "Rencana Pengiriman",
+        "bodyHasNotFound": false
+      },
+      "/engineering": {
+        "url": "http://127.0.0.1:8080/engineering",
+        "heading": "Engineering Job",
+        "bodyHasNotFound": false
+      }
+    },
+    "consoleErrors": [],
+    "badResponses": []
+  },
+  {
+    "role": "qc",
+    "routes": {
+      "/delivery": {
+        "url": "http://127.0.0.1:8080/delivery",
+        "heading": "Rencana Pengiriman",
+        "bodyHasNotFound": false
+      },
+      "/engineering": {
+        "url": "http://127.0.0.1:8080/engineering",
+        "heading": "Engineering Job",
+        "bodyHasNotFound": false
+      }
+    },
+    "consoleErrors": [],
+    "badResponses": []
+  }
+]

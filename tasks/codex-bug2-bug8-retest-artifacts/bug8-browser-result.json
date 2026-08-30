@@ -1,0 +1,18 @@
+{
+  "deliveryContinuationUser": "codex-bug28-delivery-cont-1788098544117@dsm-mos.local",
+  "deliveryId": "b1cc9ae2-8b0a-44a4-bcdd-de6a133a5a3c",
+  "dropdownContainsEmpty": false,
+  "dropdownContainsFixture": true,
+  "dropdownSnippet": [
+    "SO BUG28-SO-QC-PASS · BUG28 Customer · Dibuat 30 Agt 2026 21:01",
+    "Item Pengiriman",
+    "Hanya hasil QC berstatus Lulus dari SO ini yang bisa ditambahkan.",
+    "Pilih hasil QC (Lulus)",
+    "BUG28 QC Passed Item · BUG28-BATCH-QC-PASS · OK 8"
+  ],
+  "preparedHasPrepared": true,
+  "deliveredHasDelivered": true,
+  "deliveryHasEngineeringMenu": false,
+  "consoleErrors": [],
+  "badResponses": []
+}
