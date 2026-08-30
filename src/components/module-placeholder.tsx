@@ -1,3 +1,6 @@
+// NOTE (audit UI/UX Fase 1, Task 4): komponen ini tidak lagi di-import di mana pun
+// — semua route modul sudah punya konten sendiri. Disimpan sementara, jangan hapus
+// tanpa konfirmasi pemilik. Kandidat cleanup di iterasi berikutnya.
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ModulePlaceholder({ title }: { title: string }) {

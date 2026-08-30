@@ -13,9 +13,9 @@
 berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `Button`.
 
 **Acceptance criteria:**
-- [ ] `<html lang="id">` di `RootShell`
-- [ ] `NotFoundComponent` & `ErrorComponent` teks Indonesia
-- [ ] Kedua halaman pakai komponen `Button` (`asChild` untuk link) alih-alih kelas manual
+- [x] `<html lang="id">` di `RootShell`
+- [x] `NotFoundComponent` & `ErrorComponent` teks Indonesia
+- [x] Kedua halaman pakai komponen `Button` (`asChild` untuk link) alih-alih kelas manual
 
 **Verification:** buka route ngawur → 404 Indonesia; lempar error di route → halaman error Indonesia, tombol konsisten dengan app.
 **Dependencies:** None
@@ -28,9 +28,9 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 (`space-y-6` vs `space-y-4`).
 
 **Acceptance criteria:**
-- [ ] Tidak ada route `_authenticated/*` yang menambah padding luar sendiri (grep `p-6` di root div route = 0)
-- [ ] Kontainer halaman pakai `space-y-6` konsisten
-- [ ] Judul halaman seragam: `text-2xl font-semibold tracking-tight`
+- [x] Tidak ada route `_authenticated/*` yang menambah padding luar sendiri (grep `p-6` di root div route = 0)
+- [x] Kontainer halaman pakai `space-y-6` konsisten
+- [x] Judul halaman seragam: `text-2xl font-semibold tracking-tight`
 
 **Verification:** buka Dashboard, Sales Order, Engineering, Produksi berturut — gutter kiri/atas identik.
 **Dependencies:** None
@@ -42,9 +42,9 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 "Sales Order". Ganti ke prefix match (hati-hati `/engineering` vs `/engineering/workload`).
 
 **Acceptance criteria:**
-- [ ] Route detail/edit menyorot item induk yang benar
-- [ ] `/engineering/workload` menyorot "Engineering Workload", bukan juga "Engineering"
-- [ ] Komentar singkat di `app-sidebar.tsx` soal keputusan penamaan (menunggu Task 8)
+- [x] Route detail/edit menyorot item induk yang benar
+- [x] `/engineering/workload` menyorot "Engineering Workload", bukan juga "Engineering"
+- [x] Komentar singkat di `app-sidebar.tsx` soal keputusan penamaan (menunggu Task 8)
 
 **Verification:** klik ke detail SO, batch produksi, job engineering — item sidebar benar.
 **Dependencies:** None
@@ -53,9 +53,9 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 
 ### ✅ Task 4: Bersihkan copy usang & label tak konsisten
 **Acceptance criteria:**
-- [ ] Hapus/ubah catatan dashboard "Kartu Antrian QC dan Siap Kirim akan muncul setelah modul QC & Delivery dibangun" (route sudah ada)
-- [ ] Label aksi buat SO seragam ("SO Baru" vs "Buat SO Baru" → pilih satu)
-- [ ] Cek `module-placeholder.tsx` masih terpakai; kalau tidak, catat di komentar (jangan hapus tanpa konfirmasi)
+- [x] Hapus/ubah catatan dashboard "Kartu Antrian QC dan Siap Kirim akan muncul setelah modul QC & Delivery dibangun" (route sudah ada)
+- [x] Label aksi buat SO seragam ("SO Baru" vs "Buat SO Baru" → pilih satu)
+- [x] Cek `module-placeholder.tsx` masih terpakai; kalau tidak, catat di komentar (jangan hapus tanpa konfirmasi)
 
 **Verification:** grep string usang = 0; scan visual dashboard + list SO.
 **Dependencies:** None
@@ -64,9 +64,9 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 
 ### ✅ Task 5: `aria-label` dinamis badge notifikasi + audit tombol ikon
 **Acceptance criteria:**
-- [ ] `NotificationsBell` trigger `aria-label={`Notifikasi, ${unread} belum dibaca`}` (fallback "Notifikasi" saat 0)
-- [ ] Audit semua `size="icon"` Button di app punya `aria-label` (target ≥ semua icon-only)
-- [ ] Panah pagination punya label ("Halaman sebelumnya" / "Halaman berikutnya")
+- [x] `NotificationsBell` trigger `aria-label={`Notifikasi, ${unread} belum dibaca`}` (fallback "Notifikasi" saat 0)
+- [x] Audit semua `size="icon"` Button di app punya `aria-label` (target ≥ semua icon-only)
+- [x] Panah pagination punya label ("Halaman sebelumnya" / "Halaman berikutnya")
 
 **Verification:** screen reader / axe DevTools pada header + list SO → tidak ada icon-button tanpa nama.
 **Dependencies:** None
@@ -74,10 +74,10 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 **Scope:** S
 
 ### ✅ Checkpoint 1
-- [ ] build + lint hijau
-- [ ] `/sales-orders/<id>` → sidebar "Sales Order" aktif
-- [ ] Padding luar seragam semua route
-- [ ] axe: 0 pelanggaran "button has no accessible name" di header & list SO
+- [x] build + lint hijau
+- [x] `/sales-orders/<id>` → sidebar "Sales Order" aktif
+- [x] Padding luar seragam semua route
+- [x] axe: 0 pelanggaran "button has no accessible name" di header & list SO
 
 ---
 
@@ -88,9 +88,9 @@ berbahasa Inggris dan pakai `<button>`/`<a>` tangan sendiri, bukan komponen `But
 sedikit beda. Satukan.
 
 **Acceptance criteria:**
-- [ ] `src/components/page-header.tsx`: props `title`, `description?`, `actions?` (children slot kanan)
-- [ ] Semua route `_authenticated/*` memakainya; tidak ada `<h1 className="text-2xl` lepas tersisa
-- [ ] `<h1>` tetap satu per halaman; deskripsi `text-sm text-muted-foreground`
+- [x] `src/components/page-header.tsx`: props `title`, `description?`, `actions?` (children slot kanan)
+- [x] Semua route `_authenticated/*` memakainya; tidak ada `<h1 className="text-2xl` lepas tersisa
+- [x] `<h1>` tetap satu per halaman; deskripsi `text-sm text-muted-foreground`
 
 **Verification:** grep `text-2xl font-semibold` di routes hanya muncul di `page-header.tsx`.
 **Dependencies:** Task 2
@@ -99,9 +99,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 7: Komponen `EmptyState`
 **Acceptance criteria:**
-- [ ] `src/components/empty-state.tsx`: `icon`, `title`, `description?`, `action?`
-- [ ] Dipakai di: dashboard "Belum ada Sales Order", kanban "Belum ada batch produksi", list SO kosong, notifikasi kosong
-- [ ] `role="status"` pada container
+- [x] `src/components/empty-state.tsx`: `icon`, `title`, `description?`, `action?`
+- [x] Dipakai di: dashboard "Belum ada Sales Order", kanban "Belum ada batch produksi", list SO kosong, notifikasi kosong
+- [x] `role="status"` pada container
 
 **Verification:** kosongkan filter agar list kosong → tampil ikon + heading + helper + tombol aksi.
 **Dependencies:** None
@@ -110,9 +110,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 8: Lokalisasi + grup navigasi sidebar
 **Acceptance criteria:**
-- [ ] Label diputuskan konsisten (default: "Pelanggan", "Bahan", "Perencanaan Produksi", "Produksi", "Pengiriman", "Jadwal Pengiriman", "Kelola User"; "Dashboard" & "QC" tetap)
-- [ ] Item dikelompokkan `SidebarGroup`: Penjualan / Engineering / Produksi / Logistik / Admin
-- [ ] Filter peran per item tetap berfungsi; grup kosong tidak dirender
+- [x] Label diputuskan konsisten (default: "Pelanggan", "Bahan", "Perencanaan Produksi", "Produksi", "Pengiriman", "Jadwal Pengiriman", "Kelola User"; "Dashboard" & "QC" tetap)
+- [x] Item dikelompokkan `SidebarGroup`: Penjualan / Engineering / Produksi / Logistik / Admin
+- [x] Filter peran per item tetap berfungsi; grup kosong tidak dirender
 
 **Verification:** login sebagai tiap peran → grup & item yang tampil sesuai; label konsisten Indonesia.
 **Dependencies:** Task 3
@@ -121,10 +121,10 @@ sedikit beda. Satukan.
 
 ### ✅ Task 9: Breadcrumb di header shell
 **Acceptance criteria:**
-- [ ] Header menampilkan breadcrumb dari route aktif (mis. Sales Order › SO-2026-0001 › Edit)
-- [ ] Pakai `src/components/ui/breadcrumb.tsx` yang sudah ada
-- [ ] Segmen non-terakhir adalah link; terakhir `aria-current="page"`
-- [ ] Mobile: breadcrumb collapse / truncate, tidak mendorong aksi header keluar
+- [x] Header menampilkan breadcrumb dari route aktif (mis. Sales Order › SO-2026-0001 › Edit)
+- [x] Pakai `src/components/ui/breadcrumb.tsx` yang sudah ada
+- [x] Segmen non-terakhir adalah link; terakhir `aria-current="page"`
+- [x] Mobile: breadcrumb collapse / truncate, tidak mendorong aksi header keluar
 
 **Verification:** navigasi list → detail → edit, breadcrumb update & link berfungsi.
 **Dependencies:** Task 8
@@ -133,9 +133,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 10: Reset focus saat perpindahan route
 **Acceptance criteria:**
-- [ ] Setelah navigasi, focus pindah ke `<main>` (atau `<h1>`) tujuan
-- [ ] Tidak mencuri focus saat interaksi dalam halaman yang sama
-- [ ] `<main>` punya `tabIndex={-1}` + `id` untuk skip-link masa depan
+- [x] Setelah navigasi, focus pindah ke `<main>` (atau `<h1>`) tujuan
+- [x] Tidak mencuri focus saat interaksi dalam halaman yang sama
+- [x] `<main>` punya `tabIndex={-1}` + `id` untuk skip-link masa depan
 
 **Verification:** keyboard-only: klik link nav, tekan Tab → fokus mulai dari konten baru, bukan elemen lama.
 **Dependencies:** None
@@ -143,10 +143,10 @@ sedikit beda. Satukan.
 **Scope:** S
 
 ### ✅ Checkpoint 2
-- [ ] Semua route pakai `PageHeader`
-- [ ] Breadcrumb benar di detail & edit
-- [ ] Focus reset terverifikasi keyboard
-- [ ] build + lint hijau
+- [x] Semua route pakai `PageHeader`
+- [x] Breadcrumb benar di detail & edit
+- [x] Focus reset terverifikasi keyboard
+- [x] build + lint hijau
 
 ---
 
@@ -154,9 +154,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 11: Filter/pagination Sales Order → search params
 **Acceptance criteria:**
-- [ ] `page`, `status`, `search` dibaca/ditulis via `Route` search params (validasi schema)
-- [ ] Refresh & share URL mempertahankan state
-- [ ] Ganti filter me-reset `page` ke 1
+- [x] `page`, `status`, `search` dibaca/ditulis via `Route` search params (validasi schema)
+- [x] Refresh & share URL mempertahankan state
+- [x] Ganti filter me-reset `page` ke 1
 
 **Verification:** buka `/sales-orders?status=production&page=2`, refresh → tetap; ubah status → `page=1`.
 **Dependencies:** None
@@ -165,9 +165,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 12: Pagination sungguhan
 **Acceptance criteria:**
-- [ ] Prev/Next benar-benar disabled (bukan cuma `aria-disabled`) di batas
-- [ ] Tampilkan "Halaman X dari Y · N data"
-- [ ] Tidak ada `href="#"` yang bisa diklik saat disabled
+- [x] Prev/Next benar-benar disabled (bukan cuma `aria-disabled`) di batas
+- [x] Tampilkan "Halaman X dari Y · N data"
+- [x] Tidak ada `href="#"` yang bisa diklik saat disabled
 
 **Verification:** di halaman 1 Prev tidak bisa diklik/fokus-aktif; di halaman akhir Next mati.
 **Dependencies:** Task 11
@@ -176,9 +176,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 13: Debounce search + tombol clear
 **Acceptance criteria:**
-- [ ] Search live dengan debounce ~300ms (hapus pola onBlur/Enter-only)
-- [ ] Tombol clear (×) muncul saat ada teks, reset search + `page=1`
-- [ ] Indikator loading halus saat query berjalan
+- [x] Search live dengan debounce ~300ms (hapus pola onBlur/Enter-only)
+- [x] Tombol clear (×) muncul saat ada teks, reset search + `page=1`
+- [x] Indikator loading halus saat query berjalan
 
 **Verification:** ketik → hasil ter-update tanpa Enter; klik × → list penuh kembali.
 **Dependencies:** Task 11
@@ -187,9 +187,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 14: Konfirmasi sign-out
 **Acceptance criteria:**
-- [ ] Tombol "Keluar" pindah ke `DropdownMenu` di bawah email user
-- [ ] Aksi keluar minta konfirmasi (`AlertDialog`) sebelum clear cache + signOut
-- [ ] Batal = tidak ada efek
+- [x] Tombol "Keluar" pindah ke `DropdownMenu` di bawah email user
+- [x] Aksi keluar minta konfirmasi (`AlertDialog`) sebelum clear cache + signOut
+- [x] Batal = tidak ada efek
 
 **Verification:** klik email → menu → Keluar → dialog → Batal (tetap login) / Konfirmasi (ke `/auth`).
 **Dependencies:** None
@@ -198,8 +198,8 @@ sedikit beda. Satukan.
 
 ### ✅ Task 15: Skeleton transisi route + `StatCard` konsisten
 **Acceptance criteria:**
-- [ ] Fallback `<Suspense>` Outlet bukan teks "Memuat..." polos — skeleton generik selaras layout
-- [ ] `StatCard` loading pakai `<Skeleton>`, bukan string `"…"`
+- [x] Fallback `<Suspense>` Outlet bukan teks "Memuat..." polos — skeleton generik selaras layout
+- [x] `StatCard` loading pakai `<Skeleton>`, bukan string `"…"`
 
 **Verification:** throttle jaringan, pindah route → skeleton, bukan teks kosong; dashboard load → skeleton kartu.
 **Dependencies:** None
@@ -208,9 +208,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 16: Wire dark mode
 **Acceptance criteria:**
-- [ ] Default ikut `prefers-color-scheme`; toggle manual di header (atau menu user) meng-override
-- [ ] Pilihan persist di `localStorage`, diterapkan sebelum first paint (no flash)
-- [ ] Smoke test tiap route di mode gelap: teks terbaca, tidak ada elemen "hilang"; catat sisa masalah kontras di Fase 4
+- [x] Default ikut `prefers-color-scheme`; toggle manual di header (atau menu user) meng-override
+- [x] Pilihan persist di `localStorage`, diterapkan sebelum first paint (no flash)
+- [x] Smoke test tiap route di mode gelap: teks terbaca, tidak ada elemen "hilang"; catat sisa masalah kontras di Fase 4
 
 **Verification:** toggle → seluruh app gelap; reload → tetap gelap; DevTools emulate `prefers-color-scheme: dark` tanpa pilihan tersimpan → gelap.
 **Dependencies:** Task 9 (header sudah punya slot aksi)
@@ -219,10 +219,10 @@ sedikit beda. Satukan.
 
 ### ✅ Task 17: Aksesibilitas Kanban drag
 **Acceptance criteria:**
-- [ ] Tambah `KeyboardSensor` + `TouchSensor` ke `useSensors`
-- [ ] Drag bisa diselesaikan via keyboard (space untuk angkat, arrow, space untuk jatuhkan)
-- [ ] `DndContext` punya `accessibility.announcements` dasar (Indonesia)
-- [ ] Tombol aksi fallback tetap ada
+- [x] Tambah `KeyboardSensor` + `TouchSensor` ke `useSensors`
+- [x] Drag bisa diselesaikan via keyboard (space untuk angkat, arrow, space untuk jatuhkan)
+- [x] `DndContext` punya `accessibility.announcements` dasar (Indonesia)
+- [x] Tombol aksi fallback tetap ada
 
 **Verification:** keyboard-only pindahkan satu batch antar status; VoiceOver mengumumkan perubahan.
 **Dependencies:** None
@@ -231,9 +231,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 18: Responsif tabel Sales Order di mobile
 **Acceptance criteria:**
-- [ ] Di bawah `sm`: baris tampil sebagai kartu bertumpuk (No. SO + Status menonjol), bukan scroll horizontal 7 kolom
-- [ ] `sm` ke atas: tabel seperti sekarang
-- [ ] Tidak ada horizontal scroll pada `<body>` di 320px
+- [x] Di bawah `sm`: baris tampil sebagai kartu bertumpuk (No. SO + Status menonjol), bukan scroll horizontal 7 kolom
+- [x] `sm` ke atas: tabel seperti sekarang
+- [x] Tidak ada horizontal scroll pada `<body>` di 320px
 
 **Verification:** viewport 320 & 375 → daftar SO terbaca sebagai kartu; 768+ → tabel.
 **Dependencies:** Task 11
@@ -242,9 +242,9 @@ sedikit beda. Satukan.
 
 ### ✅ Task 19: Header sempit + posisi Toaster
 **Acceptance criteria:**
-- [ ] Email user disembunyikan `< sm`, tetap tersedia di menu user (Task 14)
-- [ ] `SidebarTrigger` + breadcrumb + aksi muat di 320px tanpa overflow
-- [ ] `<Toaster position="top-center">` (atau keputusan final)
+- [x] Email user disembunyikan `< sm`, tetap tersedia di menu user (Task 14)
+- [x] `SidebarTrigger` + breadcrumb + aksi muat di 320px tanpa overflow
+- [x] `<Toaster position="top-center">` (atau keputusan final)
 
 **Verification:** 320px → header rapi; trigger toast → tidak menutupi tombol header.
 **Dependencies:** Task 9, Task 14
@@ -252,12 +252,12 @@ sedikit beda. Satukan.
 **Scope:** S
 
 ### ✅ Checkpoint 3 (Complete)
-- [ ] Refresh `/sales-orders?status=production&page=2` mempertahankan state
-- [ ] Dark mode toggle + persist berfungsi
-- [ ] Kanban: ubah status via keyboard berhasil
-- [ ] Viewport 320/768/1024/1440 — tidak ada horizontal scroll body
-- [ ] `bun test` hijau, build + lint hijau
-- [ ] Review dengan pemilik sebelum merge
+- [x] Refresh `/sales-orders?status=production&page=2` mempertahankan state
+- [x] Dark mode toggle + persist berfungsi
+- [x] Kanban: ubah status via keyboard berhasil
+- [x] Viewport 320/768/1024/1440 — tidak ada horizontal scroll body
+- [x] `bun test` hijau, build + lint hijau
+- [x] Review dengan pemilik sebelum merge
 
 ---
 

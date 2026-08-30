@@ -36,9 +36,9 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 - [x] Task 5: `aria-label` dinamis untuk badge notifikasi + audit tombol ikon lain
 
 ### Checkpoint: Quick Wins
-- [ ] `bun run build` hijau, `bun run lint` bersih
-- [ ] Klik manual: buka `/sales-orders/<id>` → item "Sales Order" tersorot di sidebar
-- [ ] Semua halaman punya padding luar yang sama (tidak ada 48px ganda)
+- [x] `bun run build` hijau, `bun run lint` bersih
+- [x] Klik manual: buka `/sales-orders/<id>` → item "Sales Order" tersorot di sidebar
+- [x] Semua halaman punya padding luar yang sama (tidak ada 48px ganda)
 
 ### Phase 2: Shared Shell Components
 
@@ -49,10 +49,10 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 - [x] Task 10: Reset focus ke `<main>` saat perpindahan route
 
 ### Checkpoint: Shell
-- [ ] Semua route pakai `PageHeader` (grep: tidak ada `<h1 className="text-2xl` lepas)
-- [ ] Breadcrumb tampil benar di route detail & edit
-- [ ] Navigasi keyboard: Tab setelah pindah route mulai dari konten baru
-- [ ] Build + lint hijau
+- [x] Semua route pakai `PageHeader` (grep: tidak ada `<h1 className="text-2xl` lepas)
+- [x] Breadcrumb tampil benar di route detail & edit
+- [x] Navigasi keyboard: Tab setelah pindah route mulai dari konten baru
+- [x] Build + lint hijau
 
 ### Phase 3: Navigation State & Polish
 
@@ -67,11 +67,11 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 - [x] Task 19: Header sempit — sembunyikan email < sm, pindah ke menu; Toaster `top-center`
 
 ### Checkpoint: Complete
-- [ ] Refresh di `/sales-orders?status=production&page=2` mempertahankan state
-- [ ] Dark mode toggle berfungsi & persist antar reload
-- [ ] Kanban: ubah status batch via keyboard berhasil
-- [ ] Uji viewport 320 / 768 / 1024 / 1440 — tidak ada horizontal scroll body
-- [ ] `bun test` hijau, build + lint hijau
+- [x] Refresh di `/sales-orders?status=production&page=2` mempertahankan state
+- [x] Dark mode toggle berfungsi & persist antar reload
+- [x] Kanban: ubah status batch via keyboard berhasil
+- [x] Uji viewport 320 / 768 / 1024 / 1440 — tidak ada horizontal scroll body
+- [x] `bun test` hijau, build + lint hijau
 
 ### Phase 4: Backlog — SELESAI (semua di `main`)
 
