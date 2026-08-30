@@ -256,24 +256,24 @@ function PlanningPage() {
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <Badge
           variant="outline"
-          className="border-blue-300 bg-blue-100 text-blue-800"
+          className="border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-200"
         >
           Bar biru = rencana on-track
         </Badge>
         <Badge
           variant="outline"
-          className="border-red-300 bg-red-100 text-red-800"
+          className="border-red-300 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/50 dark:text-red-200"
         >
           Bar merah = terlambat dari rencana
         </Badge>
         <Badge
           variant="outline"
-          className="border-purple-300 bg-purple-100 text-purple-800"
+          className="border-purple-300 bg-purple-100 text-purple-800 dark:border-purple-800 dark:bg-purple-950/50 dark:text-purple-200"
         >
           ◆ Berlian ungu = estimasi kirim (bukan data Delivery)
         </Badge>
         {overdueCount > 0 && (
-          <span className="inline-flex items-center gap-1 text-red-600">
+          <span className="inline-flex items-center gap-1 text-red-600 dark:text-red-400">
             <AlertTriangle className="h-3.5 w-3.5" /> {overdueCount} batch
             terlambat
           </span>
@@ -298,7 +298,7 @@ function PlanningPage() {
                   setSelectedBatch(b);
                   setEditOpen(true);
                 }}
-                className="text-left rounded-lg border p-3 hover:bg-muted/50 transition"
+                className="text-left rounded-xl border p-3 hover:bg-muted/50 transition"
               >
                 <div className="font-mono text-sm">{b.batch_number}</div>
                 <div className="text-sm">

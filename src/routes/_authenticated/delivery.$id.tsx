@@ -377,7 +377,7 @@ function DeliveryDetail() {
         {(d.delivery_items ?? []).length === 0 ? (
           <div className="text-sm text-muted-foreground">Belum ada item.</div>
         ) : (
-          <div className="divide-y rounded-lg border">
+          <div className="divide-y rounded-xl border">
             {(d.delivery_items ?? []).map((it) => {
               const meta = eligible.find((e) => e.id === it.qc_inspection_id);
               return (

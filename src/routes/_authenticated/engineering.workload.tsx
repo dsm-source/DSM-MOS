@@ -77,7 +77,7 @@ function WorkloadPage() {
                       <div className="flex items-center gap-2">
                         {overdue && (
                           <AlertTriangle
-                            className="h-4 w-4 text-rose-600"
+                            className="h-4 w-4 text-rose-600 dark:text-rose-400"
                             aria-label="Ada job terlambat"
                           />
                         )}

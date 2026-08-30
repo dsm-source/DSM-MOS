@@ -268,7 +268,7 @@ function DashboardPage() {
                   <div
                     key={status}
                     className={cn(
-                      "rounded-lg border px-4 py-3 flex items-center justify-between",
+                      "rounded-xl border px-4 py-3 flex items-center justify-between",
                       STATUS_CLASS[status],
                     )}
                   >

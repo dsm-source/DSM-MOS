@@ -588,7 +588,7 @@ export function BlockerHistory({
   };
 
   return (
-    <div ref={panelRef} className="rounded-lg border p-3">
+    <div ref={panelRef} className="rounded-xl border p-3">
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           <Clock className="h-4 w-4 text-muted-foreground" />
