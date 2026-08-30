@@ -75,7 +75,8 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 
 ### Phase 4: Backlog (tidak dikerjakan di siklus ini)
 
-- [ ] Redesign Kanban jadi board kolom-per-proses (semua batch terlihat) — scope L
+- [x] Redesign Kanban jadi board kolom-per-proses (semua batch terlihat) — scope L
+  - ✅ Selesai — lihat spec & plan di `docs/superpowers/specs/2026-08-29-production-board-redesign-design.md` dan `docs/superpowers/plans/2026-08-29-production-board-redesign.md`. Implementasi di branch `production-board-redesign`.
 - [ ] Sistem warna status: fill lebih tegas + ikon/bentuk per status (WCAG 1.4.1)
 - [ ] Aksen brand DSM + review palet chart default
 - [ ] Konsolidasi skala radius container
