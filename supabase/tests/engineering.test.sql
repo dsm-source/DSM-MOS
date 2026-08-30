@@ -19,7 +19,7 @@ INSERT INTO auth.users (id, email, aud, role) VALUES
   ('00000000-0000-0000-0000-0000000000e5', 'tap-eng-pp@test.local',         'authenticated', 'authenticated'), -- production_planning
   ('00000000-0000-0000-0000-0000000000e6', 'tap-eng-production@test.local', 'authenticated', 'authenticated'), -- production
   ('00000000-0000-0000-0000-0000000000e7', 'tap-eng-qc@test.local',         'authenticated', 'authenticated'), -- qc
-  ('00000000-0000-0000-0000-0000000000e8', 'tap-eng-delivery@test.local',   'authenticated', 'authenticated'), -- delivery, not scoped for eng_jobs
+  ('00000000-0000-0000-0000-0000000000e8', 'tap-eng-delivery@test.local',   'authenticated', 'authenticated'), -- delivery
   ('00000000-0000-0000-0000-0000000000e9', 'tap-eng-viewer@test.local',     'authenticated', 'authenticated'), -- viewer, not scoped for eng_jobs
   ('00000000-0000-0000-0000-0000000000ea', 'tap-eng-norole@test.local',     'authenticated', 'authenticated'); -- no role, must be denied
 
@@ -185,7 +185,7 @@ SELECT ok(
 
 -- ============================================================
 -- RLS matrix for engineering_jobs SELECT (scoped to admin/engineering/sales/
--- production_planning/material/production/qc/viewer; delivery and no-role denied)
+-- production_planning/material/production/qc/delivery/viewer; no-role denied)
 -- ============================================================
 
 SET LOCAL ROLE authenticated;
@@ -212,7 +212,7 @@ SELECT set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-0000000000e7
 SELECT is((SELECT count(*)::int FROM public.engineering_jobs WHERE id = '00000000-0000-0000-0000-0000000000f4'), 1, 'qc can SELECT engineering_jobs');
 
 SELECT set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-0000000000e8', true);
-SELECT is((SELECT count(*)::int FROM public.engineering_jobs WHERE id = '00000000-0000-0000-0000-0000000000f4'), 0, 'delivery is denied SELECT on engineering_jobs');
+SELECT is((SELECT count(*)::int FROM public.engineering_jobs WHERE id = '00000000-0000-0000-0000-0000000000f4'), 1, 'delivery can SELECT engineering_jobs');
 
 SELECT set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-0000000000e9', true);
 SELECT is((SELECT count(*)::int FROM public.engineering_jobs WHERE id = '00000000-0000-0000-0000-0000000000f4'), 1, 'viewer can SELECT engineering_jobs');

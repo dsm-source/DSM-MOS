@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +26,6 @@ export const Route = createFileRoute("/change-password")({
 });
 
 function ChangePasswordPage() {
-  const navigate = useNavigate();
   const changePassword = useServerFn(changePasswordAndClearFlag);
 
   const [password, setPassword] = useState("");
@@ -50,15 +49,20 @@ function ChangePasswordPage() {
     setLoading(true);
     try {
       await changePassword({ data: { password } });
-      // Changing the password server-side (via the admin API) already
-      // invalidated this browser's session, so a global sign-out would call
-      // the logout endpoint with a dead token and get a 403. Clear the
-      // session locally only and send the user back to log in fresh.
-      await supabase.auth.signOut({ scope: "local" });
+      // Changing the password server-side (via the admin API) already revoked
+      // this browser's session. Any signOut() call — even scope:"local" —
+      // still hits the logout endpoint with the dead token and logs a 403.
+      // Drop the persisted session directly instead, then hard-reload to /auth
+      // so the client re-initialises with no session.
+      for (const key of Object.keys(localStorage)) {
+        if (key.startsWith("sb-") && key.endsWith("-auth-token")) {
+          localStorage.removeItem(key);
+        }
+      }
       toast.success("Kata sandi berhasil diganti", {
         description: "Silakan masuk lagi dengan kata sandi baru.",
       });
-      navigate({ to: "/auth", replace: true });
+      window.location.assign("/auth");
     } catch (e) {
       notifyError(e, { title: "Gagal mengganti kata sandi" });
     } finally {
