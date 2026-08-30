@@ -1,11 +1,12 @@
 import {
-  CheckCircle2,
+  CircleCheckBig,
   Pause,
   Play,
   Clock,
   MinusCircle,
   RotateCcw,
 } from "lucide-react";
+import type { StatusMeta } from "@/lib/status-tone";
 import type { ProductionProcess, ProductionStepStatus } from "../types";
 
 export const PROCESS_LABEL: Record<ProductionProcess, string> = {
@@ -16,38 +17,19 @@ export const PROCESS_LABEL: Record<ProductionProcess, string> = {
   assembly: "Assembly",
 };
 
-export const STEP_STATUS_LABEL: Record<ProductionStepStatus, string> = {
-  waiting: "Menunggu",
-  running: "Berjalan",
-  paused: "Dijeda",
-  completed: "Selesai",
-  skipped: "Dilewati",
-  rework: "Rework",
+export const STEP_STATUS_META: Record<ProductionStepStatus, StatusMeta> = {
+  waiting: { label: "Menunggu", icon: Clock, tone: "neutral" },
+  running: { label: "Berjalan", icon: Play, tone: "active" },
+  paused: { label: "Dijeda", icon: Pause, tone: "attention" },
+  completed: { label: "Selesai", icon: CircleCheckBig, tone: "success" },
+  skipped: { label: "Dilewati", icon: MinusCircle, tone: "neutral" },
+  rework: { label: "Rework", icon: RotateCcw, tone: "attention" },
 };
 
-export const STEP_STATUS_CLASS: Record<ProductionStepStatus, string> = {
-  waiting:
-    "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700",
-  running:
-    "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/40 dark:text-blue-200 dark:border-blue-800",
-  paused:
-    "bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-900/40 dark:text-amber-200 dark:border-amber-800",
-  completed:
-    "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-200 dark:border-emerald-800",
-  skipped:
-    "bg-zinc-200 text-zinc-600 border-zinc-300 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700",
-  rework:
-    "bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/40 dark:text-orange-200 dark:border-orange-800",
-};
-
-export const STEP_STATUS_ICON: Record<ProductionStepStatus, typeof Play> = {
-  waiting: Clock,
-  running: Play,
-  paused: Pause,
-  completed: CheckCircle2,
-  skipped: MinusCircle,
-  rework: RotateCcw,
-};
+export const STEP_STATUS_LABEL: Record<ProductionStepStatus, string> =
+  Object.fromEntries(
+    Object.entries(STEP_STATUS_META).map(([k, v]) => [k, v.label]),
+  ) as Record<ProductionStepStatus, string>;
 
 /** Format durasi sejak timestamp (mis. "2j 15m", "45m", "12d"). */
 export function formatDurationSince(iso: string | null | undefined): string {

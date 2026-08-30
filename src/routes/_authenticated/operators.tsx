@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Plus, Pencil, Power } from "lucide-react";
+import { Plus, Pencil, Power, CircleCheck, CircleSlash } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
+import { StatusPill } from "@/components/status-pill";
 import { toast } from "sonner";
 import { z } from "zod";
 import { myRolesQueryOptions, useMyRoles } from "@/hooks/use-my-roles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -165,11 +165,17 @@ function OperatorsPage() {
                   </TableCell>
                   <TableCell>
                     {op.is_active ? (
-                      <Badge className="border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
-                        Aktif
-                      </Badge>
+                      <StatusPill
+                        icon={CircleCheck}
+                        label="Aktif"
+                        tone="success"
+                      />
                     ) : (
-                      <Badge variant="secondary">Nonaktif</Badge>
+                      <StatusPill
+                        icon={CircleSlash}
+                        label="Nonaktif"
+                        tone="neutral"
+                      />
                     )}
                   </TableCell>
                   {canEdit && (
