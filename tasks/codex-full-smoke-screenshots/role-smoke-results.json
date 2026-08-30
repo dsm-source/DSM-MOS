@@ -1,0 +1,76 @@
+{
+  "roles": {
+    "admin": {
+      "email": "test@dsm.com",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    "sales": {
+      "email": "smoke-sales@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    "qc": {
+      "email": "smoke-qc@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    "production": {
+      "email": "smoke-production@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    "production_planning": {
+      "email": "smoke-production_planning@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    "material": {
+      "email": "smoke-material@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    "delivery": {
+      "email": "smoke-delivery@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    "viewer": {
+      "email": "smoke-viewer@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/auth",
+      "menu": [],
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    }
+  },
+  "guards": [
+    {
+      "role": "sales",
+      "attempted": "/admin",
+      "finalUrl": "/auth",
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    },
+    {
+      "role": "qc",
+      "attempted": "/production-planning",
+      "finalUrl": "/auth",
+      "body": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda"
+    }
+  ],
+  "consoleErrors": [],
+  "badResponses": []
+}

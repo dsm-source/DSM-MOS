@@ -1,0 +1,159 @@
+{
+  "admin": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": true,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": true,
+      "Perencanaan Produksi": true,
+      "Operator": true,
+      "Produksi": true,
+      "QC": true,
+      "Pengiriman": true,
+      "Jadwal Pengiriman": true,
+      "Kelola User": true
+    },
+    "events": []
+  },
+  "sales": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": true,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": false,
+      "Perencanaan Produksi": false,
+      "Operator": false,
+      "Produksi": true,
+      "QC": false,
+      "Pengiriman": false,
+      "Jadwal Pengiriman": false,
+      "Kelola User": false
+    },
+    "events": []
+  },
+  "qc": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": false,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": false,
+      "Perencanaan Produksi": false,
+      "Operator": false,
+      "Produksi": true,
+      "QC": true,
+      "Pengiriman": true,
+      "Jadwal Pengiriman": false,
+      "Kelola User": false
+    },
+    "events": []
+  },
+  "production": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": false,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": false,
+      "Perencanaan Produksi": false,
+      "Operator": false,
+      "Produksi": true,
+      "QC": false,
+      "Pengiriman": false,
+      "Jadwal Pengiriman": false,
+      "Kelola User": false
+    },
+    "events": []
+  },
+  "production_planning": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": false,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": false,
+      "Perencanaan Produksi": true,
+      "Operator": true,
+      "Produksi": true,
+      "QC": false,
+      "Pengiriman": false,
+      "Jadwal Pengiriman": false,
+      "Kelola User": false
+    },
+    "events": []
+  },
+  "material": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": false,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": true,
+      "Perencanaan Produksi": false,
+      "Operator": false,
+      "Produksi": true,
+      "QC": false,
+      "Pengiriman": false,
+      "Jadwal Pengiriman": false,
+      "Kelola User": false
+    },
+    "events": []
+  },
+  "delivery": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": false,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": false,
+      "Perencanaan Produksi": false,
+      "Operator": false,
+      "Produksi": true,
+      "QC": true,
+      "Pengiriman": true,
+      "Jadwal Pengiriman": true,
+      "Kelola User": false
+    },
+    "events": []
+  },
+  "viewer": {
+    "url": "http://127.0.0.1:8080/dashboard",
+    "menu": {
+      "Dashboard": true,
+      "Sales Order": true,
+      "Pelanggan": false,
+      "Engineering Job": true,
+      "Engineering Workload": true,
+      "Bahan": true,
+      "Perencanaan Produksi": false,
+      "Operator": false,
+      "Produksi": true,
+      "QC": true,
+      "Pengiriman": true,
+      "Jadwal Pengiriman": true,
+      "Kelola User": false
+    },
+    "events": []
+  },
+  "guards": {
+    "sales_admin": "http://127.0.0.1:8080/dashboard",
+    "qc_planning": "http://127.0.0.1:8080/dashboard",
+    "viewer_new_so": "http://127.0.0.1:8080/sales-orders/new"
+  }
+}

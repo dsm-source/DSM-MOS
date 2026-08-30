@@ -1,12 +1,22 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { notifyError } from "@/lib/error-message";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/page-header";
 import { SalesOrderForm } from "@/features/sales-orders/components/sales-order-form";
 import { useCreateSalesOrder } from "@/features/sales-orders/hooks/use-sales-orders";
-import { useMyRoles } from "@/hooks/use-my-roles";
+import { myRolesQueryOptions } from "@/hooks/use-my-roles";
 
 export const Route = createFileRoute("/_authenticated/sales-orders/new")({
+  beforeLoad: async ({ context }) => {
+    const roles =
+      await context.queryClient.ensureQueryData(myRolesQueryOptions);
+    if (!roles.some((r) => r === "admin" || r === "sales")) {
+      throw redirect({
+        to: "/sales-orders",
+        search: { page: 1, status: "all", q: "" },
+      });
+    }
+  },
   head: () => ({ meta: [{ title: "SO Baru — DSM MOS" }] }),
   component: NewSalesOrderPage,
 });
@@ -14,17 +24,6 @@ export const Route = createFileRoute("/_authenticated/sales-orders/new")({
 function NewSalesOrderPage() {
   const navigate = useNavigate();
   const create = useCreateSalesOrder();
-  const { hasAnyRole } = useMyRoles();
-
-  if (!hasAnyRole(["admin", "sales"])) {
-    return (
-      <div className="p-6">
-        <p className="text-sm text-muted-foreground">
-          Anda tidak memiliki akses untuk membuat sales order.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className="p-6 space-y-6 max-w-5xl">

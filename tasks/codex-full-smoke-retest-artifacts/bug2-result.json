@@ -1,0 +1,17 @@
+{
+  "firstUrl": "http://127.0.0.1:8080/change-password",
+  "firstText": "DSM MOS\n\nManufacturing Operating System\n\nGanti kata sandi\nAkun ini masih memakai kata sandi sementara dari admin. Buat kata sandi baru sebelum melanjutkan.\nKata sandi baru\nKonfirmasi kata sandi baru\nGanti kata sandi",
+  "finalUrl": "http://127.0.0.1:8080/auth",
+  "finalText": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda",
+  "events": [
+    {
+      "type": "response",
+      "status": 403,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    }
+  ]
+}

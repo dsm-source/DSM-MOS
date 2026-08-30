@@ -1,0 +1,7 @@
+{
+  "soId": "d9184d9b-81bd-4260-9559-2903b65a16be",
+  "consoleErrors": [],
+  "badResponses": [],
+  "body": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nSales Order\nDetail\n99+\ntest@dsm.com\nSO-2026-000218\nConfirmed\n\nSmoke Customer 412816 (SMOKE-412816)\n\nEdit\nHapus\nDetail\nRiwayat Status\nTanggal Order\n2026-08-30\nJatuh Tempo\n2026-09-06\nCatatan\nUI smoke SO edited\nUbah status:\n\nDatabase akan menolak transisi yang tidak sah.\n\nPenanggung Jawab\nNotifikasi status akan dikirim ke user yang ditugaskan di sini.\nEngineering\nPilih user\nMaterial\nPilih user\nProduction Planning\nPilih user\nProduction\nPilih user\nQC\nPilih user\nDelivery\nPilih user\nItem (1)\nNama Item\tNo. Gambar\tQty\tSatuan\tSpesifikasi Material\nSmoke Item 412816\tSMOKE-DWG-412816\t3\tpcs\tSS304 smoke",
+  "finalUrl": "http://127.0.0.1:8080/sales-orders/d9184d9b-81bd-4260-9559-2903b65a16be"
+}

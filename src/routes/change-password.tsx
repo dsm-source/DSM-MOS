@@ -50,11 +50,11 @@ function ChangePasswordPage() {
     setLoading(true);
     try {
       await changePassword({ data: { password } });
-      // Changing the password server-side (via the admin API) invalidates
-      // this browser's existing session, so the old access token can't be
-      // reused — sign out locally and have the user log in again with the
-      // new password rather than pretending the current session still works.
-      await supabase.auth.signOut();
+      // Changing the password server-side (via the admin API) already
+      // invalidated this browser's session, so a global sign-out would call
+      // the logout endpoint with a dead token and get a 403. Clear the
+      // session locally only and send the user back to log in fresh.
+      await supabase.auth.signOut({ scope: "local" });
       toast.success("Kata sandi berhasil diganti", {
         description: "Silakan masuk lagi dengan kata sandi baru.",
       });

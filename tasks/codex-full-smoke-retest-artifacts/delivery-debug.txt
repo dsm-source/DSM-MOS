@@ -1,0 +1,211 @@
+DSM MOS
+Manufacturing OS
+Dashboard
+Penjualan
+Sales Order
+Pelanggan
+Engineering
+Engineering Job
+Engineering Workload
+Produksi
+Bahan
+Perencanaan Produksi
+Operator
+Produksi
+QC & Pengiriman
+QC
+Pengiriman
+Jadwal Pengiriman
+Admin
+Kelola User
+Toggle Sidebar
+Pengiriman
+4
+test@dsm.com
+Rencana Pengiriman
+
+Tracking internal — bukan dokumen surat jalan resmi.
+
+Jadwal (Gantt)
+Rencana Baru
+Aktif (belum selesai)
+DLV-2026-000001
+SO SO-2026-000151 · PT Cahaya Logam Sejahtera
+Disiapkan
+Kirim: 20 Jul 2026 · Sampai: 30 Okt 2026
+Joko Susilo · B 1151 JKL
+1 item lolos QC
+DLV-2026-000002
+SO SO-2026-000152 · PT Baja Nusantara Perkasa
+Disiapkan
+Kirim: 19 Jul 2026 · Sampai: 31 Okt 2026
+Bambang Prakoso · B 1152 ABC
+1 item lolos QC
+DLV-2026-000004
+SO SO-2026-000154 · PT Sumber Rejeki Metal
+Disiapkan
+Kirim: 17 Jul 2026 · Sampai: 2 Nov 2026
+Joko Susilo · B 1154 QRS
+1 item lolos QC
+DLV-2026-000005
+SO SO-2026-000155 · PT Industri Sinar Abadi
+Disiapkan
+Kirim: 16 Jul 2026 · Sampai: 3 Nov 2026
+Bambang Prakoso · B 1155 JKL
+1 item lolos QC
+DLV-2026-000007
+SO SO-2026-000157 · PT Anugerah Steel Works
+Disiapkan
+Kirim: 14 Jul 2026 · Sampai: 5 Nov 2026
+Joko Susilo · B 1157 XYZ
+1 item lolos QC
+DLV-2026-000008
+SO SO-2026-000158 · PT Global Fabrikasi Indonesia
+Disiapkan
+Kirim: 13 Jul 2026 · Sampai: 6 Nov 2026
+Bambang Prakoso · B 1158 QRS
+1 item lolos QC
+DLV-2026-000010
+SO SO-2026-000160 · PT Trimatra Enjiniring
+Disiapkan
+Kirim: 11 Jul 2026 · Sampai: 8 Nov 2026
+Joko Susilo · B 1160 ABC
+1 item lolos QC
+DLV-2026-000011
+SO SO-2026-000161 · PT Cahaya Logam Sejahtera
+Disiapkan
+Kirim: 10 Jul 2026 · Sampai: 9 Nov 2026
+Bambang Prakoso · B 1161 XYZ
+1 item lolos QC
+DLV-2026-000013
+SO SO-2026-000163 · CV Mitra Teknik Presisi
+Disiapkan
+Kirim: 8 Jul 2026 · Sampai: 11 Nov 2026
+Joko Susilo · B 1163 JKL
+1 item lolos QC
+DLV-2026-000014
+SO SO-2026-000164 · PT Sumber Rejeki Metal
+Disiapkan
+Kirim: 7 Jul 2026 · Sampai: 12 Nov 2026
+Bambang Prakoso · B 1164 ABC
+1 item lolos QC
+DLV-2026-000016
+SO SO-2026-000166 · CV Karya Logam Mandiri
+Disiapkan
+Kirim: 5 Jul 2026 · Sampai: 14 Nov 2026
+Joko Susilo · B 1166 QRS
+1 item lolos QC
+DLV-2026-000017
+SO SO-2026-000167 · PT Anugerah Steel Works
+Disiapkan
+Kirim: 4 Jul 2026 · Sampai: 15 Nov 2026
+Bambang Prakoso · B 1167 JKL
+1 item lolos QC
+DLV-2026-000019
+SO SO-2026-000169 · CV Prima Konstruksi Baja
+Disiapkan
+Kirim: 2 Jul 2026 · Sampai: 17 Nov 2026
+Joko Susilo · B 1169 XYZ
+1 item lolos QC
+DLV-2026-000020
+SO SO-2026-000170 · PT Trimatra Enjiniring
+Disiapkan
+Kirim: 1 Jul 2026 · Sampai: 18 Nov 2026
+Bambang Prakoso · B 1170 QRS
+1 item lolos QC
+DLV-2026-000022
+SO SO-2026-000172 · PT Baja Nusantara Perkasa
+Disiapkan
+Kirim: 29 Jun 2026 · Sampai: 20 Nov 2026
+Joko Susilo · B 1172 ABC
+1 item lolos QC
+DLV-2026-000023
+SO SO-2026-000173 · CV Mitra Teknik Presisi
+Disiapkan
+Kirim: 28 Jun 2026 · Sampai: 21 Nov 2026
+Bambang Prakoso · B 1173 XYZ
+1 item lolos QC
+DLV-2026-000025
+SO SO-2026-000175 · PT Industri Sinar Abadi
+Disiapkan
+Kirim: 26 Jun 2026 · Sampai: 23 Nov 2026
+Joko Susilo · B 1175 JKL
+1 item lolos QC
+DLV-2026-000026
+SO SO-2026-000176 · CV Karya Logam Mandiri
+Disiapkan
+Kirim: 25 Jun 2026 · Sampai: 24 Nov 2026
+Bambang Prakoso · B 1176 ABC
+1 item lolos QC
+DLV-2026-000028
+SO SO-2026-000178 · PT Global Fabrikasi Indonesia
+Disiapkan
+Kirim: 23 Jun 2026 · Sampai: 26 Nov 2026
+Joko Susilo · B 1178 QRS
+1 item lolos QC
+DLV-2026-000029
+SO SO-2026-000179 · CV Prima Konstruksi Baja
+Disiapkan
+Kirim: 22 Jun 2026 · Sampai: 27 Nov 2026
+Bambang Prakoso · B 1179 JKL
+1 item lolos QC
+DLV-2026-000003
+SO SO-2026-000153 · CV Mitra Teknik Presisi
+Dikirim
+Kirim: 18 Jul 2026 · Sampai: 1 Nov 2026
+Slamet Riyadi · B 1153 XYZ
+1 item lolos QC
+DLV-2026-000006
+SO SO-2026-000156 · CV Karya Logam Mandiri
+Dikirim
+Kirim: 15 Jul 2026 · Sampai: 4 Nov 2026
+Slamet Riyadi · B 1156 ABC
+1 item lolos QC
+DLV-2026-000009
+SO SO-2026-000159 · CV Prima Konstruksi Baja
+Dikirim
+Kirim: 12 Jul 2026 · Sampai: 7 Nov 2026
+Slamet Riyadi · B 1159 JKL
+1 item lolos QC
+DLV-2026-000012
+SO SO-2026-000162 · PT Baja Nusantara Perkasa
+Dikirim
+Kirim: 9 Jul 2026 · Sampai: 10 Nov 2026
+Slamet Riyadi · B 1162 QRS
+1 item lolos QC
+DLV-2026-000015
+SO SO-2026-000165 · PT Industri Sinar Abadi
+Dikirim
+Kirim: 6 Jul 2026 · Sampai: 13 Nov 2026
+Slamet Riyadi · B 1165 XYZ
+1 item lolos QC
+DLV-2026-000018
+SO SO-2026-000168 · PT Global Fabrikasi Indonesia
+Dikirim
+Kirim: 3 Jul 2026 · Sampai: 16 Nov 2026
+Slamet Riyadi · B 1168 ABC
+1 item lolos QC
+DLV-2026-000021
+SO SO-2026-000171 · PT Cahaya Logam Sejahtera
+Dikirim
+Kirim: 30 Jun 2026 · Sampai: 19 Nov 2026
+Slamet Riyadi · B 1171 JKL
+1 item lolos QC
+DLV-2026-000024
+SO SO-2026-000174 · PT Sumber Rejeki Metal
+Dikirim
+Kirim: 27 Jun 2026 · Sampai: 22 Nov 2026
+Slamet Riyadi · B 1174 QRS
+1 item lolos QC
+DLV-2026-000027
+SO SO-2026-000177 · PT Anugerah Steel Works
+Dikirim
+Kirim: 24 Jun 2026 · Sampai: 25 Nov 2026
+Slamet Riyadi · B 1177 XYZ
+1 item lolos QC
+DLV-2026-000030
+SO SO-2026-000180 · PT Trimatra Enjiniring
+Dikirim
+Kirim: 21 Jun 2026 · Sampai: 28 Nov 2026
+Slamet Riyadi · B 1180 ABC
+1 item lolos QC

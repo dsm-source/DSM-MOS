@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Plus, Search, AlertCircle, FileText, X } from "lucide-react";
+import { Plus, Search, FileText, X } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { EmptyState } from "@/components/empty-state";
+import { ErrorNotice } from "@/components/error-notice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -82,12 +82,13 @@ function SalesOrdersPage() {
     return () => clearTimeout(t);
   }, [searchInput, q, navigate]);
 
-  const { data, isLoading, isFetching, isError, error } = useSalesOrders({
-    page,
-    pageSize: PAGE_SIZE,
-    status,
-    search: q,
-  });
+  const { data, isLoading, isFetching, isError, error, refetch } =
+    useSalesOrders({
+      page,
+      pageSize: PAGE_SIZE,
+      status,
+      search: q,
+    });
   const total = data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const filtered = q !== "" || status !== "all";
@@ -155,11 +156,11 @@ function SalesOrdersPage() {
       </div>
 
       {isError && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Gagal memuat data</AlertTitle>
-          <AlertDescription>{error?.message}</AlertDescription>
-        </Alert>
+        <ErrorNotice
+          error={error}
+          title="Gagal memuat sales order"
+          onRetry={() => refetch()}
+        />
       )}
 
       {/* Mobile: stacked cards */}

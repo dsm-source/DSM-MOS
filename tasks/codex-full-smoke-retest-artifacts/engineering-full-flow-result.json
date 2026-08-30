@@ -1,0 +1,51 @@
+{
+  "afterSave": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nEngineering\nDetail\n4\ntest@dsm.com\nENG-2026-000161\nDraft\n2026-09-10\n\nRETEST Engineering Plate — SO-2026-000201 · PT Retest Smoke Fixture\n\nNo. Gambar\n—\nQty\n10 pcs\nSpesifikasi\nSS304\nKelola Job\nPenanggung Jawab\nPilih engineer\nTarget Penyelesaian\nProgress\n20%\nCatatan\nSimpan Perubahan\nPindah ke In Progress\n\nTransisi hanya bisa: Draft → In Progress → Review → Approved (Review boleh dikembalikan ke In Progress). Database akan menolak transisi ilegal.\n\nRingkasan\nAssigned: —\nProgress: 20%\nTarget: 2026-09-10\nApproved at: —\nRiwayat Perubahan\nProgress berubah dari 100% menjadi 20%\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nCatatan berubah dari RETEST engineering progress 75 menjadi RETEST engineering assigned and dated\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nTarget penyelesaian berubah dari — menjadi 2026-09-10\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nProgress berubah dari 75% menjadi 100%\n8/30/2026, 12:20:18 PM · oleh test@dsm.com\nCatatan ber",
+  "afterInProgress": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nEngineering\nDetail\n4\ntest@dsm.com\nENG-2026-000161\nDraft\n2026-09-10\n\nRETEST Engineering Plate — SO-2026-000201 · PT Retest Smoke Fixture\n\nNo. Gambar\n—\nQty\n10 pcs\nSpesifikasi\nSS304\nKelola Job\nPenanggung Jawab\nPilih engineer\nTarget Penyelesaian\nProgress\n20%\nCatatan\nSimpan Perubahan\nPindah ke In Progress\n\nTransisi hanya bisa: Draft → In Progress → Review → Approved (Review boleh dikembalikan ke In Progress). Database akan menolak transisi ilegal.\n\nRingkasan\nAssigned: —\nProgress: 20%\nTarget: 2026-09-10\nApproved at: —\nRiwayat Perubahan\nProgress berubah dari 100% menjadi 20%\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nCatatan berubah dari RETEST engineering progress 75 menjadi RETEST engineering assigned and dated\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nTarget penyelesaian berubah dari — menjadi 2026-09-10\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nProgress berubah dari 75% menjadi 100%\n8/30/2026, 12:20:18 PM · oleh test@dsm.com\nCatatan ber",
+  "after100": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nEngineering\nDetail\n4\ntest@dsm.com\nENG-2026-000161\nDraft\n2026-09-10\n\nRETEST Engineering Plate — SO-2026-000201 · PT Retest Smoke Fixture\n\nNo. Gambar\n—\nQty\n10 pcs\nSpesifikasi\nSS304\nKelola Job\nPenanggung Jawab\nPilih engineer\nTarget Penyelesaian\nProgress\n100%\nCatatan\nSimpan Perubahan\nPindah ke In Progress\n\nTransisi hanya bisa: Draft → In Progress → Review → Approved (Review boleh dikembalikan ke In Progress). Database akan menolak transisi ilegal.\n\nRingkasan\nAssigned: —\nProgress: 100%\nTarget: 2026-09-10\nApproved at: —\nRiwayat Perubahan\nProgress berubah dari 20% menjadi 100%\n8/30/2026, 12:20:57 PM · oleh test@dsm.com\nProgress berubah dari 100% menjadi 20%\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nTarget penyelesaian berubah dari — menjadi 2026-09-10\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nCatatan berubah dari RETEST engineering progress 75 menjadi RETEST engineering assigned and dated\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nProgress ",
+  "buttonsBeforeFinal": [
+    {
+      "text": "Toggle Sidebar",
+      "disabled": false
+    },
+    {
+      "text": "Beralih ke mode gelap",
+      "disabled": false
+    },
+    {
+      "text": "4",
+      "disabled": false
+    },
+    {
+      "text": "test@dsm.com",
+      "disabled": false
+    },
+    {
+      "text": "Kembali",
+      "disabled": false
+    },
+    {
+      "text": "Pilih engineer",
+      "disabled": false
+    },
+    {
+      "text": "Simpan Perubahan",
+      "disabled": false
+    },
+    {
+      "text": "Pindah ke In Progress",
+      "disabled": false
+    }
+  ],
+  "finalText": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nEngineering\nDetail\n4\ntest@dsm.com\nENG-2026-000161\nDraft\n2026-09-10\n\nRETEST Engineering Plate — SO-2026-000201 · PT Retest Smoke Fixture\n\nNo. Gambar\n—\nQty\n10 pcs\nSpesifikasi\nSS304\nKelola Job\nPenanggung Jawab\nPilih engineer\nTarget Penyelesaian\nProgress\n100%\nCatatan\nSimpan Perubahan\nPindah ke In Progress\n\nTransisi hanya bisa: Draft → In Progress → Review → Approved (Review boleh dikembalikan ke In Progress). Database akan menolak transisi ilegal.\n\nRingkasan\nAssigned: —\nProgress: 100%\nTarget: 2026-09-10\nApproved at: —\nRiwayat Perubahan\nProgress berubah dari 20% menjadi 100%\n8/30/2026, 12:20:57 PM · oleh test@dsm.com\nProgress berubah dari 100% menjadi 20%\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nTarget penyelesaian berubah dari — menjadi 2026-09-10\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nCatatan berubah dari RETEST engineering progress 75 menjadi RETEST engineering assigned and dated\n8/30/2026, 12:20:54 PM · oleh test@dsm.com\nProgress berubah dari 75% menjadi 100%\n8/30/2026, 12:20:18 PM · oleh test@dsm.com\nProgress berubah dari 0% menjadi 75%\n8/30/2026, 12:20:16 PM · oleh test@dsm.com\nCatatan berubah dari — menjadi RETEST engineering progress 75\n8/30/2026, 12:20:16 PM · oleh test@dsm.com\nJob dibuat dengan status Draft\n8/30/2026, 12:15:21 PM · oleh test@dsm.com\nUrutan status:\nDraft\n→\nIn Progress\n→\nReview\n→\nApproved\nPerubahan disimpan\nTerjadi kesalahan\nSet penanggung jawab dan target penyelesaian terlebih dahulu.\nPerubahan disimpan",
+  "events": [
+    {
+      "type": "response",
+      "status": 400,
+      "url": "http://127.0.0.1:54321/rest/v1/engineering_jobs?id=eq.5fc884f2-8fde-4596-ab82-b79b05d73cdd&select=*"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    }
+  ]
+}

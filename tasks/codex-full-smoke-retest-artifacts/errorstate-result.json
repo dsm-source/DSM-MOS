@@ -1,0 +1,69 @@
+{
+  "results": {
+    "sales-orders": {
+      "hasError": false,
+      "hasSpinner": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nSales Order\n4\ntest@dsm.com\nSales Order\n\nKelola pesanan pelanggan.\n\nSO Baru\nSemua status\nNo. SO\tCustomer\tTgl Order\tJatuh Tempo\tItem\tStatus\tAksi\n\n\n\n\n\n\n\n\n\n0 data · Halaman 1 dari 1\nSebelumnya\nBerikutnya"
+    },
+    "material": {
+      "hasError": false,
+      "hasSpinner": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nBahan\n4\ntest@dsm.com\nMaterial Status\n\nKesiapan bahan per engineering job. Salah satu penentu produksi boleh berjalan."
+    },
+    "qc": {
+      "hasError": false,
+      "hasSpinner": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (0)\nRiwayat Lulus (0)\nStatus: Menunggu · Inspeksi · Tolak · Rework"
+    }
+  },
+  "events": [
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    },
+    {
+      "type": "console",
+      "text": "Failed to load resource: net::ERR_FAILED"
+    }
+  ]
+}

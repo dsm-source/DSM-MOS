@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { mapPgError } from "@/lib/pg-error";
+import { withQueryTimeout } from "@/lib/query-timeout";
 import type { Database } from "@/integrations/supabase/types";
 import type { SalesOrderFormValues, SalesOrderStatus } from "../types";
 
@@ -29,7 +30,9 @@ const DETAIL_KEY = ["sales-order"] as const;
 export function useSalesOrders(params: SalesOrderListParams) {
   return useQuery({
     queryKey: [...LIST_KEY, params],
-    queryFn: async (): Promise<{
+    queryFn: async ({
+      signal,
+    }): Promise<{
       rows: SalesOrderListItem[];
       total: number;
     }> => {
@@ -45,7 +48,8 @@ export function useSalesOrders(params: SalesOrderListParams) {
           },
         )
         .order("created_at", { ascending: false })
-        .range(from, to);
+        .range(from, to)
+        .abortSignal(withQueryTimeout(signal));
 
       if (params.status && params.status !== "all")
         q = q.eq("status", params.status);
@@ -59,7 +63,8 @@ export function useSalesOrders(params: SalesOrderListParams) {
         const { data: custs, error: custErr } = await supabase
           .from("customers")
           .select("id")
-          .or(`name.ilike.${like},code.ilike.${like}`);
+          .or(`name.ilike.${like},code.ilike.${like}`)
+          .abortSignal(withQueryTimeout(signal));
         if (custErr) throw new Error(mapPgError(custErr));
         const ors = [`so_number.ilike.${like}`];
         const custIds = (custs ?? []).map((c) => c.id);
@@ -82,6 +87,7 @@ export function useSalesOrders(params: SalesOrderListParams) {
       });
       return { rows, total: count ?? 0 };
     },
+    retry: 1,
   });
 }
 

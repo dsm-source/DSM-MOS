@@ -1,0 +1,73 @@
+{
+  "dark": {
+    "/dashboard": {
+      "hasWhiteFlash": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nDashboard\n4\ntest@dsm.com\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nadmin\nSales Order Aktif\n185\n\n206 total (termasuk selesai & dibat"
+    },
+    "/sales-orders": {
+      "hasWhiteFlash": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nSales Order\n4\ntest@dsm.com\nSales Order\n\nKelola pesanan pelanggan.\n\nSO Baru\nSemua status\nNo. SO\tCustomer\tTgl Order\tJatuh Tempo\tItem\tStatus\tAksi\nSO-202"
+    },
+    "/production?q=RETEST": {
+      "hasWhiteFlash": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nProduksi\n4\ntest@dsm.com\nProduction\n\nBoard kontrol per proses. Seret kartu ke kolom berikutnya untuk menyelesaikan tahapan.\n\nSemua customer\nSemua SO\nT"
+    },
+    "/qc": {
+      "hasWhiteFlash": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesa"
+    },
+    "/delivery": {
+      "hasWhiteFlash": false,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nPengiriman\n4\ntest@dsm.com\nRencana Pengiriman\n\nTracking internal — bukan dokumen surat jalan resmi.\n\nJadwal (Gantt)\nRencana Baru\nAktif (belum selesai)"
+    }
+  },
+  "empty": {
+    "/sales-orders?q=NO_MATCH_RETEST_EMPTY_999": {
+      "containsExpected": true,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nSales Order\n4\ntest@dsm.com\nSales Order\n\nKelola pesanan pelanggan.\n\nSO Baru\nSemua status\nNo. SO\tCustomer\tTgl Order\tJatuh Tempo\tItem\tStatus\tAksi\n\n\nBelum ada sales order\n\nTidak ada SO yang cocok dengan filter.\n\nSO Baru\n0 data · Halaman 1 dari 1\nSebelumnya\nBerikutnya"
+    },
+    "/engineering": {
+      "containsExpected": true,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nEngineering\n4\ntest@dsm.com\nEngineering Job\n\nJob dibuat otomatis saat Sales Order dikonfirmasi.\n\nLihat Workload\nDraft\n1\nENG-2026-000162\nTarget belum diset\nRETEST Material Bracket\nSO-2026-000202 · PT Retest Smoke Fixture\nBelum di-assign\nProgress\n0%\nIn Progress\n20\nENG-2026-000121\n2026-08-31\nDudukan Mounting CNC\nSO-2026-000041 · PT Cahaya Logam Sejahtera\n40000000\nProgress\n35%\nENG-2026-000091\n2026-09-01\nPlat Penutup Junction Box\nSO-2026-000042 · PT Baja Nusantara Perkasa\n40000000\nProgress\n35%\nENG-2026-000073\n2026-09-02\nFrame Konveyor Belt\nSO-2026-0"
+    },
+    "/material": {
+      "containsExpected": true,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nBahan\n4\ntest@dsm.com\nMaterial Status\n\nKesiapan bahan per engineering job. Salah satu penentu produksi boleh berjalan.\n\nMENUNGGU MATERIAL\n21\nRETEST Engineering Plate\nENG-2026-000161\nSO-2026-000201 • PT Retest Smoke Fixture\nSpek: SS304\nQty: 10 pcs\nBraket Penyangga Pipa\nENG-2026-000025\nSO-2026-000044 • PT Sumber Rejeki Metal\nSpek: SS304 2mm\nQty: 10 pcs\nDudukan Mounting CNC\nENG-2026-000048\nSO-2026-000053 • CV Mitra Teknik Presisi\nSpek: MS Plate 6mm\nQty: 10 pcs\nRangka Rak Penyimpanan\nENG-2026-000058\nSO-2026-000046 • CV Karya Logam Mandiri\nSpek: MS "
+    },
+    "/production?q=NO_MATCH_RETEST_EMPTY_999": {
+      "containsExpected": true,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nProduksi\n4\ntest@dsm.com\nProduction\n\nBoard kontrol per proses. Seret kartu ke kolom berikutnya untuk menyelesaikan tahapan.\n\nSemua customer\nSemua SO\nTerblokir\nMepet deadline\nAntrian\n0\n—\nLaser Cutting\n0\n—\nBending\n0\n—\nWelding & Grinding\n0\n—\nPowder Coating\n0\n—\nAssembly\n0\n—\nSelesai\n0"
+    },
+    "/qc": {
+      "containsExpected": true,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (0)\nRiwayat Lulus (0)\nAntrian kosong. Tahapan produksi yang sudah selesai akan muncul di sini untuk diinspeksi QC.\nStatus: Menunggu · Inspeksi · Tolak · Rework"
+    },
+    "/delivery": {
+      "containsExpected": true,
+      "snippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nPengiriman\n4\ntest@dsm.com\nRencana Pengiriman\n\nTracking internal — bukan dokumen surat jalan resmi.\n\nJadwal (Gantt)\nRencana Baru\nAktif (belum selesai)\nTidak ada data."
+    }
+  },
+  "mobile": {
+    "/dashboard": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "snippet": "Toggle Sidebar\nDashboard\n4\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nadmin\nSales Order Aktif\n185\n\n206 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n21\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n1\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n145\n"
+    },
+    "/sales-orders": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "snippet": "Toggle Sidebar\nSales Order\n4\nSales Order\n\nKelola pesanan pelanggan.\n\nSO Baru\nSemua status\nSO-2026-000201\nConfirmed\nPT Retest Smoke Fixture (RETEST-CUST)\nOrder 2026-08-30 · Jatuh tempo — · 1 item\nSO-2026-000202\nConfirmed\nPT Retest Smoke Fixture (RETEST-CUST)\nOrder 2026-08-30 · Jatuh tempo — · 1 item\nSO-2026-000203\nConfirmed\nPT Retest Smoke Fixture (RETEST-CUST)\nOrder 2026-08-30 · Jatuh tempo — · 1 "
+    },
+    "/production?q=RETEST": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "snippet": "Toggle Sidebar\nProduksi\n4\nProduction\n\nBoard kontrol per proses. Seret kartu ke kolom berikutnya untuk menyelesaikan tahapan.\n\nSemua customer\nSemua SO\nTerblokir\nMepet deadline\nAntrian\n0\n—\nLaser Cutting\n2\nENG-2026-000163-B1\nRETEST Start Batch Plate\nSO-2026-000203 · PT Retest Smoke Fixture\nQty\n10\nBerjalan\nberjalan 44m\n· RETEST Operator Baseline\nTarget: 6 Sep\nPause\nComplete\nENG-2026-000165-B1\nRETEST Q"
+    },
+    "/qc": {
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "snippet": "Toggle Sidebar\nQC\n4\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (92)\nRiwayat Lulus (300)\nENG-2026-000164-B1\nTahap 1 • Laser Cutting\nSO SO-2026-000204 · PT Retest Smoke Fixture\nMenunggu\nRETEST Drag Batch Plate\nQty batch: 10 pcs\n30 Agt 2026 12:28\nBuka\nENG-2026-000165-B1\nTahap 1 • Laser Cutting\nSO SO-20"
+    }
+  },
+  "events": []
+}

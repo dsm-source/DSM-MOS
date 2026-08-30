@@ -1,0 +1,6 @@
+{
+  "dialog": "Inspeksi QC — ENG-2026-000165-B1\nTolak\n\nTahap 1 • Laser Cutting · SO SO-2026-000205 · PT Retest Smoke Fixture · RETEST QC Reject Plate · Qty batch: 10 pcs\n\nTotal Diinspeksi\nJumlah OK\nJumlah Tolak\nCatatan cacat\nRiwayat inspeksi tahapan\nSiklus 1\nTolak\n30 Agt 2026 12:31\nTotal: 10 · OK: 8 · Tolak: 2\nRETEST reject via UI\nTutup\nTrigger Rework\nClose",
+  "triggerVisible": true,
+  "text": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (1)\nRiwayat Lulus (0)\nENG-2026-000165-B1\nTahap 1 • Laser Cutting\nSO SO-2026-000205 · PT Retest Smoke Fixture\nRework\nRETEST QC Reject Plate\nQty batch: 10 pcs\n30 Agt 2026 12:31\nBuka\nStatus: Menunggu · Inspeksi · Tolak · Rework\nRework dipicu",
+  "events": []
+}

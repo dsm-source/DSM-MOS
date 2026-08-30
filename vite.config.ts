@@ -12,4 +12,36 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          // Split heavy client vendors out of the main bundle so the initial
+          // chunk stays under the 500 kB warning threshold and long-tail deps
+          // (charts, drag-and-drop, date utils) load on their own.
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return;
+            if (
+              /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)
+            )
+              return "react";
+            if (id.includes("@tanstack")) return "tanstack";
+            if (id.includes("@radix-ui")) return "radix";
+            if (id.includes("@dnd-kit")) return "dnd";
+            if (id.includes("recharts") || id.includes("d3-")) return "charts";
+            if (id.includes("date-fns") || id.includes("lucide-react"))
+              return "ui-utils";
+            if (id.includes("@supabase") || id.includes("supabase"))
+              return "supabase";
+            if (
+              id.includes("react-hook-form") ||
+              id.includes("@hookform") ||
+              id.includes("zod")
+            )
+              return "forms";
+          },
+        },
+      },
+    },
+  },
 });

@@ -1,0 +1,39 @@
+{
+  "filtered": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (1)\nRiwayat Lulus (0)\nENG-2026-000165-B1\nTahap 1 • Laser Cutting\nSO SO-2026-000205 · PT Retest Smoke Fixture\nMenunggu\nRETEST QC Reject Plate\nQty batch: 10 pcs\n30 Agt 2026 12:15\nBuka\nStatus: Menunggu · Inspeksi · Tolak · Rework",
+  "dialogText": "Inspeksi QC — ENG-2026-000165-B1\nMenunggu\n\nTahap 1 • Laser Cutting · SO SO-2026-000205 · PT Retest Smoke Fixture · RETEST QC Reject Plate · Qty batch: 10 pcs\n\nTotal Diinspeksi\nJumlah OK\nJumlah Tolak\nCatatan cacat\nRiwayat inspeksi tahapan\nSiklus 1\nMenunggu\n30 Agt 2026 12:15\nTotal: 10 · OK: 0 · Tolak: 0\nTutup\nSimpan\nMulai Inspeksi\nClose",
+  "inputs": [
+    {
+      "tag": "INPUT",
+      "type": "number",
+      "id": "qty-total",
+      "value": "10",
+      "placeholder": ""
+    },
+    {
+      "tag": "INPUT",
+      "type": "number",
+      "id": "qty-ok",
+      "value": "0",
+      "placeholder": ""
+    },
+    {
+      "tag": "INPUT",
+      "type": "number",
+      "id": "qty-reject",
+      "value": "0",
+      "placeholder": ""
+    },
+    {
+      "tag": "TEXTAREA",
+      "type": "textarea",
+      "id": "notes",
+      "value": "",
+      "placeholder": "Deskripsikan jenis cacat, lokasi, jumlah, dsb."
+    }
+  ],
+  "invalidText": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (1)\nRiwayat Lulus (0)\nENG-2026-000165-B1\nTahap 1 • Laser Cutting\nSO SO-2026-000205 · PT Retest Smoke Fixture\nInspeksi\nRETEST QC Reject Plate\nQty batch: 10 pcs\n30 Agt 2026 12:30\nBuka\nStatus: Menunggu · Inspeksi · Tolak · Rework\nData belum valid\nJumlah OK + Tolak melebihi Total\nStatus → Inspeksi\nInspeksi QC — ENG-2026-000165-B1\nInspeksi\n\nTahap 1 • Laser Cutting · SO SO-2026-000205 · PT Retest Smoke Fixture · RETEST QC Reject Plate · Qty batch: 10 pcs\n\nTotal Diinspeksi\nJumlah OK\nJumlah Tolak\n\nOK + Tolak (14) melebihi Total (10).\n\nCatatan cacat\nRiwayat inspeksi tahapan\nSiklus 1\nInspeksi\n30 Agt 2026 12:30\nTotal: 10 · OK: 0 · Tolak: 0\nTutup\nSimpan\nLulus\nTolak\nClose",
+  "afterReject": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (1)\nRiwayat Lulus (0)\nENG-2026-000165-B1\nTahap 1 • Laser Cutting\nSO SO-2026-000205 · PT Retest Smoke Fixture\nTolak\nRETEST QC Reject Plate\nQty batch: 10 pcs\nOK: 8\nTolak: 2\n30 Agt 2026 12:31\nBuka\nStatus: Menunggu · Inspeksi · Tolak · Rework\nStatus → Tolak\nData belum valid\nJumlah OK + Tolak melebihi Total",
+  "triggerVisible": false,
+  "afterRework": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nQC\n4\ntest@dsm.com\nQuality Control\n\nAntrian inspeksi per tahapan produksi — setiap tahapan batch masuk antrian otomatis begitu tahapan tersebut selesai.\n\nAntrian (1)\nRiwayat Lulus (0)\nENG-2026-000165-B1\nTahap 1 • Laser Cutting\nSO SO-2026-000205 · PT Retest Smoke Fixture\nTolak\nRETEST QC Reject Plate\nQty batch: 10 pcs\nOK: 8\nTolak: 2\n30 Agt 2026 12:31\nBuka\nStatus: Menunggu · Inspeksi · Tolak · Rework\nStatus → Tolak\nData belum valid\nJumlah OK + Tolak melebihi Total",
+  "events": []
+}

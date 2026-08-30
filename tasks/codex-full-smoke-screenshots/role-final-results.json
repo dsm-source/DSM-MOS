@@ -1,0 +1,145 @@
+{
+  "roles": {
+    "admin": {
+      "email": "test@dsm.com",
+      "forcedPasswordChange": false,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Sales Order",
+        "Pelanggan",
+        "Engineering Job",
+        "Engineering Workload",
+        "Bahan",
+        "Perencanaan Produksi",
+        "Operator",
+        "Produksi",
+        "QC",
+        "Pengiriman",
+        "Jadwal Pengiriman",
+        "Kelola User"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nDashboard\n99+\ntest@dsm.com\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nadmin\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    },
+    "sales": {
+      "email": "smoke-sales@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Sales Order",
+        "Pelanggan",
+        "Engineering Job",
+        "Engineering Workload"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nToggle Sidebar\nDashboard\nsmoke-sales@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nsales\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    },
+    "qc": {
+      "email": "smoke-qc@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Engineering Job",
+        "Engineering Workload",
+        "QC"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nEngineering\nEngineering Job\nEngineering Workload\nQC & Pengiriman\nQC\nToggle Sidebar\nDashboard\nsmoke-qc@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nqc\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    },
+    "production": {
+      "email": "smoke-production@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Engineering Job",
+        "Engineering Workload",
+        "Produksi"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nProduksi\nToggle Sidebar\nDashboard\nsmoke-production@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nproduction\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    },
+    "production_planning": {
+      "email": "smoke-production_planning@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Engineering Job",
+        "Engineering Workload",
+        "Perencanaan Produksi",
+        "Operator"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nPerencanaan Produksi\nOperator\nToggle Sidebar\nDashboard\nsmoke-production_planning@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nproduction_planning\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    },
+    "material": {
+      "email": "smoke-material@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Engineering Job",
+        "Engineering Workload",
+        "Bahan"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nToggle Sidebar\nDashboard\nsmoke-material@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nmaterial\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    },
+    "delivery": {
+      "email": "smoke-delivery@dsm.local",
+      "forcedPasswordChange": false,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Engineering Job",
+        "Engineering Workload",
+        "Pengiriman",
+        "Jadwal Pengiriman"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nEngineering\nEngineering Job\nEngineering Workload\nQC & Pengiriman\nPengiriman\nJadwal Pengiriman\nToggle Sidebar\nDashboard\nsmoke-delivery@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\ndelivery\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    },
+    "viewer": {
+      "email": "smoke-viewer@dsm.local",
+      "forcedPasswordChange": true,
+      "finalUrl": "/dashboard",
+      "menu": [
+        "Dashboard",
+        "Sales Order",
+        "Engineering Job",
+        "Engineering Workload",
+        "Bahan",
+        "Produksi",
+        "QC",
+        "Pengiriman",
+        "Jadwal Pengiriman"
+      ],
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nToggle Sidebar\nDashboard\nsmoke-viewer@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nviewer\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n0\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n140\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0"
+    }
+  },
+  "guards": [
+    {
+      "role": "sales",
+      "attempted": "/admin",
+      "finalUrl": "/dashboard",
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nToggle Sidebar\nDashboard\nsmoke-sales@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nsales\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob M"
+    },
+    {
+      "role": "qc",
+      "attempted": "/production-planning",
+      "finalUrl": "/dashboard",
+      "body": "DSM MOS\nManufacturing OS\nDashboard\nEngineering\nEngineering Job\nEngineering Workload\nQC & Pengiriman\nQC\nToggle Sidebar\nDashboard\nsmoke-qc@dsm.local\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nqc\nSales Order Aktif\n180\n\n200 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n20"
+    }
+  ],
+  "consoleErrors": [
+    {
+      "role": "viewer",
+      "url": "/change-password",
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    }
+  ],
+  "badResponses": [
+    {
+      "role": "viewer",
+      "status": 403,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    }
+  ]
+}

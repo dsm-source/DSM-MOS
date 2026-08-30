@@ -1,0 +1,16 @@
+{
+  "normalHasDashboard": false,
+  "normalTextSnippet": "DSM MOS\n\nManufacturing Operating System\n\nMasuk ke akun\nGunakan email dan kata sandi yang diberikan admin. Akun baru hanya dibuat oleh admin lewat halaman Kelola User.\nEmail\nKata sandi\nMasuk\n\nKembali ke beranda",
+  "blockedCount": 4,
+  "errorAtMs": 22170,
+  "retryVisible": true,
+  "disabledDuring": false,
+  "errorContainsExpected": true,
+  "errorTextSnippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nDashboard\n4\ntest@dsm.com\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nadmin\nGagal memuat ringkasan dashboard\n\nCoba muat ulang halaman untuk mengambil data terbaru.\n\nCoba lagi\nSales Order Aktif\n—\n\nGagal memuat data\n\nJob Menunggu Material\n22\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n1\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\n\nGagal memuat distribusi Sales Order.",
+  "afterBlockedStillError": true,
+  "recoveredHasLoading": false,
+  "recoveredHasError": false,
+  "recoveredTextSnippet": "DSM MOS\nManufacturing OS\nDashboard\nPenjualan\nSales Order\nPelanggan\nEngineering\nEngineering Job\nEngineering Workload\nProduksi\nBahan\nPerencanaan Produksi\nOperator\nProduksi\nQC & Pengiriman\nQC\nPengiriman\nJadwal Pengiriman\nAdmin\nKelola User\nToggle Sidebar\nDashboard\n4\ntest@dsm.com\nDashboard\n\nRingkasan operasional lintas modul.\n\nPeran Anda:\nadmin\nSales Order Aktif\n186\n\n206 total (termasuk selesai & dibatalkan)\n\nJob Menunggu Material\n22\n\nEngineering job dengan status material 'Waiting Material'\n\nProduksi Berjalan\n1\n\nTahapan produksi yang sedang running\n\nSales Order per Status\nDistribusi seluruh SO berdasarkan status saat ini.\nDraft\n40\nConfirmed\n146\nEngineering\n0\nProduction\n0\nQuality Control\n0\nDelivery\n0\nCompleted\n20\nCancelled\n0",
+  "consoleErrors": [],
+  "badResponses": []
+}

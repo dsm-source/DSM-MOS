@@ -1,0 +1,22 @@
+{
+  "code": "SMOKE-412816",
+  "cust": "Smoke Customer 412816",
+  "steps": [
+    {
+      "step": "customer_create",
+      "body": true
+    },
+    {
+      "step": "sales_order_create_dynamic_item",
+      "finalUrl": "http://127.0.0.1:8080/sales-orders/d9184d9b-81bd-4260-9559-2903b65a16be",
+      "hasSoTitle": true
+    },
+    {
+      "step": "sales_order_edit",
+      "finalUrl": "http://127.0.0.1:8080/sales-orders/d9184d9b-81bd-4260-9559-2903b65a16be",
+      "bodyHasEdited": true
+    }
+  ],
+  "consoleErrors": [],
+  "badResponses": []
+}

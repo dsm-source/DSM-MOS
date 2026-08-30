@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
+import { ErrorNotice } from "@/components/error-notice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { useMyRoles } from "@/hooks/use-my-roles";
@@ -32,7 +33,14 @@ function MaterialBoardPage() {
   const { hasAnyRole } = useMyRoles();
   const canEdit = hasAnyRole(["admin", "material"]);
   useMaterialStatusesRealtime();
-  const { data: rows = [], isLoading } = useMaterialStatuses();
+  const {
+    data: rows = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+  } = useMaterialStatuses();
   const [q, setQ] = useState("");
 
   const filtered = useMemo(() => {
@@ -75,7 +83,14 @@ function MaterialBoardPage() {
         }
       />
 
-      {isLoading ? (
+      {isError ? (
+        <ErrorNotice
+          error={error}
+          title="Gagal memuat status material"
+          onRetry={() => refetch()}
+          actionLabel={isRefetching ? "Memuat ulang…" : "Coba lagi"}
+        />
+      ) : isLoading ? (
         <div className="grid gap-4 md:grid-cols-3">
           {MATERIAL_STATUSES.map((s) => (
             <Skeleton key={s.key} className="h-64" />

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { mapPgError } from "@/lib/pg-error";
+import { withQueryTimeout } from "@/lib/query-timeout";
 import type { Database } from "@/integrations/supabase/types";
 
 export type MaterialStatus = Database["public"]["Enums"]["material_status"];
@@ -34,16 +35,18 @@ const LIST_KEY = ["material-statuses"] as const;
 export function useMaterialStatuses() {
   return useQuery({
     queryKey: LIST_KEY,
-    queryFn: async (): Promise<MaterialWithContext[]> => {
+    queryFn: async ({ signal }): Promise<MaterialWithContext[]> => {
       const { data, error } = await supabase
         .from("material_statuses")
         .select(
           "*, engineering_job:engineering_jobs!inner(id, job_number, status, sales_order_item:sales_order_items!inner(id, item_name, drawing_number, quantity, unit, material_spec, sales_order:sales_orders!inner(id, so_number, customer:customers(name, code))))",
         )
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .abortSignal(withQueryTimeout(signal));
       if (error) throw new Error(mapPgError(error));
       return (data ?? []) as unknown as MaterialWithContext[];
     },
+    retry: 1,
   });
 }
 

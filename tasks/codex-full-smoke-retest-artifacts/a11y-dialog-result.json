@@ -1,0 +1,26 @@
+{
+  "createUser": {
+    "dialog": true,
+    "active": "<input class=\"flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-fo",
+    "afterTab": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-vis",
+    "closed": true
+  },
+  "stepOperator": {
+    "dialog": false,
+    "active": "<body data-tsd-source=\"/src/routes/__root.tsx:114:7\"><!--$--><!--$--><!--/$--><!--/$--><div class=\"group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar\" data-tsd-source=\"/",
+    "afterTab": "<button class=\"inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disa",
+    "closed": true
+  },
+  "qcInspection": {
+    "dialog": true,
+    "active": "<input class=\"flex w-full rounded-md border border-input bg-transparent px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground place",
+    "afterTab": "<input class=\"flex w-full rounded-md border border-input bg-transparent px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground place",
+    "closed": true
+  },
+  "deliveryCreate": {
+    "dialog": true,
+    "active": "<button type=\"button\" role=\"combobox\" aria-controls=\"radix-_r_t_\" aria-expanded=\"false\" aria-autocomplete=\"none\" dir=\"ltr\" data-state=\"closed\" data-placeholder=\"\" class=\"flex h-9 w-full items-center j",
+    "afterTab": "<input class=\"flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-fo",
+    "closed": true
+  }
+}

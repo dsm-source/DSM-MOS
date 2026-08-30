@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Search } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
+import { ErrorNotice } from "@/components/error-notice";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -65,9 +66,20 @@ function QcPage() {
   const { hasAnyRole } = useMyRoles();
   const canWrite = hasAnyRole(["qc", "admin"]);
   const [historyFrom, setHistoryFrom] = useState(defaultHistoryFrom);
-  const { data: active = [], isLoading: loadingActive } = useQcActiveQueue();
-  const { data: pastInspections = [], isLoading: loadingHistory } =
-    useQcHistory({ from: historyFrom, toExclusive: tomorrowIso() });
+  const {
+    data: active = [],
+    isLoading: loadingActive,
+    isError: activeError,
+    error: activeErr,
+    refetch: refetchActive,
+  } = useQcActiveQueue();
+  const {
+    data: pastInspections = [],
+    isLoading: loadingHistory,
+    isError: historyError,
+    error: historyErr,
+    refetch: refetchHistory,
+  } = useQcHistory({ from: historyFrom, toExclusive: tomorrowIso() });
   const { pending, syncing, sync } = useOfflineQcQueue();
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -139,7 +151,13 @@ function QcPage() {
         </TabsList>
 
         <TabsContent value="queue" className="space-y-4">
-          {loadingActive ? (
+          {activeError ? (
+            <ErrorNotice
+              error={activeErr}
+              title="Gagal memuat antrian inspeksi"
+              onRetry={() => refetchActive()}
+            />
+          ) : loadingActive ? (
             <Card className="p-8 flex items-center justify-center">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
             </Card>
@@ -179,7 +197,13 @@ function QcPage() {
               className="w-[160px] h-9"
             />
           </div>
-          {loadingHistory ? (
+          {historyError ? (
+            <ErrorNotice
+              error={historyErr}
+              title="Gagal memuat riwayat inspeksi"
+              onRetry={() => refetchHistory()}
+            />
+          ) : loadingHistory ? (
             <Card className="p-8 flex items-center justify-center">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
             </Card>

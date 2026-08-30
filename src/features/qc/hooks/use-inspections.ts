@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { mapPgError } from "@/lib/pg-error";
+import { withQueryTimeout } from "@/lib/query-timeout";
 import type { QcInspectionWithContext, QcStatus } from "../types";
 
 const SELECT = `
@@ -117,15 +118,17 @@ export function useQcActiveQueue() {
   useQcRealtimeInvalidate("qc-inspections-realtime-active");
   return useQuery({
     queryKey: [...QC_KEY, "active"],
-    queryFn: async (): Promise<QcInspectionWithContext[]> => {
+    queryFn: async ({ signal }): Promise<QcInspectionWithContext[]> => {
       const { data, error } = await supabase
         .from("qc_inspections")
         .select(SELECT)
         .in("status", ACTIVE_QC_STATUSES)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .abortSignal(withQueryTimeout(signal));
       if (error) throw new Error(mapPgError(error));
       return (data ?? []).map(normalize);
     },
+    retry: 1,
   });
 }
 
@@ -139,7 +142,7 @@ export function useQcHistory(range: { from: string; toExclusive: string }) {
   useQcRealtimeInvalidate("qc-inspections-realtime-history");
   return useQuery({
     queryKey: [...QC_KEY, "history", range.from, range.toExclusive],
-    queryFn: async (): Promise<QcInspectionWithContext[]> => {
+    queryFn: async ({ signal }): Promise<QcInspectionWithContext[]> => {
       const { data, error } = await supabase
         .from("qc_inspections")
         .select(SELECT)
@@ -147,10 +150,12 @@ export function useQcHistory(range: { from: string; toExclusive: string }) {
         .gte("created_at", range.from)
         .lt("created_at", range.toExclusive)
         .order("created_at", { ascending: false })
-        .limit(HISTORY_LIMIT);
+        .limit(HISTORY_LIMIT)
+        .abortSignal(withQueryTimeout(signal));
       if (error) throw new Error(mapPgError(error));
       return (data ?? []).map(normalize);
     },
+    retry: 1,
   });
 }
 
