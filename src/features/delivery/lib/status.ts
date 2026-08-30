@@ -1,11 +1,18 @@
+import { FileText, PackageCheck, Truck, CircleCheckBig } from "lucide-react";
+import type { StatusMeta } from "@/lib/status-tone";
 import type { DeliveryStatus } from "../types";
 
-export const DELIVERY_STATUS_LABEL: Record<DeliveryStatus, string> = {
-  draft: "Draft",
-  prepared: "Disiapkan",
-  shipped: "Dikirim",
-  delivered: "Terkirim",
+export const DELIVERY_STATUS_META: Record<DeliveryStatus, StatusMeta> = {
+  draft: { label: "Draft", icon: FileText, tone: "neutral" },
+  prepared: { label: "Disiapkan", icon: PackageCheck, tone: "active" },
+  shipped: { label: "Dikirim", icon: Truck, tone: "active" },
+  delivered: { label: "Terkirim", icon: CircleCheckBig, tone: "success" },
 };
+
+export const DELIVERY_STATUS_LABEL: Record<DeliveryStatus, string> =
+  Object.fromEntries(
+    Object.entries(DELIVERY_STATUS_META).map(([k, v]) => [k, v.label]),
+  ) as Record<DeliveryStatus, string>;
 
 export const DELIVERY_STATUS_ORDER: DeliveryStatus[] = [
   "draft",

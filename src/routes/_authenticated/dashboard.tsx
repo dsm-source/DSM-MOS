@@ -24,7 +24,8 @@ import {
   useMaterialWaitingCount,
   useProductionRunningCount,
 } from "@/features/dashboard/hooks/use-dashboard-stats";
-import { STATUS_LABEL, STATUS_CLASS } from "@/features/sales-orders/lib/status";
+import { SO_STATUS_META } from "@/features/sales-orders/lib/status";
+import { toneClass } from "@/lib/status-tone";
 import type { SalesOrderStatus } from "@/features/sales-orders/types";
 import { cn } from "@/lib/utils";
 
@@ -264,16 +265,19 @@ function DashboardPage() {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {orderedStatuses.map((status) => {
                 const count = soByStatus.get(status) ?? 0;
+                const meta = SO_STATUS_META[status];
+                const Icon = meta.icon;
                 return (
                   <div
                     key={status}
                     className={cn(
                       "rounded-xl border px-4 py-3 flex items-center justify-between",
-                      STATUS_CLASS[status],
+                      toneClass(meta.tone),
                     )}
                   >
-                    <span className="text-sm font-medium">
-                      {STATUS_LABEL[status]}
+                    <span className="text-sm font-medium flex items-center gap-1.5">
+                      <Icon className="h-4 w-4 shrink-0" aria-hidden />
+                      {meta.label}
                     </span>
                     <span className="text-xl font-semibold tabular-nums">
                       {count}
