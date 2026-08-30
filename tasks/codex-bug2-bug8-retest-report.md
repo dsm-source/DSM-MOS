@@ -8,7 +8,7 @@ HEAD diuji: `2061b3e90cff72440ce0df6f200b91bab3c9db5e` (`1f720c4` ada di history
 
 | Bug | Verdict | Bisa ditutup? |
 |---|---|---|
-| BUG-2 forced password-change logout 403 | **PARTIAL / FAIL strict** | **Belum penuh**. Target utama `auth/v1/logout` 403 sudah hilang, tetapi strict criterion "tidak ada console error merah" belum bersih karena muncul 2 request notifications HTTP 401 setelah session direvoke. Toast sukses juga tidak terobservasi sebelum full reload. |
+| BUG-2 forced password-change logout 403 | **PARTIAL / FAIL strict** (fix menyusul, lihat §6) | **Belum penuh**. Target utama `auth/v1/logout` 403 sudah hilang, tetapi strict criterion "tidak ada console error merah" belum bersih karena muncul 2 request notifications HTTP 401 setelah session direvoke. Toast sukses juga tidak terobservasi sebelum full reload. **Update:** residual notifications-401 sudah di-patch di commit `ed5a915` (gate query pada sesi hidup); menunggu retest browser. |
 | BUG-8 delivery QC pass eligibility | **PASS** | **Ya, bisa ditandai CLOSED** untuk scope BUG-8. Role `delivery` melihat kandidat QC pass, menambah item, dan transisi draft -> prepared -> shipped -> delivered berhasil tanpa 400/403/5xx/console error. |
 
 Kesimpulan: **BUG-8 layak CLOSED; BUG-2 belum layak CLOSED strict** kecuali owner memutuskan scope penutupan hanya untuk hilangnya `auth/v1/logout` 403.
@@ -155,12 +155,50 @@ Expected:
 - Tidak ada console error merah sama sekali sepanjang successful password-change flow.
 - Toast sukses terlihat sebelum reload, atau acceptance diubah bila full reload terlalu cepat untuk toast.
 
+#### Fix (commit `ed5a915`)
+
+Root cause: query notifikasi menembak PostgREST tanpa cek sesi. Setelah
+`changePasswordAndClearFlag` mencabut sesi, cache invalidation dari root
+`onAuthStateChange` listener masih bisa me-refetch query itu dengan token mati
+-> `401` yang dicatat browser sebagai error merah (bukan error JS, jadi hanya
+bisa dicegah di level request). Commit `3af4c3f` sebelumnya menambah
+`cancelQueries()` + `clear()` tapi tidak menutup race refetch setelah `clear()`.
+
+Perubahan:
+
+1. `src/features/notifications/hooks/use-notifications.ts` — `useNotifications`
+   dan `useUnreadCount` sekarang `supabase.auth.getSession()` dulu; kalau tidak
+   ada sesi, langsung `return []` / `0` tanpa request. auth-js 2.110.7
+   (`__loadSession`) membaca token langsung dari localStorage, jadi begitu token
+   dihapus hasilnya `null`.
+2. `src/routes/change-password.tsx` — hapus `sb-*-auth-token` dari localStorage
+   **sebelum** `cancelQueries()` / `clear()`, sehingga refetch apa pun setelah
+   titik itu ketemu sesi `null` dan short-circuit.
+
+Toast sukses + delay reload 800ms sudah ada dari `3af4c3f`, tidak diubah.
+
+Gate lokal:
+
+| Gate | Hasil |
+|---|---|
+| `bunx tsc --noEmit` | PASS, 0 error |
+| `bun run lint` | PASS, 0 error, 37 warning pre-existing |
+| `bun run build` | PASS |
+
+Retest status: **belum diverifikasi end-to-end di browser.** Jalur 401 sudah
+tertutup secara statik (token dihapus lebih dulu -> `getSession()` -> `null` ->
+query short-circuit). Perlu retest browser ulang flow admin -> viewer ->
+`/change-password` untuk konfirmasi 0 console error merah sebelum menutup BUG-2
+strict.
+
 ## 7. Kesimpulan
 
 [Pasti] BUG-8 sekarang bisa ditandai **CLOSED** untuk scope retest ini.  
 [Pasti] BUG-2 target `auth/v1/logout` 403 sudah tertutup: 0 request logout dan 0 response 403.  
 [Pasti] BUG-2 belum memenuhi strict acceptance penuh karena masih ada console error merah HTTP 401 dari notifications dan toast sukses tidak terbukti.  
 [Kemungkinan Besar] Sisa BUG-2 bukan masalah `signOut` lagi, melainkan outstanding notifications queries yang memakai session yang sudah direvoke sebelum halaman hard-reload ke `/auth`.
+
+[Update pasca-report] Residual notifications-401 (BUG-2R4) di-patch di commit `ed5a915`: query notifikasi sekarang gate pada `getSession()` dan token localStorage dihapus sebelum cache di-clear. Gate lokal (tsc/lint/build) PASS. Belum diverifikasi end-to-end di browser — perlu retest flow forced password-change untuk konfirmasi 0 console error merah.
 
 Follow-up di luar scope retest ini: BUG-6 DnD dari ronde 3 tetap open dan tidak diuji ulang di task ini.
 
