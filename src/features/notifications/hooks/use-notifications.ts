@@ -12,6 +12,11 @@ export function useNotifications(limit = 20) {
   return useQuery({
     queryKey: [...KEY, limit],
     queryFn: async (): Promise<NotificationRow[]> => {
+      // A cache invalidation can race a just-revoked session (e.g. forced
+      // password change): bail before hitting PostgREST with a dead token
+      // so it never logs a 401.
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) return [];
       const { data, error } = await supabase
         .from("notifications")
         .select("*")
@@ -27,6 +32,8 @@ export function useUnreadCount() {
   return useQuery({
     queryKey: [...KEY, "unread-count"],
     queryFn: async (): Promise<number> => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) return 0;
       const { count, error } = await supabase
         .from("notifications")
         .select("id", { count: "exact", head: true })

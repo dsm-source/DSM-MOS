@@ -61,13 +61,17 @@ function ChangePasswordPage() {
       // USER_UPDATED after the password change, and the root listener reacts
       // with queryClient.invalidateQueries() — refetching against the now-dead
       // token and logging 401s — before the hard reload lands.
-      await queryClient.cancelQueries();
-      queryClient.clear();
+      // Drop the persisted token FIRST: once it is gone, supabase.auth
+      // .getSession() resolves to null, and the notifications queries (which
+      // now guard on that) short-circuit instead of refetching with a dead
+      // token. Then cancel/clear so nothing keeps a stale result around.
       for (const key of Object.keys(localStorage)) {
         if (key.startsWith("sb-") && key.endsWith("-auth-token")) {
           localStorage.removeItem(key);
         }
       }
+      await queryClient.cancelQueries();
+      queryClient.clear();
       toast.success("Kata sandi berhasil diganti", {
         description: "Silakan masuk lagi dengan kata sandi baru.",
       });
