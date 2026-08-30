@@ -196,7 +196,7 @@ function SalesOrdersPage() {
             className="block rounded-xl border bg-card p-3 space-y-1.5 hover:border-primary/40"
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-sm text-primary">
+              <span className="font-mono text-sm text-brand">
                 {so.so_number}
               </span>
               <StatusBadge status={so.status} />
@@ -274,7 +274,7 @@ function SalesOrdersPage() {
                   <Link
                     to="/sales-orders/$id"
                     params={{ id: so.id }}
-                    className="text-primary hover:underline"
+                    className="text-brand hover:underline"
                   >
                     {so.so_number}
                   </Link>
