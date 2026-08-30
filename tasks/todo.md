@@ -192,3 +192,15 @@ Konteks: owner minta full smoke test end-to-end semua modul/flow via Codex (buka
   - Retest manual BUG-6/7/8 (drag-drop Production, create batch UI, create delivery UI) — kemungkinan besar limitasi automation, tapi perlu mata manusia.
   - Apakah `<ErrorNotice>` pola sama perlu diterapkan ke SEMUA list board lain (engineering, production, delivery, operators) — konsistensi.
   - BUG-3 lanjutan: `production_batches` list masih unbounded (sudah dievaluasi di Follow-up B, diputuskan OK); code-split jspdf/gantt kalau cold-load terasa berat.
+
+### Ronde 3 retest (2026-08-30, verdict FAIL — report `tasks/codex-full-smoke-retest3-report.md`, commit `e560bf8`)
+- Naik lagi dari ronde 2: BUG-1/3/4/5/7 CLOSED. Masih open: BUG-2 (logout 403 belum benar-benar hilang), BUG-8 (role delivery tak bisa tambah item), BUG-6 (DnD belum terbukti).
+
+### Fixes BUG-2 + BUG-8 (commit `1f720c4`, 2026-08-30)
+- [x] **BUG-8** (major): eligibility query di `src/features/delivery/hooks/use-deliveries.ts` (`useEligibleQcInspections`) inner-join `qc_inspections → production_batch_steps → production_batches → engineering_jobs → sales_order_items`. Role `delivery` punya SELECT di semua tabel itu **kecuali `engineering_jobs`** → query balik 0 row, draft delivery tak pernah bisa dapat item, transisi `draft → prepared` ditolak. Fix: migration `supabase/migrations/20260830000001_m8_eng_jobs_select_delivery.sql` tambah `delivery` ke policy `eng_jobs_select_scoped`. Test RLS-matrix `supabase/tests/engineering.test.sql` di-flip: "delivery denied" → "delivery can SELECT".
+- [x] **BUG-2** (major, ronde 2 fix ternyata belum tuntas): `signOut({ scope: "local" })` **tetap** POST `/auth/v1/logout?scope=local` dengan token yang sudah di-revoke server-side saat ganti password → 403 di console (auth-js menelan error-nya, tapi browser tetap log resource 403). Fix: `src/routes/change-password.tsx` — hapus persisted session langsung dari `localStorage` (key `sb-*-auth-token`), lalu `window.location.assign("/auth")` (hard reload, client re-init tanpa session). Import `useNavigate` yang jadi orphan dibersihkan.
+- [x] Verifikasi: `bunx tsc --noEmit`, `bun run lint` (0 error, 37 warning pra-existing), `supabase db reset` (M8 applied), `supabase test db` (256/256 PASS), `bun run build` (client chunk terbesar < 500 kB) — semua PASS.
+- [ ] **Masih open setelah ronde 3**:
+  - BUG-6 (DnD Production) — pointer-drag automation tak memindahkan kartu; fallback button + gate QC + operator dialog semua terbukti jalan. Kemungkinan artefak automation; perlu retest manual atau keputusan owner apakah DnD wajib untuk demo.
+  - BUG-9R3 (ResizeObserver loop noise) — quirk dev-overlay benign, minor.
+  - RBAC sidebar matrix masih longgar vs tabel prompt untuk beberapa role — butuh keputusan owner apakah tabel = strict source-of-truth.
