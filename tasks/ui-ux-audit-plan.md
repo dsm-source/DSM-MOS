@@ -73,13 +73,18 @@ Sumber temuan: transcript audit (26 temuan). Plan ini memetakan temuan → task.
 - [ ] Uji viewport 320 / 768 / 1024 / 1440 — tidak ada horizontal scroll body
 - [ ] `bun test` hijau, build + lint hijau
 
-### Phase 4: Backlog (tidak dikerjakan di siklus ini)
+### Phase 4: Backlog — SELESAI (semua di `main`)
 
 - [x] Redesign Kanban jadi board kolom-per-proses (semua batch terlihat) — scope L
-  - ✅ Selesai — lihat spec & plan di `docs/superpowers/specs/2026-08-29-production-board-redesign-design.md` dan `docs/superpowers/plans/2026-08-29-production-board-redesign.md`. Implementasi di branch `production-board-redesign`.
-- [ ] Sistem warna status: fill lebih tegas + ikon/bentuk per status (WCAG 1.4.1)
-- [ ] Aksen brand DSM + review palet chart default
-- [ ] Konsolidasi skala radius container
+  - ✅ Spec + plan di `docs/superpowers/specs/2026-08-29-production-board-redesign-design.md` & `docs/superpowers/plans/2026-08-29-production-board-redesign.md`. Dikerjakan subagent-driven (4 task + final review), merged (`6a0dfff`).
+- [x] Konsolidasi skala radius container
+  - ✅ Panel bordered card-like → `rounded-xl` (match shadcn Card); kontrol kecil tetap radius kecil. Commit `8137791`, merged `512cd74`.
+- [x] Dark-mode contrast pass (dulu "tuntaskan sisa masalah kontras Task 16")
+  - ✅ Gantt (`gantt-task-react`) di-render sebagai "light island" konsisten; legend chip Production Planning + teks overdue dapat `dark:` variant. Commit `67cd811`, merged `512cd74`.
+- [x] Aksen brand DSM (arah "Charcoal + aksen" dari mockup)
+  - ✅ Ramp netral di-detint slate→abu murni (sesuai charcoal `#535353` logo); token `--brand` (`#D81E1C`). Merah = aksen saja (wordmark, nav aktif, focus ring, link, board), bukan warna aksi. Commit `48004f4`, merged `edd8273`. **Palet chart `--chart-1..5` sengaja tidak diubah** — data-viz, di luar identitas brand.
+- [x] Sistem warna status: ikon/bentuk per status (WCAG 1.4.1) + token semantik
+  - ✅ `src/lib/status-tone.ts` (5 tone) + `<StatusPill>`. Sales Order / Engineering / Delivery / QC / Production-step badge + dashboard tiles + operator: semua ikon + label + tone, dua tema. Menggantikan blok `bg-X-100 …` berulang. Commit `b28e25e`, merged `d82de7d`.
 
 ## Risks and Mitigations
 

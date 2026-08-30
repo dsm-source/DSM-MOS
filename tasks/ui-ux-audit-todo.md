@@ -261,11 +261,15 @@ sedikit beda. Satukan.
 
 ---
 
-## Phase 4 — Backlog (tidak dikerjakan siklus ini)
+## Phase 4 — Backlog — SELESAI (semua merged ke `main`)
 
 - [x] Redesign Kanban → board kolom-per-proses, semua batch terlihat (scope L)
-  - ✅ Selesai — lihat spec & plan di `docs/superpowers/specs/2026-08-29-production-board-redesign-design.md` dan `docs/superpowers/plans/2026-08-29-production-board-redesign.md`. Implementasi di branch `production-board-redesign`.
-- [ ] Sistem warna status: fill tegas + ikon/bentuk per status (WCAG 1.4.1), pindah dari raw Tailwind palette ke token semantik
-- [ ] Aksen brand DSM + audit palet chart default (`--chart-1..5`)
-- [ ] Konsolidasi skala radius container (pilih satu: `rounded-lg` atau `rounded-xl`)
-- [ ] Tuntaskan sisa masalah kontras dark mode dari Task 16
+  - ✅ Spec + plan di `docs/superpowers/`. Subagent-driven (4 task + final review). Merge `6a0dfff`.
+- [x] Sistem warna status: ikon/bentuk per status (WCAG 1.4.1) + token semantik
+  - ✅ `src/lib/status-tone.ts` (5 tone: neutral/active/attention/success/danger) + `<StatusPill>`. Semua badge (SO/eng/delivery/QC/step) + dashboard tiles + operator. Merge `d82de7d`.
+- [x] Aksen brand DSM + audit palet chart default (`--chart-1..5`)
+  - ✅ Arah "Charcoal + aksen": netral di-detint ke abu murni, `--brand` = `#D81E1C` sebagai aksen (bukan primary). Palet chart sengaja dibiarkan (data-viz ≠ brand identity). Merge `edd8273`.
+- [x] Konsolidasi skala radius container (pilih satu: `rounded-lg` atau `rounded-xl`)
+  - ✅ Panel card-like → `rounded-xl`. Merge `512cd74`.
+- [x] Tuntaskan sisa masalah kontras dark mode dari Task 16
+  - ✅ Gantt → "light island"; legend chip + overdue text dapat `dark:` variant. Merge `512cd74`.
