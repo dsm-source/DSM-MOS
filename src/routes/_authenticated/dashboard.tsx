@@ -115,6 +115,16 @@ function DashboardPage() {
     soStatus.error ?? materialWaiting.error ?? productionRunning.error;
   const hasDashboardError =
     soStatus.isError || materialWaiting.isError || productionRunning.isError;
+  const isRefetchingDashboard =
+    soStatus.isFetching ||
+    materialWaiting.isFetching ||
+    productionRunning.isFetching;
+
+  const retryDashboard = () => {
+    soStatus.refetch();
+    materialWaiting.refetch();
+    productionRunning.refetch();
+  };
 
   const soByStatus = new Map<string, number>();
   for (const row of soStatus.data ?? []) soByStatus.set(row.status, row.count);
@@ -192,10 +202,20 @@ function DashboardPage() {
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Gagal memuat ringkasan dashboard</AlertTitle>
-          <AlertDescription>
-            {dashboardError instanceof Error
-              ? dashboardError.message
-              : "Coba muat ulang halaman untuk mengambil data terbaru."}
+          <AlertDescription className="space-y-2">
+            <p>
+              {dashboardError instanceof Error
+                ? dashboardError.message
+                : "Coba muat ulang halaman untuk mengambil data terbaru."}
+            </p>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={retryDashboard}
+              disabled={isRefetchingDashboard}
+            >
+              {isRefetchingDashboard ? "Memuat ulang…" : "Coba lagi"}
+            </Button>
           </AlertDescription>
         </Alert>
       )}
