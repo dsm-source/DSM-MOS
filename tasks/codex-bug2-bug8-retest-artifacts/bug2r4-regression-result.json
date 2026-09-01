@@ -1,0 +1,667 @@
+{
+  "dashboardUrl": "http://127.0.0.1:8080/dashboard",
+  "bellTextSample": "Notifikasi\nTandai semua dibaca\n\nBelum ada notifikasi",
+  "markAllDisabledBefore": true,
+  "clickedMarkAll": false,
+  "notificationResponses": [
+    {
+      "t": "2026-08-30T15:03:01.189Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:01.189Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:03.607Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:03.607Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    }
+  ],
+  "notification200": 4,
+  "bellConsoleErrors": [],
+  "bell401403": [],
+  "normalLogoutStatuses": [
+    {
+      "t": "2026-08-30T15:03:08.465Z",
+      "phase": "bell-admin-logout",
+      "type": "request-watch",
+      "method": "POST",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    },
+    {
+      "t": "2026-08-30T15:03:08.542Z",
+      "phase": "bell-admin-logout",
+      "type": "response-watch",
+      "status": 204,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "statusText": "No Content"
+    },
+    {
+      "t": "2026-08-30T15:03:08.543Z",
+      "phase": "bell-admin-logout",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "method": "POST",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "cycles": [
+    {
+      "label": "admin-1",
+      "loggedInUrl": "http://127.0.0.1:8080/dashboard",
+      "loggedOutUrl": "http://127.0.0.1:8080/auth",
+      "consoleErrors": [],
+      "status401403": [],
+      "logoutStatuses": [
+        {
+          "t": "2026-08-30T15:03:17.469Z",
+          "phase": "cycle-admin-1-logout",
+          "type": "request-watch",
+          "method": "POST",
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+        },
+        {
+          "t": "2026-08-30T15:03:17.546Z",
+          "phase": "cycle-admin-1-logout",
+          "type": "response-watch",
+          "status": 204,
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+          "statusText": "No Content"
+        },
+        {
+          "t": "2026-08-30T15:03:17.552Z",
+          "phase": "cycle-admin-1-logout",
+          "type": "requestfailed",
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+          "method": "POST",
+          "failure": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    {
+      "label": "viewer",
+      "loggedInUrl": "http://127.0.0.1:8080/dashboard",
+      "loggedOutUrl": "http://127.0.0.1:8080/auth",
+      "consoleErrors": [],
+      "status401403": [],
+      "logoutStatuses": [
+        {
+          "t": "2026-08-30T15:03:26.430Z",
+          "phase": "cycle-viewer-logout",
+          "type": "request-watch",
+          "method": "POST",
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+        },
+        {
+          "t": "2026-08-30T15:03:26.513Z",
+          "phase": "cycle-viewer-logout",
+          "type": "response-watch",
+          "status": 204,
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+          "statusText": "No Content"
+        },
+        {
+          "t": "2026-08-30T15:03:26.518Z",
+          "phase": "cycle-viewer-logout",
+          "type": "requestfailed",
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+          "method": "POST",
+          "failure": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    {
+      "label": "admin-2",
+      "loggedInUrl": "http://127.0.0.1:8080/dashboard",
+      "loggedOutUrl": "http://127.0.0.1:8080/auth",
+      "consoleErrors": [],
+      "status401403": [],
+      "logoutStatuses": [
+        {
+          "t": "2026-08-30T15:03:35.465Z",
+          "phase": "cycle-admin-2-logout",
+          "type": "request-watch",
+          "method": "POST",
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+        },
+        {
+          "t": "2026-08-30T15:03:35.542Z",
+          "phase": "cycle-admin-2-logout",
+          "type": "response-watch",
+          "status": 204,
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+          "statusText": "No Content"
+        },
+        {
+          "t": "2026-08-30T15:03:35.546Z",
+          "phase": "cycle-admin-2-logout",
+          "type": "requestfailed",
+          "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+          "method": "POST",
+          "failure": "net::ERR_ABORTED"
+        }
+      ]
+    }
+  ],
+  "allWatchedEvents": [
+    {
+      "t": "2026-08-30T15:02:57.421Z",
+      "phase": "bell-admin-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:57.431Z",
+      "phase": "bell-admin-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:57.568Z",
+      "phase": "bell-admin-login",
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:01.151Z",
+      "phase": "bell-admin-login",
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:03:01.151Z",
+      "phase": "bell-admin-login",
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:03:01.189Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:01.189Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:01.191Z",
+      "phase": "bell-admin-login",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:03.406Z",
+      "phase": "bell-admin-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:03.410Z",
+      "phase": "bell-admin-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:03.437Z",
+      "phase": "bell-admin-login",
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:03.592Z",
+      "phase": "bell-admin-login",
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:03:03.592Z",
+      "phase": "bell-admin-login",
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:03:03.607Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:03.607Z",
+      "phase": "bell-admin-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:03.607Z",
+      "phase": "bell-admin-login",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:08.465Z",
+      "phase": "bell-admin-logout",
+      "type": "request-watch",
+      "method": "POST",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    },
+    {
+      "t": "2026-08-30T15:03:08.542Z",
+      "phase": "bell-admin-logout",
+      "type": "response-watch",
+      "status": 204,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "statusText": "No Content"
+    },
+    {
+      "t": "2026-08-30T15:03:08.543Z",
+      "phase": "bell-admin-logout",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "method": "POST",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:11.107Z",
+      "phase": "cycle-admin-1-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:11.109Z",
+      "phase": "cycle-admin-1-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:11.144Z",
+      "phase": "cycle-admin-1-login",
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:14.473Z",
+      "phase": "cycle-admin-1-login",
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:03:14.473Z",
+      "phase": "cycle-admin-1-login",
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:03:14.486Z",
+      "phase": "cycle-admin-1-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:14.486Z",
+      "phase": "cycle-admin-1-login",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:14.488Z",
+      "phase": "cycle-admin-1-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:17.469Z",
+      "phase": "cycle-admin-1-logout",
+      "type": "request-watch",
+      "method": "POST",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    },
+    {
+      "t": "2026-08-30T15:03:17.546Z",
+      "phase": "cycle-admin-1-logout",
+      "type": "response-watch",
+      "status": 204,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "statusText": "No Content"
+    },
+    {
+      "t": "2026-08-30T15:03:17.552Z",
+      "phase": "cycle-admin-1-logout",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "method": "POST",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:20.074Z",
+      "phase": "cycle-viewer-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:20.077Z",
+      "phase": "cycle-viewer-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:20.110Z",
+      "phase": "cycle-viewer-login",
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:23.452Z",
+      "phase": "cycle-viewer-login",
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:03:23.452Z",
+      "phase": "cycle-viewer-login",
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:03:23.458Z",
+      "phase": "cycle-viewer-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:23.459Z",
+      "phase": "cycle-viewer-login",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:23.460Z",
+      "phase": "cycle-viewer-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:26.430Z",
+      "phase": "cycle-viewer-logout",
+      "type": "request-watch",
+      "method": "POST",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    },
+    {
+      "t": "2026-08-30T15:03:26.513Z",
+      "phase": "cycle-viewer-logout",
+      "type": "response-watch",
+      "status": 204,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "statusText": "No Content"
+    },
+    {
+      "t": "2026-08-30T15:03:26.518Z",
+      "phase": "cycle-viewer-logout",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "method": "POST",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:29.048Z",
+      "phase": "cycle-admin-2-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:29.050Z",
+      "phase": "cycle-admin-2-login",
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:29.075Z",
+      "phase": "cycle-admin-2-login",
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:03:32.446Z",
+      "phase": "cycle-admin-2-login",
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:03:32.446Z",
+      "phase": "cycle-admin-2-login",
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:03:32.462Z",
+      "phase": "cycle-admin-2-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:32.465Z",
+      "phase": "cycle-admin-2-login",
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:03:32.465Z",
+      "phase": "cycle-admin-2-login",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:03:35.465Z",
+      "phase": "cycle-admin-2-logout",
+      "type": "request-watch",
+      "method": "POST",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    },
+    {
+      "t": "2026-08-30T15:03:35.542Z",
+      "phase": "cycle-admin-2-logout",
+      "type": "response-watch",
+      "status": 204,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "statusText": "No Content"
+    },
+    {
+      "t": "2026-08-30T15:03:35.546Z",
+      "phase": "cycle-admin-2-logout",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "method": "POST",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "screenshots": [
+    "bug2r4-bell-admin-open.png",
+    "bug2r4-auth-after-admin-logout.png",
+    "bug2r4-cycle-admin-1-logged-in.png",
+    "bug2r4-cycle-viewer-logged-in.png",
+    "bug2r4-cycle-admin-2-logged-in.png"
+  ]
+}

@@ -1,0 +1,606 @@
+{
+  "base": "http://127.0.0.1:8080",
+  "adminFixtureCreatedByCodex": true,
+  "viewerEmail": "codex-bug2r4-20260830150136@dsm-mos.local",
+  "tempPasswordLength": 19,
+  "newPasswordLength": 18,
+  "firstLoginUrl": "http://127.0.0.1:8080/change-password",
+  "afterSubmitUrl": "http://127.0.0.1:8080/auth",
+  "reloginUrl": "http://127.0.0.1:8080/dashboard",
+  "reloadUrl": "http://127.0.0.1:8080/dashboard",
+  "toastMs": 280,
+  "redirectMs": 1028,
+  "authTokenKeyCountAfterRedirect": 0,
+  "counts": {
+    "notificationsAfterSubmit": 0,
+    "logoutAfterSubmit": 0,
+    "status401403AfterSubmit": 0,
+    "consoleErrorsAfterSubmit": 0
+  },
+  "notificationsAfterSubmit": [],
+  "logoutAfterSubmit": [],
+  "status401403AfterSubmit": [],
+  "consoleErrorsAfterSubmit": [],
+  "allWatchedEvents": [
+    {
+      "t": "2026-08-30T15:01:37.077Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:37.100Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:37.224Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:40.716Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:01:40.716Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:01:40.754Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:01:40.757Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:01:40.759Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:01:43.040Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:43.043Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:43.071Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:43.241Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:01:43.241Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:01:43.254Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:01:43.255Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:01:43.262Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:01:46.319Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:46.322Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:46.344Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:46.615Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:01:46.615Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:01:46.641Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:01:46.643Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:01:46.643Z",
+      "phase": "admin-login",
+      "msAfterSubmit": null,
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:01:52.105Z",
+      "phase": "admin-logout",
+      "msAfterSubmit": null,
+      "type": "request-watch",
+      "method": "POST",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global"
+    },
+    {
+      "t": "2026-08-30T15:01:52.179Z",
+      "phase": "admin-logout",
+      "msAfterSubmit": null,
+      "type": "response-watch",
+      "status": 204,
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "statusText": "No Content"
+    },
+    {
+      "t": "2026-08-30T15:01:52.243Z",
+      "phase": "admin-logout",
+      "msAfterSubmit": null,
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/auth/v1/logout?scope=global",
+      "method": "POST",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:01:54.715Z",
+      "phase": "viewer-first-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:54.719Z",
+      "phase": "viewer-first-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:54.740Z",
+      "phase": "viewer-first-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:01:58.135Z",
+      "phase": "viewer-first-login",
+      "msAfterSubmit": null,
+      "type": "console",
+      "level": "verbose",
+      "text": "[DOM] Password forms should have (optionally hidden) username fields for accessibility: (More info: https://goo.gl/9p2vKq) %o",
+      "location": {
+        "url": "http://127.0.0.1:8080/change-password",
+        "line": 0,
+        "column": 0,
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:01.541Z",
+      "phase": "password-submit",
+      "msAfterSubmit": 1025,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:01.547Z",
+      "phase": "password-submit",
+      "msAfterSubmit": 1031,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:01.574Z",
+      "phase": "password-submit",
+      "msAfterSubmit": 1058,
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:02.810Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 2294,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:02.814Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 2298,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:02.847Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 2331,
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:06.144Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 5628,
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:02:06.144Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 5628,
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:02:06.173Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 5657,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:02:06.178Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 5662,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:02:06.178Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 5662,
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "t": "2026-08-30T15:02:08.703Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8187,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 858,
+        "column": 8,
+        "lineNumber": 858,
+        "columnNumber": 8
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:08.880Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8364,
+      "type": "console",
+      "level": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://127.0.0.1:8080/@vite/client",
+        "line": 967,
+        "column": 11,
+        "lineNumber": 967,
+        "columnNumber": 11
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:08.921Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8405,
+      "type": "console",
+      "level": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://127.0.0.1:8080/node_modules/.vite/deps/react-dom_client.js?v=0005877e",
+        "line": 14335,
+        "column": 48,
+        "lineNumber": 14335,
+        "columnNumber": 48
+      }
+    },
+    {
+      "t": "2026-08-30T15:02:09.102Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8586,
+      "type": "request-watch",
+      "method": "HEAD",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null"
+    },
+    {
+      "t": "2026-08-30T15:02:09.102Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8586,
+      "type": "request-watch",
+      "method": "GET",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20"
+    },
+    {
+      "t": "2026-08-30T15:02:09.110Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8594,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:02:09.110Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8594,
+      "type": "response-watch",
+      "status": 200,
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=*&order=created_at.desc&limit=20",
+      "statusText": "OK"
+    },
+    {
+      "t": "2026-08-30T15:02:09.110Z",
+      "phase": "viewer-relogin-new-password",
+      "msAfterSubmit": 8594,
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:54321/rest/v1/notifications?select=id&read_at=is.null",
+      "method": "HEAD",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "screenshots": [
+    "bug2r4-admin-before-create.png",
+    "bug2r4-created-viewer.png",
+    "bug2r4-change-password-before-submit.png",
+    "bug2r4-toast-success.png",
+    "bug2r4-auth-after-change.png",
+    "bug2r4-dashboard-after-relogin.png",
+    "bug2r4-dashboard-after-reload.png"
+  ]
+}

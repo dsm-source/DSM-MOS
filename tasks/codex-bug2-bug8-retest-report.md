@@ -1,5 +1,7 @@
 # Codex Retest BUG-2 + BUG-8 DSM MOS
 
+Update terbaru: lihat §9 untuk retest BUG-2R4 setelah commit `ed5a915`. Verdict terbaru BUG-2 strict: **PASS / layak CLOSED** untuk scope notifications-401 forced password-change.
+
 Tanggal: 2026-08-30 20:50-21:10 WIB  
 Target: local Supabase stack only. Remote `jtzwawtfymljfqfrplib` tidak disentuh.  
 HEAD diuji: `2061b3e90cff72440ce0df6f200b91bab3c9db5e` (`1f720c4` ada di history).
@@ -210,3 +212,140 @@ Cleanup lokal sudah dilakukan:
 - Akun test `codex-bug28-*` dan `codex-debug-*`: 0.
 - `supabase test db` final setelah cleanup: PASS, Files=10, Tests=256.
 
+## 9. Retest BUG-2R4 Strict Setelah `ed5a915`
+
+Tanggal: 2026-08-30 21:44-22:06 WIB
+Target: local Supabase stack only. Remote `jtzwawtfymljfqfrplib` tidak disentuh.
+Scope: retest browser fokus BUG-2R4 notifications 401 setelah fix `ed5a915`; bukan full smoke dan bukan review kode.
+
+### 9.1 Verdict BUG-2 Strict
+
+| Bug | Verdict setelah `ed5a915` | Bisa ditutup? |
+|---|---|---|
+| BUG-2 forced password-change notifications 401 | **PASS strict** | **Ya, layak ditandai CLOSED** untuk scope BUG-2 strict: forced password-change menghasilkan 0 request `auth/v1/logout`, 0 request `/rest/v1/notifications*` setelah submit, 0 response 401/403, dan 0 console error merah. |
+
+### 9.2 Ringkasan Setup
+
+- `git rev-parse HEAD`: `d68eb2376dbcd2d8230ca6aed7e337300b5d2ba3`.
+- Branch: `main`.
+- `git log --oneline -5`: `d68eb23`, `e8647d0`, `ed5a915`, `3af4c3f`, `a24e959`.
+- `git merge-base --is-ancestor ed5a915 HEAD`: exit `0`, jadi fix `ed5a915` ada di working tree.
+- `supabase db reset`: PASS; migration terakhir `20260830000001_m8_eng_jobs_select_delivery.sql` teraplikasi.
+- Seed demo: `supabase/seed-demo/20260823_demo_200_dataset.sql` via local container `psql`: PASS.
+- Dev server: `bun run dev --host 127.0.0.1 --port 8080`, Vite ready di `http://127.0.0.1:8080/`.
+- Catatan setup: setelah reset+seed, tidak ada admin siap-login di `auth.users`; seed demo hanya membuat `demo-*` tanpa password. Untuk melanjutkan retest local-only, dibuat fixture admin sementara `test@dsm.com` via Auth Admin API lokal dan role `admin` di DB lokal. Fixture ini dihapus saat cleanup.
+
+Quality gates awal:
+
+| Gate | Hasil |
+|---|---|
+| `supabase test db` | PASS, Files=10, Tests=256 |
+| `bunx tsc --noEmit` | PASS, exit 0 |
+| `bun run lint` | PASS exit 0, 37 warning `react-refresh/only-export-components` yang sudah diketahui |
+| `bun run build` | PASS |
+
+### 9.3 BUG-2 Detail Browser
+
+Langkah dieksekusi:
+
+1. Login admin fixture lokal.
+2. Buka `/dashboard`, lalu `/admin`, supaya notification queries masuk cache.
+3. Buat user baru via UI `/admin` dengan role `viewer`: `codex-bug2r4-20260830150136@dsm-mos.local`.
+4. Logout admin.
+5. Login viewer dengan password sementara -> redirect ke `/change-password`.
+6. Submit password baru.
+7. Observasi toast, redirect hard reload ke `/auth`, dan localStorage.
+8. Login ulang dengan password baru -> `/dashboard`.
+9. Reload `/dashboard` -> tetap `/dashboard`, tidak loop ke `/change-password`.
+
+Hasil aktual:
+
+| Check strict | Hasil |
+|---|---|
+| First login temp password | PASS, URL `http://127.0.0.1:8080/change-password` |
+| Request `auth/v1/logout` setelah submit | PASS, **0 request** |
+| Request `/rest/v1/notifications*` setelah submit | PASS, **0 request** |
+| Response 401/403 setelah submit | PASS, **0 response** |
+| Console error merah setelah submit | PASS, **0 error level console** |
+| Toast sukses | PASS, `Kata sandi berhasil diganti` tertangkap sekitar **280 ms** setelah submit |
+| Redirect hard reload ke `/auth` | PASS, URL `http://127.0.0.1:8080/auth`, redirect sekitar **1028 ms** setelah submit |
+| `localStorage` key `sb-*-auth-token` setelah redirect | PASS, jumlah key = 0 |
+| Login password baru | PASS, URL `http://127.0.0.1:8080/dashboard` |
+| Reload dashboard loop balik change-password | PASS, tetap `http://127.0.0.1:8080/dashboard` |
+
+Console/network note:
+
+- Setelah submit password, tidak ada network trace 401/403 yang perlu dikutip karena hasilnya 0.
+- Browser masih mencatat log dev biasa (`[vite] connecting`, `[vite] connected`, React DevTools info) dan satu console `verbose` Chrome tentang password form username field sebelum submit. Ini bukan console error merah dan tidak terkait notifications 401.
+- Setelah login ulang dengan password baru, notification requests kembali berjalan dengan session hidup dan response `200`, sesuai ekspektasi.
+
+Evidence:
+
+- JSON Flow A: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-browser-result.json`
+- Screenshot admin sebelum create: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-admin-before-create.png`
+- Screenshot viewer dibuat: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-created-viewer.png`
+- Screenshot `/change-password` sebelum submit: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-change-password-before-submit.png`
+- Screenshot toast sukses: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-toast-success.png`
+- Screenshot `/auth` setelah redirect: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-auth-after-change.png`
+- Screenshot dashboard setelah login ulang: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-dashboard-after-relogin.png`
+- Screenshot dashboard setelah reload: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-dashboard-after-reload.png`
+
+### 9.4 Regresi B + C
+
+Notification bell saat login sah:
+
+| Check | Hasil |
+|---|---|
+| Login admin -> `/dashboard` | PASS |
+| Bell memuat tanpa console error | PASS |
+| Request `/rest/v1/notifications?select=*...` | PASS, `200 OK` |
+| Request `/rest/v1/notifications?select=id&read_at=is.null` | PASS, `200 OK` |
+| Badge/list | PASS untuk state aktual: bell menampilkan empty state `Belum ada notifikasi`; tombol `Tandai semua dibaca` disabled karena unread = 0 |
+| `Tandai semua dibaca` | Tidak dieksekusi karena tombol disabled/unread = 0 |
+| Logout normal | PASS, `auth/v1/logout?scope=global` -> `204 No Content`, redirect `/auth`, 0 console error, 0 response 401/403 |
+
+Login/logout biasa:
+
+| Siklus | Hasil |
+|---|---|
+| `admin-1` login -> logout | PASS, `/auth` -> `/dashboard` -> `/auth`, 0 console error, 0 response 401/403 |
+| `viewer` login -> logout | PASS, `/auth` -> `/dashboard` -> `/auth`, 0 console error, 0 response 401/403 |
+| `admin-2` login -> logout | PASS, `/auth` -> `/dashboard` -> `/auth`, 0 console error, 0 response 401/403 |
+
+Catatan network normal logout:
+
+- Setiap logout normal mengirim `POST /auth/v1/logout?scope=global` dan menerima `204 No Content`.
+- Playwright juga merekam `requestfailed net::ERR_ABORTED` setelah `204` karena halaman langsung redirect/navigate. Ini bukan response 401/403 dan tidak muncul sebagai console error.
+
+Evidence regresi:
+
+- JSON: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-regression-result.json`
+- Screenshot bell admin: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-bell-admin-open.png`
+- Screenshot `/auth` setelah logout admin: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-auth-after-admin-logout.png`
+- Screenshot siklus admin/viewer: `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-cycle-admin-1-logged-in.png`, `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-cycle-viewer-logged-in.png`, `tasks/codex-bug2-bug8-retest-artifacts/bug2r4-cycle-admin-2-logged-in.png`
+
+### 9.5 Bug Baru
+
+Tidak ada bug baru yang terbukti dari retest fokus ini.
+
+Out-of-scope / follow-up owner:
+
+- BUG-6 DnD Production masih open dari ronde 3 dan tidak diuji ulang di task ini.
+- Bila owner ingin bell regression membuktikan `Tandai semua dibaca` pada unread > 0, perlu fixture notifikasi unread eksplisit. Pada run ini state seed/admin aktual menghasilkan empty state, tetapi endpoint notifications tetap terbukti `200 OK`.
+
+### 9.6 Kesimpulan
+
+[Pasti] BUG-2 strict sekarang bisa ditandai **CLOSED** untuk scope forced password-change notifications-401 setelah `ed5a915`: browser retest membuktikan 0 request logout, 0 request notifications setelah submit, 0 response 401/403, 0 console error merah, toast sukses terlihat, token localStorage hilang, redirect ke `/auth`, dan login ulang tidak loop ke `/change-password`.
+
+[Pasti] Regresi notification bell saat session hidup tidak terlihat: endpoint notifications mengembalikan `200 OK` dan console bersih.
+
+[Pasti] Regresi login/logout biasa tidak terlihat pada siklus admin/viewer/admin: redirect normal, 0 console error, 0 response 401/403.
+
+### 9.7 Cleanup
+
+Cleanup lokal sudah dilakukan:
+
+- User viewer `codex-bug2r4-20260830150136@dsm-mos.local`: 0 di `auth.users`.
+- Admin fixture sementara `test@dsm.com`: 0 di `auth.users`.
+- Query cleanup users: `remaining_test_users = 0`.
+- `supabase test db` final setelah cleanup: PASS, Files=10, Tests=256.
