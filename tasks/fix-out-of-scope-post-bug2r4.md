@@ -385,8 +385,41 @@ navigate keluar-masuk `/production`.
 
 **Acceptance:**
 
-- [ ] Catat hasil di report: PASS/FAIL + screenshot 2 tab.
-- [ ] Kalau FAIL, buka bug baru dengan repro; jangan patch di task ini.
+- [x] Catat hasil di report: PASS/FAIL + screenshot 2 tab.
+- [x] Kalau FAIL, buka bug baru dengan repro; jangan patch di task ini. → tidak FAIL.
+
+### T5 — VERDICT 2026-09-01: PASS
+
+Realtime memang terpasang: `useProductionBatches`
+(`src/features/production/hooks/use-batches.ts:92-134`) subscribe
+`postgres_changes` event `*` untuk `production_batches`,
+`production_batch_steps`, `material_statuses`, `engineering_jobs` →
+`invalidateQueries(BATCHES_KEY)`; cleanup `removeChannel` di return effect.
+Keempat tabel + `deliveries`/`delivery_items`/`notifications` ada di publication
+`supabase_realtime` dengan `REPLICA IDENTITY FULL` (migrations M5/M7/M8).
+
+Verifikasi 2 browser context (keduanya login `demo-admin`, keduanya di
+`/production`), fixture: 1 batch `ENG-2026-000046-B1` dengan step 2 (Bending)
+`running`:
+
+| Cek | Hasil |
+|---|---|
+| Tab B sebelum: posisi kartu | kolom **Bending**, badge **Berjalan** |
+| Tab A: drag kartu → "Welding & Grinding" → konfirmasi "Ya" (step 2 completed) | OK |
+| **Tab B TANPA reload**: kartu pindah | kolom **Welding & Grinding**, badge **Menunggu** |
+| Propagasi realtime | **~284 ms** |
+| Channel leak: Tab B navigate `/dashboard` ↔ `/production` × 6 | **0 console error** (total maupun selama churn); board tetap update setelahnya |
+
+Evidence:
+
+- `tasks/codex-bug2-bug8-retest-artifacts/t5-result.json`
+- `tasks/codex-bug2-bug8-retest-artifacts/t5-tabB-before.png` (kartu di Bending, "Berjalan")
+- `tasks/codex-bug2-bug8-retest-artifacts/t5-tabA-after.png` (tab A setelah complete)
+- `tasks/codex-bug2-bug8-retest-artifacts/t5-tabB-after.png` (kartu pindah ke Welding & Grinding, "Menunggu", tanpa reload)
+
+Verifikasi dijalankan lewat script Playwright 2-context sekali pakai (tidak
+di-commit sebagai spec permanen — severity rendah; kalau nanti mau permanen,
+polanya sama dengan `e2e/bug6-production-dnd.spec.ts` + `newContext()` kedua).
 
 ---
 

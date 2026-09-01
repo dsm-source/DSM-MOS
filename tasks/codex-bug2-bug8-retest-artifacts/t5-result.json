@@ -1,0 +1,16 @@
+{
+  "batch": "ENG-2026-000046-B1",
+  "before": {
+    "column": "Bending",
+    "badge": "Berjalan"
+  },
+  "after": {
+    "column": "Welding & Grinding",
+    "badge": "Menunggu"
+  },
+  "realtimeMoved": true,
+  "propagationMs": 284,
+  "consoleErrorsTotal": 0,
+  "consoleErrorsDuringNavChurn": 0,
+  "sampleErrors": []
+}
