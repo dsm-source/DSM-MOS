@@ -144,7 +144,30 @@ Gap sebenarnya = **prosedur retest**, bukan data seed. Opsi penutupan T2:
   `INSERT INTO user_roles` **atau** re-assign beberapa notifikasi ke user
   fixture itu.
 
-**BLOCKER: butuh keputusan owner A / B / C sebelum patch T2.**
+### T2 — DONE 2026-09-01 (opsi A)
+
+`supabase/seed-demo/20260823_demo_200_dataset.sql` sekarang menjadikan
+`demo-admin@dsm-mos.local` akun login nyata (**password: `demo1234`**) — satu
+`UPDATE auth.users` + satu `INSERT auth.identities` tepat setelah blok
+`user_roles`. Tidak ada row `notifications` manual: seed sudah menghasilkannya
+lewat trigger (lihat temuan di atas).
+
+Verifikasi (local, `supabase db reset` + seed):
+
+| Cek | Hasil |
+|---|---|
+| Login `demo-admin@dsm-mos.local` / `demo1234` | PASS (token grant `200`) |
+| Unread notifications untuk `...002` | **1390** |
+| Bell badge di UI | `99+` |
+| Buka bell → list | PASS, terisi (bukan empty state) |
+| Klik "Tandai semua dibaca" | `PATCH /rest/v1/notifications?...&read_at=is.null` → **204**, badge → 0, list jadi read, **0 console error** |
+| `supabase test db` | PASS, Files=10, Tests=256 |
+
+Catatan: minimal auth-column set yang dibutuhkan GoTrue v2 untuk login lewat
+SQL — `encrypted_password`, `email_confirmed_at`, `created_at`, `instance_id`,
+`raw_app_meta_data`, dan **semua kolom token = `''`** (bukan NULL) — sudah
+dibakar ke seed. Update dok kredensial retest: pakai `demo-admin@dsm-mos.local`
+/ `demo1234`, tidak perlu lagi bikin `test@dsm.com` manual.
 
 ---
 
@@ -244,10 +267,37 @@ step 2 aktif). Lalu: fokus handle `GripVertical` → `Space` → `ArrowRight` �
 `production_batch_steps` step lama `completed` di DB. Ulangi drop ke kolom
 non-next → assert toast error + 0 transisi.
 
-**BLOCKER lingkungan:** `supabase start` untuk project ini gagal — port 54321-54327
-sudah dipakai project lokal lain (`supabase_*_DSM_SALES_WEB_APP_V2`). Perlu
-`supabase stop` project itu dulu (atau jalankan verifikasi di mesin/کontainer
-bersih) sebelum langkah browser T3 bisa dijalankan.
+### T3 — VERDICT 2026-09-01: BUG-6 CLOSED, kode benar (fixture ronde 3 salah)
+
+Verifikasi browser dijalankan (login `demo-admin`, `/production`). Bukti:
+
+| Klaim | Bukti |
+|---|---|
+| Drag handle hanya render untuk active step `running`/`paused` tanpa blocker | 50 kartu di kolom "Bending" dengan active step `waiting` → **tidak ada handle**, cuma tombol "Start"/"Skip". Setelah 1 step di-set `running` (via SQL: QC-pass step 1 + step 2 → running) + reload → handle `GripVertical` (`aria-label="Seret batch ENG-2026-000046-B1 ke tahapan berikutnya"`) **muncul**. Ini persis penjelasan BUG-6 ronde 3. |
+| dnd-kit pickup jalan | keyboard `Space` di handle fokus → `aria-pressed=true`, state dragging aktif, announcements dnd-kit ada. |
+| Guard kolom non-next | drop yang resolve ke kolom bukan-`nextColumnFor` → toast **"Batch hanya bisa dipindahkan ke tahapan berikutnya"**, 0 transisi DB. Sesuai `handleDragEnd` cabang `!canDropOn`. |
+| Valid drop → konfirmasi → mutation ber-gate | trace kode: `handleDragEnd` valid → `setPending({batchId,stepId})` → panel inline **"Selesaikan {process}?"** (Ya/Batal, `batch-card.tsx:215-238`, bukan `role="dialog"`) → `runComplete` → `update.mutateAsync({ status: "completed" })` — jalur mutation identik dengan tombol "Complete", jadi gate QC/operator (trigger DB) tidak di-bypass. |
+
+Repro live drop **valid** tidak tertangkap otomatis: board **tidak** mendaftarkan
+`coordinateGetter` untuk `KeyboardSensor` (jadi keyboard-drag bisa angkat/jatuh
+di tempat, tidak bisa lintas kolom), dan `PointerSensor` (`distance: 6`) butuh
+rangkaian `pointermove` bertahap yang tidak dihasilkan andal oleh synthetic event
+maupun `left_click_drag` tool. Manusia dengan mouse (user sebenarnya per PRD
+§11 #7) menyeret normal.
+
+**Verdict: BUG-6 bukan bug produk.** Mekanisme DnD sehat. "Drag tidak melakukan
+apa-apa" di ronde 3 = (a) batch fixture tidak punya step `running` → tidak ada
+handle, dan/atau (b) drag sukses membuka panel konfirmasi inline, bukan
+memindahkan kartu — mudah disalahartikan sebagai "tidak terjadi apa-apa".
+
+**Temuan sampingan (bukan BUG-6):** seed demo **tidak pernah** meninggalkan step
+produksi dalam status `running` — blok "production execution"
+(`20260823_demo_200_dataset.sql:267-287`) meng-`running`-kan step 1 lalu langsung
+`completed`. Akibatnya fitur drag Kanban tidak bisa dicoba dari data seed saja —
+ini alasan setiap ronde retest kesulitan dengan BUG-6. Rekomendasi: sisakan
+1-2 batch `production_active` dengan step aktif `running` (+ QC pass step
+sebelumnya) di seed, supaya BUG-6 / T4 E2E punya fixture siap-pakai. Di luar
+scope patch T3.
 
 ---
 

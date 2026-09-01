@@ -44,6 +44,37 @@ INSERT INTO public.user_roles (user_id, role) VALUES
   ('40000000-0000-0000-0000-000000000008', 'delivery')
 ON CONFLICT DO NOTHING;
 
+-- LOCAL DEMO ONLY: make demo-admin an actual login (email/password). Every SO
+-- status transition below fires sales_orders_notify_on_status_change(), which
+-- notifies all admins, so this account lands with a realistic backlog of unread
+-- notifications — the bell / "Tandai semua dibaca" path is testable out of the
+-- box. Credentials: demo-admin@dsm-mos.local / demo1234. Never run this file
+-- against a remote project.
+UPDATE auth.users SET
+  instance_id       = '00000000-0000-0000-0000-000000000000',
+  encrypted_password = COALESCE(encrypted_password,
+                                extensions.crypt('demo1234', extensions.gen_salt('bf'))),
+  email_confirmed_at = COALESCE(email_confirmed_at, now()),
+  created_at         = COALESCE(created_at, now()),
+  updated_at         = now(),
+  raw_app_meta_data  = '{"provider":"email","providers":["email"]}'::jsonb,
+  raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb),
+  confirmation_token = '', recovery_token = '', email_change_token_new = '',
+  email_change = '', email_change_token_current = '', phone_change = '',
+  phone_change_token = '', reauthentication_token = ''
+WHERE id = '40000000-0000-0000-0000-000000000002';
+
+INSERT INTO auth.identities
+  (provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
+VALUES
+  ('40000000-0000-0000-0000-000000000002', '40000000-0000-0000-0000-000000000002',
+   jsonb_build_object(
+     'sub', '40000000-0000-0000-0000-000000000002',
+     'email', 'demo-admin@dsm-mos.local',
+     'email_verified', true),
+   'email', now(), now(), now())
+ON CONFLICT (provider, provider_id) DO NOTHING;
+
 INSERT INTO public.operators (id, name, employee_number, is_active, created_by) VALUES
   ('40000000-0000-0000-0000-000000000101', 'Dedi Kurniawan', 'EMP-2024-014', true, '40000000-0000-0000-0000-000000000002'),
   ('40000000-0000-0000-0000-000000000102', 'Wahyu Saputra', 'EMP-2024-027', true, '40000000-0000-0000-0000-000000000002')
