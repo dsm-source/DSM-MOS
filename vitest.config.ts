@@ -9,5 +9,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     css: false,
+    // e2e/ is Playwright's; keep it out of the vitest unit run.
+    exclude: ["**/node_modules/**", "**/dist/**", "e2e/**"],
   },
 });

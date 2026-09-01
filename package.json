@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:reset": "supabase db reset && docker exec -i \"$(docker ps --format '{{.Names}}' | grep supabase_db)\" psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q < supabase/seed-demo/20260823_demo_200_dataset.sql"
   },
   "overrides": {
     "dompurify": "^3.4.14",
@@ -80,6 +82,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@lovable.dev/vite-tanstack-config": "2.8.5",
+    "@playwright/test": "^1.62.1",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

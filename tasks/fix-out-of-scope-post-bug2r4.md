@@ -326,11 +326,50 @@ over-engineer). Cakup 3 skenario:
 
 **Acceptance:**
 
-- [ ] `<runner> test` (mis. `bunx playwright test`) menjalankan ketiga spec dan
-      semua PASS terhadap local stack yang sudah di-seed.
-- [ ] Dokumentasikan cara menjalankannya di `README` atau `tasks/` (prasyarat:
-      `supabase start`, seed demo, `bun run dev`).
-- [ ] Tidak menambah dependency berat di luar `@playwright/test`.
+- [x] `bun run test:e2e` menjalankan ketiga skenario (4 test) dan semua PASS
+      terhadap local stack yang sudah di-seed.
+- [x] Cara menjalankan didokumentasikan di `e2e/README.md` (prasyarat:
+      `supabase start`, `bun run test:e2e:reset`; `test:e2e` menjalankan
+      `bun run dev` sendiri).
+- [x] Dependency baru cuma `@playwright/test`.
+
+### T4 — DONE 2026-09-01
+
+Suite Playwright di `e2e/` (bukan setup sebelumnya — project pakai vitest+jsdom
+untuk unit test; e2e dipisah dari `bun run test`).
+
+| File | Bug | Cakupan |
+|---|---|---|
+| `e2e/bug2-forced-password-change.spec.ts` | BUG-2/2R4 | admin buat viewer → viewer login temp password → `/change-password` submit → **0 request `auth/v1/logout`, 0 request `/rest/v1/notifications`, 0 response 401/403** setelah submit, toast sukses, token localStorage hilang, re-login ke `/dashboard` tidak loop |
+| `e2e/bug8-delivery-qc-pass.spec.ts` | BUG-8 | role `delivery` buat rencana dari SO QC-pass → kandidat QC muncul (bukan empty state) → `delivery_items` terisi dengan `qc_inspection_id` benar → transisi `draft → prepared → shipped → delivered` (assert status DB tiap langkah) |
+| `e2e/bug6-production-dnd.spec.ts` | BUG-6 | hanya batch dengan step aktif `running` yang punya drag handle; **drag pointer nyata** (Playwright `mouse.move` bertahap **memicu** dnd-kit `PointerSensor`) ke kolom berikutnya → panel konfirmasi "Selesaikan …?" → "Ya" → step `completed` di DB |
+
+Infra:
+
+- `playwright.config.ts` — chromium, serial (`workers: 1`), `webServer` jalankan
+  `bun run dev`.
+- `e2e/helpers/` — `auth.ts` (login/logout UI, `gotoHydrated` + retry
+  fill+submit karena klik pra-hidrasi jatuh ke native form submit),
+  `supabase-admin.ts` (service-role: `createUser` confirmed-role tanpa forced
+  password change, `deleteUserByEmail`), `db.ts` (SQL lewat `docker exec psql`),
+  `fixtures.ts` (`prepareQcPassSalesOrder`, `prepareRunningProductionStep`,
+  `deleteDeliveriesForSo` — semua idempoten).
+- Scripts: `test:e2e`, `test:e2e:reset` (opt-in `supabase db reset` + seed).
+- `vitest.config.ts` exclude `e2e/**`; `eslint.config.js` blok node-globals
+  untuk `e2e/**` + `playwright.config.ts`.
+
+Catatan T3 dikoreksi: klaim "keyboard-drag/pointer-drag tidak bisa lintas kolom"
+benar untuk synthetic events + MCP `left_click_drag`, tapi **Playwright
+`page.mouse.move(..., { steps })` nyata berhasil** menyeret dan memicu
+`PointerSensor` → BUG-6 full-drag ternyata bisa diotomasi.
+
+Gate: `bunx tsc --noEmit` PASS, `bun run lint` PASS (0 error), `bun run build`
+PASS, `bun run test` (vitest) 44 PASS, `bun run test:e2e` 4 PASS.
+
+Catatan stack: selama development `supabase db reset` berkali-kali + restart
+container bikin Kong/GoTrue nyangkut ("invalid response from upstream") —
+sembuh dengan `docker restart supabase_kong_*`. Kalau `test:e2e` gagal semua di
+langkah login, cek health auth dulu.
 
 ---
 
