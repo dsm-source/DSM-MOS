@@ -2,6 +2,8 @@
 
 Update terbaru: lihat §9 untuk retest BUG-2R4 setelah commit `ed5a915`. Verdict terbaru BUG-2 strict: **PASS / layak CLOSED** untuk scope notifications-401 forced password-change.
 
+Follow-up out-of-scope (T1–T5) sudah dikerjakan — ringkasan di **§10**; detail per task di `tasks/fix-out-of-scope-post-bug2r4.md`.
+
 Tanggal: 2026-08-30 20:50-21:10 WIB  
 Target: local Supabase stack only. Remote `jtzwawtfymljfqfrplib` tidak disentuh.  
 HEAD diuji: `2061b3e90cff72440ce0df6f200b91bab3c9db5e` (`1f720c4` ada di history).
@@ -349,3 +351,43 @@ Cleanup lokal sudah dilakukan:
 - Admin fixture sementara `test@dsm.com`: 0 di `auth.users`.
 - Query cleanup users: `remaining_test_users = 0`.
 - `supabase test db` final setelah cleanup: PASS, Files=10, Tests=256.
+
+## 10. Follow-up Out-of-Scope (T1–T5)
+
+Tanggal: 2026-09-01. Local Supabase stack only. Sumber task:
+`tasks/fix-out-of-scope-post-bug2r4.md` (detail lengkap + bukti ada di sana).
+
+### 10.1 Ringkasan Verdict
+
+| Task | Verdict | Perubahan |
+|---|---|---|
+| **T1** — Sidebar Engineering pakai `ALL_ROLES` | **CLOSED, bukan bug** | 0 perubahan kode. Sesuai PRD §11 poin 6 ("Engineering Workload terbuka semua peran — ✓ Final") + matriks akses `docs/PRD.md:165-167` ("semua peran" SELECT) + route `engineering.tsx` sengaja tanpa role guard. Observasi `deliveryHasEngineeringMenu=false` di §5 = build lama. |
+| **T2** — Seed demo tak punya notifikasi unread | **DONE** | Premis tidak akurat: trigger `sales_orders_notify_on_status_change()` sudah mem-flood `demo-admin` (`...002`) ~1390 notifikasi unread saat seed (transisi pakai actor non-admin). §9.4 lihat empty state karena login sebagai `test@dsm.com` (user_id beda). Fix commit `15337b7`: `demo-admin@dsm-mos.local` jadi login nyata (**password `demo1234`**) via 1 `UPDATE auth.users` + 1 `INSERT auth.identities` di `supabase/seed-demo/20260823_demo_200_dataset.sql`. Retester tidak perlu bikin `test@dsm.com` lagi. |
+| **T3** — BUG-6 DnD Kanban Production belum terbukti | **CLOSED, bukan bug** | Drag handle hanya render kalau active step `running`/`paused` tanpa blocker (empiris: 50 kartu step `waiting` → tanpa handle; set 1 step `running` → handle muncul). Drag sukses = buka panel konfirmasi inline "Selesaikan …?" (bukan pindah kartu langsung). Fixture ronde 3 (`RETEST3-PROD-DRAG-BATCH`) kemungkinan tanpa step `running`. Ditutup lewat E2E T4. |
+| **T4** — E2E automation 3 flow retest manual | **DONE** | Suite Playwright di `e2e/` (commit `30ca8aa`). `bun run test:e2e` → **4 test PASS** (BUG-2 forced password-change, BUG-8 delivery QC-pass full transition, BUG-6 drag→confirm→gated completion). Dep baru cuma `@playwright/test`. Prasyarat + cara jalan di `e2e/README.md`. |
+| **T5** — Production realtime multi-tab | **PASS** (commit `8ababb3`) | 2 browser context di `/production`: tab A selesaikan step → tab B kartu pindah `Bending → Welding & Grinding` **tanpa reload**, propagasi **~284 ms**. Navigate B `/dashboard` ↔ `/production` × 6 → **0 console error** (tak ada channel leak terlihat). |
+
+### 10.2 Gate
+
+Semua task melewati gate wajib pada state akhir:
+
+| Gate | Hasil |
+|---|---|
+| `bunx tsc --noEmit` | PASS |
+| `bun run lint` | PASS, 0 error, 37 warning `react-refresh/only-export-components` (pre-existing) |
+| `bun run build` | PASS |
+| `bun run test` (vitest) | PASS, 44 test |
+| `supabase test db` | PASS, Files=10, Tests=256 |
+| `bun run test:e2e` (Playwright, T4) | PASS, 4 test — di local stack yang sudah `test:e2e:reset` |
+
+### 10.3 Catatan
+
+- **Kredensial retest local sekarang**: admin `demo-admin@dsm-mos.local` / `demo1234`
+  (dari seed demo). `test@dsm.com` tidak lagi perlu dibuat manual.
+- **BUG-6 CLOSED** menggantikan status "open" dari ronde 3 — kode benar, bukan fix.
+- Stack lokal sempat degraded ("invalid response from upstream" di Kong/GoTrue)
+  akibat banyak `supabase db reset` + restart container selama development;
+  sembuh dengan `docker restart supabase_kong_*` / `supabase stop && start`.
+  Kalau `test:e2e` gagal semua di langkah login, cek `curl .../auth/v1/health` dulu.
+- Commits: `15337b7` (T2 seed), `0aac9f7` (T1 investigasi), `d1093db` (§9 report),
+  `30ca8aa` (T4 E2E suite), `8ababb3` (T5 verdict). Semua sudah di `origin/main`.
