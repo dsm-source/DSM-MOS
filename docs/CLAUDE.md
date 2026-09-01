@@ -64,3 +64,10 @@ Kanban dan Gantt (dipakai di Production & Delivery) **TIDAK BOLEH pakai drag-and
 5. Commit per milestone dengan pesan jelas, bukan satu commit raksasa di akhir.
 6. Jangan membuat mock data, placeholder, atau `// TODO` bila implementasi nyata bisa dibuat.
 7. Bagian "Asumsi & Keputusan Terbuka" di `PRD.md` berisi hal-hal yang BELUM dikonfirmasi pemilik produk — kalau pekerjaanmu menyentuh salah satunya, tandai dan tanyakan, jangan diam-diam pilih salah satu.
+
+## Local Dev & Test
+
+- Stack lokal saja untuk retest/UAT — remote `jtzwawtfymljfqfrplib` jangan disentuh.
+- Login admin lokal: **`demo-admin@dsm-mos.local` / `demo1234`** (di-seed oleh `supabase/seed-demo/20260823_demo_200_dataset.sql`). Tidak perlu bikin akun `test@dsm.com` manual lagi. User `demo-*` lain sengaja tanpa password — buat lewat `/admin` kalau butuh peran lain.
+- Reset data demo: `bun run test:e2e:reset` (`supabase db reset` + seed). Destruktif untuk data lokal.
+- E2E: `bun run test:e2e` (Playwright, `e2e/`) — cover BUG-2 forced password-change, BUG-8 delivery QC-pass, BUG-6 Kanban DnD. Prasyarat & detail di `e2e/README.md`.
